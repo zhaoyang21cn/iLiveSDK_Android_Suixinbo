@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/local_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:text="本机号码" />
+
+            <TextView
+                android:id="@+id/tv_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/local_tip"
+                android:textColor="@color/colorAccent"
+                android:layout_centerVertical="true" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:onClick="onClick"
+                android:text="注销" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_channel"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="广播频道" />
+
+            <EditText
+                android:id="@+id/et_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="请输入广播频道"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:phoneNumber="true"
+                android:textSize="6pt" />
+
+            <Button
+                android:id="@+id/btn_join_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:onClick="onClick"
+                android:text="进入广播" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_channel_ctrl"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btn_mic"
+                    android:text="@string/tip_open_mic"
+                    android:onClick="onClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/btn_quit"
+                    android:text="退出频道"
+                    android:onClick="onClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <CheckBox
+                    android:id="@+id/cb_change_voice"
+                    android:text="变声"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_change"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="声调"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content" />
+                    <SeekBar
+                        android:id="@+id/sb_pitchsemi"
+                        android:max = "24"
+                        android:progress="12"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_pitchsemi"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="语速"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content" />
+                    <SeekBar
+                        android:id="@+id/sb_speed"
+                        android:max = "150"
+                        android:progress="50"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_speed"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_wav_file"
+                android:hint="WAV格式背景音乐路径"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content" />
+            <CheckBox
+                android:id="@+id/cb_bg_music"
+                android:text="背景音乐"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="背景音量"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:max = "100"
+                android:progress="100"
+                android:layout_height="wrap_content" />
+            <SeekBar
+                android:id="@+id/sb_bg_volume"
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_bg_volume"
+                android:text="100%"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_login"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/tip_welcome"
+            android:textSize="8pt"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/et_id"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="请输入手机号"
+                android:layout_marginLeft="50dp" />
+
+            <Button
+                android:id="@+id/btn_login"
+                android:onClick="onClick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="确认" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

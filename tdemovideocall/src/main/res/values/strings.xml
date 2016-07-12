@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">TDemoVideoCall</string>
+
+    <string name="tip_welcome">欢迎使用基于TILVBSDK的双人视频通话示例程序, 该示例程序可以在两台安卓手机上进行视频/语音通话\n\n在使用之前，请输入一个用户标识(为避免冲突，建议使用自己的手机号)，该用户标识将作为呼叫号码，供别人呼叫，并作为来电号码显示在来电界面</string>
+
+    <string name="title_login">手机号登录</string>
+
+    <string name="tip_logout">注销</string>
+
+    <string name="tip_my_address">本机号码</string>
+    <string name="tip_dst_address">对方号码</string>
+    <string name="tip_make_call">发起呼叫</string>
+
+    <string name="tip_call_list">通话记录</string>
+
+    <string name="tip_accept_call">接听来电</string>
+    <string name="tip_reject_call">拒接来电</string>
+    <string name="tip_end_call">挂断</string>
+
+    <string name="tip_close_camera">关闭摄像头</string>
+    <string name="tip_open_camera">打开摄像头</string>
+    <string name="tip_switch_camera">切换摄像头</string>
+    <string name="tip_close_mic">关闭麦克风</string>
+    <string name="tip_open_mic">打开麦克风</string>
+    <string name="tip_set_speaker">切换到扬声器</string>
+    <string name="tip_set_headset">切换到听筒</string>
+    <string name="tip_set_beauty">设置美颜</string>
+
+    <string name="toast_phone_empty">呼叫号码不能为空</string>
+</resources>
