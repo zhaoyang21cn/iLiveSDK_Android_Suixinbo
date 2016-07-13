@@ -128,6 +128,14 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
     }
 
     @Override
+    public void onBackPressed() {
+        if (loginView.getVisibility() == View.GONE){
+            logout();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_logout){
             logout();

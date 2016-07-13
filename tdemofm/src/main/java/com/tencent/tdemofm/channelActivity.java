@@ -43,6 +43,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     private Object obj = new Object();
 
     private SoundTouch mSoundTouch;
+    private boolean bEnterRoom = false, bLogin = false;
 
     private AVAudioCtrl.RegistAudioDataCompleteCallback mAudioDataCompleteCallback = new AVAudioCtrl.RegistAudioDataCompleteCallback(){
         @Override
@@ -90,6 +91,16 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         mSoundTouch = new SoundTouch(0, 2, 1, 2, 1, 1);
 
         initView();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bEnterRoom){
+            quit(bLogin);
+        }else if (bLogin){
+            logout();
+        }
+        super.onBackPressed();
     }
 
     private void initView(){
@@ -140,6 +151,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 llControl.setVisibility(View.GONE);
                 llChannel.setVisibility(View.VISIBLE);
                 tvId.setText(TILVBSDK.getInstance().getMyUserId());
+                bLogin = true;
             }
 
             @Override
@@ -154,6 +166,16 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         llLogin.setVisibility(View.VISIBLE);
         llControl.setVisibility(View.GONE);
         llChannel.setVisibility(View.GONE);
+        bLogin = false;
+    }
+
+    private void onRoomQuit(final boolean bNeedLogout){
+        llControl.setVisibility(View.GONE);
+        llChannel.setVisibility(View.VISIBLE);
+        bEnterRoom = false;
+        if (bNeedLogout){
+            logout();
+        }
     }
 
     private void logout(){
@@ -183,6 +205,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             public void onSuccess(Object o) {
                 llControl.setVisibility(View.VISIBLE);
                 llChannel.setVisibility(View.GONE);
+                bEnterRoom = true;
             }
 
             @Override
@@ -217,18 +240,16 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     /**
      * 退出频道
      */
-    private void quit(){
+    private void quit(final boolean bNeedLogout){
         TILVBRoom.getInstance().quitRoom(new TILVBCallBack() {
             @Override
             public void onSuccess(Object o) {
-                llControl.setVisibility(View.GONE);
-                llChannel.setVisibility(View.VISIBLE);
+                onRoomQuit(bNeedLogout);
             }
 
             @Override
             public void onError(int i, String s) {
-                llControl.setVisibility(View.GONE);
-                llChannel.setVisibility(View.VISIBLE);
+                onRoomQuit(bNeedLogout);
             }
         });
     }
@@ -250,7 +271,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 join(etChannel.getText().toString());
             }
         }else if (v.getId() == R.id.btn_quit){
-            quit();
+            quit(false);
         }else if (v.getId() == R.id.btn_mic){
             changeMic();
         }
