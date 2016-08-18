@@ -1,11 +1,10 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.tencent.tilvbsdkdemo"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -21,9 +20,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22+'
-    compile project(':tdemofm')
-    compile project(':tdemovideocall')
-    compile project(':tdemolive')
+    compile project(':mtilvbsdk')
 }

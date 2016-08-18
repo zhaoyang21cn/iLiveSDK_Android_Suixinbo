@@ -14,12 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.av.sdk.AVAudioCtrl;
+import com.tencent.tilvbsdk.TILVBConstants;
 import com.tencent.tilvbsdk.TILVBSDK;
 import com.tencent.tilvbsdk.business.TILVBCallListener;
 import com.tencent.tilvbsdk.business.TILVBCallManager;
-import com.tencent.tilvbsdk.core.TILVBAudioManager;
-import com.tencent.tilvbsdk.core.TILVBRoom;
-import com.tencent.tilvbsdk.core.TILVBVideoManager;
+import com.tencent.tilvbsdk.core.TILVBRoomManager;
 import com.tencent.tilvbsdk.view.AVRootView;
 import com.tencent.tilvbsdk.view.AVVideoView;
 
@@ -59,20 +58,16 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
 
     private void changeCamera() {
         if (bCameraEnable) {
-            TILVBVideoManager.getInstance().closeCamera();
+            TILVBRoomManager.getInstance().enableCamera(TILVBRoomManager.getInstance().getCurCameraId(), false);
         } else {
-            TILVBVideoManager.getInstance().openCamera(TILVBVideoManager.FRONT_CAMERA);
+            TILVBRoomManager.getInstance().enableCamera(TILVBConstants.FRONT_CAMERA, true);
         }
         bCameraEnable = !bCameraEnable;
         btnCamera.setText(bCameraEnable ? R.string.tip_close_camera : R.string.tip_open_camera);
     }
 
     private void changeMic() {
-        if (bMicEnalbe) {
-            TILVBAudioManager.getInstance().closeMic();
-        } else {
-            TILVBAudioManager.getInstance().openMic();
-        }
+        TILVBRoomManager.getInstance().enableMic(!bMicEnalbe);
 
         bMicEnalbe = !bMicEnalbe;
         btnMic.setText(bMicEnalbe ? R.string.tip_close_mic : R.string.tip_open_mic);
@@ -89,11 +84,11 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
     }
 
     private void switchCamera() {
-        int mCurCameraId = TILVBVideoManager.getInstance().getCurrentCameraId();
-        if (TILVBVideoManager.FRONT_CAMERA == mCurCameraId) {
-            TILVBVideoManager.getInstance().switchCamera(TILVBVideoManager.BACK_CAMERA);
+        int mCurCameraId = TILVBRoomManager.getInstance().getCurCameraId();;
+        if (TILVBConstants.FRONT_CAMERA == mCurCameraId) {
+            TILVBRoomManager.getInstance().switchCamera(TILVBConstants.BACK_CAMERA);
         } else {
-            TILVBVideoManager.getInstance().switchCamera(TILVBVideoManager.FRONT_CAMERA);
+            TILVBRoomManager.getInstance().switchCamera(TILVBConstants.FRONT_CAMERA);
         }
     }
 
@@ -116,7 +111,7 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
                                               boolean fromUser) {
                     // TODO Auto-generated method stub
                     mBeautyRate = progress;
-                    TILVBVideoManager.getInstance().inputBeautyParam(9.0f * progress / 100.0f);
+                    TILVBSDK.getInstance().getAvVideoCtrl().inputBeautyParam(9.0f * progress / 100.0f);
                 }
             });
         }
@@ -140,12 +135,28 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
 
         tvTitle.setText("New Call From:\n" + mHostId);
         TILVBCallManager.getInstance().initAvView(avRootView);
+
+        avRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
+            @Override
+            public void onSubViewCreated() {
+                // 设置点击小屏切换及可拖动
+                final AVVideoView minorView = avRootView.getViewByIndex(1);
+                minorView.setDragable(true);
+                minorView.setGestureListener(new GestureDetector.SimpleOnGestureListener(){
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+                        avRootView.swapVideoView(0, 1);
+                        return false;
+                    }
+                });
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         TILVBCallManager.getInstance().removeCallListener(this);
-        TILVBCallManager.getInstance().freeAvView();
+        TILVBRoomManager.getInstance().onDestory();
         super.onDestroy();
     }
 
@@ -183,29 +194,6 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
     @Override
     public void onCallEstablish(int callId) {
         btnEndCall.setVisibility(View.VISIBLE);
-
-        // 设置点击小屏切换及可拖动
-        final AVVideoView minorView = TILVBRoom.getInstance().getUserVideoView(TILVBSDK.getInstance().getMyUserId());
-        minorView.setDragable(true);
-        minorView.setGestureListener(new GestureDetector.OnDoubleTapListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                TILVBRoom.getInstance().swapUserVideoView(TILVBCallManager.getInstance().getDstUserId(mCallId), TILVBSDK.getInstance().getMyUserId());
-                //roomMgr.
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent e) {
-                return false;
-            }
-        });
-
     }
 
     /**
@@ -217,5 +205,10 @@ public class CallActivity extends Activity implements TILVBCallListener, View.On
     @Override
     public void onCallEnd(int callId, int endResult, String endInfo) {
         finish();
+    }
+
+    @Override
+    public void onException(int i, int i1, String s) {
+
     }
 }

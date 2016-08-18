@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">tdemolive</string>
+
+    <string name="btn_join">加入房间</string>
+    <string name="btn_exit">退出房间</string>
+
+    <string name="btn_camera_open">打开摄像头</string>
+    <string name="btn_camera_close">关闭摄像头</string>
+    <string name="btn_camera_switch">切换摄像头</string>
+
+    <string name="btn_mic_open">打开麦克风</string>
+    <string name="btn_mic_close">关闭麦克风</string>
+
+    <string name="btn_push">推流</string>
+    <string name="btn_record">录制</string>
+</resources>

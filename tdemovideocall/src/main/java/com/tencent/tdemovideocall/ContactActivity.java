@@ -9,21 +9,18 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tencent.tilvbsdk.TILVBCallBack;
 import com.tencent.tilvbsdk.TILVBConstants;
 import com.tencent.tilvbsdk.TILVBSDK;
+import com.tencent.tilvbsdk.business.TILVBCallConfig;
 import com.tencent.tilvbsdk.business.TILVBCallListener;
 import com.tencent.tilvbsdk.business.TILVBCallManager;
-import com.tencent.tilvbsdk.core.TILVBLoginManager;
-import com.tencent.tilvbsdk.core.TILVBRoom;
-import com.tencent.tilvbsdk.core.TILVBRoomConfig;
+import com.tencent.tilvbsdk.business.TILVBCallOption;
+import com.tencent.tilvbsdk.core.TILVBRoomManager;
 
 import java.util.ArrayList;
 
@@ -33,12 +30,10 @@ import java.util.ArrayList;
 public class ContactActivity extends Activity implements View.OnClickListener, TILVBCallListener {
     private static String TAG = "ContactActivity";
     private TextView tvMyAddr;
-    private EditText etDstAddr, idInput;
+    private EditText etDstAddr;
     private ListView lvCallList;
-    private Button confrim;
     ArrayList<String> callList = new ArrayList<String>();
     private ArrayAdapter adapterCallList;
-    private LinearLayout callView,loginView;
     private AlertDialog mIncomingDlg;
     private int mCurIncomingId;
 
@@ -47,11 +42,6 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
         tvMyAddr = (TextView) findViewById(R.id.tv_my_address);
         etDstAddr = (EditText) findViewById(R.id.et_dst_address);
         lvCallList = (ListView) findViewById(R.id.lv_call_list);
-        idInput = (EditText) findViewById(R.id.id_input);
-        confrim = (Button) findViewById(R.id.confirm);
-        callView = (LinearLayout)findViewById(R.id.call_view);
-        loginView = (LinearLayout)findViewById(R.id.login_view);
-        confrim.setOnClickListener(this);
         adapterCallList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 callList);
         lvCallList.setAdapter(adapterCallList);
@@ -63,6 +53,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
             }
         });
 
+        tvMyAddr.setText(TILVBSDK.getInstance().getMyUserId());
     }
 
     private void addCallList(String remoteId) {
@@ -72,21 +63,13 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
             }
         }
     }
-
-    private void onLogout() {
-        // 注销成功清除用户信息，并跳转到登陆界面
-        //finish();
-        callView.setVisibility(View.INVISIBLE);
-        loginView.setVisibility(View.VISIBLE);
-    }
-
     /**
      * 发起呼叫
      *
      * @param remoteId
      */
     private void makeCall(String remoteId) {
-        int callId = TILVBCallManager.getInstance().makeCall(remoteId, TILVBConstants.CALL_TYPE_VIDEO);
+        int callId = TILVBCallManager.getInstance().makeCall(remoteId, new TILVBCallOption(TILVBSDK.getInstance().getMyUserId(), TILVBConstants.CALL_TYPE_VIDEO));
         if (TILVBConstants.INVALID_INTETER_VALUE != callId) {
             // 成功处理
             Intent intent = new Intent();
@@ -97,30 +80,13 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
         }
     }
 
-    private void logout() {
-        TILVBLoginManager.getInstance().tilvbLogout(new TILVBCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                onLogout();
-            }
-
-            @Override
-            public void onError(int errCode, String errMsg) {
-                onLogout();
-            }
-        });
-    }
-
     // 覆盖方法
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main);
-        //TODO 初始化随心播
-        TILVBSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
-        // 关闭IM群组
-        TILVBRoom.getInstance().init(new TILVBRoomConfig().imSupport(false));
 
+        TILVBCallManager.getInstance().init(this, new TILVBCallConfig());
         initView();
 
         // 设置通话回调
@@ -128,30 +94,14 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
     }
 
     @Override
-    public void onBackPressed() {
-        if (loginView.getVisibility() == View.GONE){
-            logout();
-        }
-        super.onBackPressed();
-    }
-
-    @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_logout){
-            logout();
-        }else if (v.getId() == R.id.btn_make_call){
+        if (v.getId() == R.id.btn_make_call){
             String remoteId = etDstAddr.getText().toString();
             if (!TextUtils.isEmpty(remoteId)) {
                 addCallList(remoteId);
                 makeCall(remoteId);
             } else {
                 Toast.makeText(this, R.string.toast_phone_empty, Toast.LENGTH_SHORT).show();
-            }
-        }else if(v.getId() == R.id.confirm){
-            if (idInput.getText().toString().equals("")) {
-                return;
-            } else {
-                login(idInput.getText().toString());
             }
         }
     }
@@ -165,7 +115,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
      * @param strTips    提示消息
      */
     @Override
-    public void onNewIncomingCall(int callId, int callType, final String fromUserId, String strTips) {
+    public void onNewIncomingCall(int callId, final int callType, final String fromUserId, String strTips) {
         if (null != mIncomingDlg){  // 关闭遗留来电对话框
             mIncomingDlg.dismiss();
         }
@@ -176,7 +126,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        TILVBCallManager.getInstance().acceptCall(mCurIncomingId);
+                        TILVBCallManager.getInstance().acceptCall(mCurIncomingId, new TILVBCallOption(fromUserId, callType));
                         Intent intent = new Intent();
                         intent.setClass(ContactActivity.this, CallActivity.class);
                         intent.putExtra("HostId", fromUserId);
@@ -207,23 +157,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, T
         }
     }
 
-    /**
-     * 调用SDK登陆
-     */
-    private void login(final String id) {
-        TILVBLoginManager.getInstance().tilvbLogin(id, "123456", new TILVBCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                TILVBSDK.getInstance().setMyUserId(id);
-                tvMyAddr.setText(TILVBSDK.getInstance().getMyUserId());
-                callView.setVisibility(View.VISIBLE);
-                loginView.setVisibility(View.INVISIBLE);
-            }
+    @Override
+    public void onException(int i, int i1, String s) {
 
-            @Override
-            public void onError(int errCode, String errMsg) {
-
-            }
-        });
     }
 }

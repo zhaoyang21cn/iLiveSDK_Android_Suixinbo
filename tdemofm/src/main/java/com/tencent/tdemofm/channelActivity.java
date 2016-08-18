@@ -19,10 +19,9 @@ import com.tencent.av.sdk.AVError;
 import com.tencent.tilvbsdk.TILVBCallBack;
 import com.tencent.tilvbsdk.TILVBConstants;
 import com.tencent.tilvbsdk.TILVBSDK;
-import com.tencent.tilvbsdk.core.TILVBAudioManager;
 import com.tencent.tilvbsdk.core.TILVBLoginManager;
-import com.tencent.tilvbsdk.core.TILVBRoom;
 import com.tencent.tilvbsdk.core.TILVBRoomConfig;
+import com.tencent.tilvbsdk.core.TILVBRoomManager;
 import com.tencent.tilvbsdk.core.TILVBRoomOption;
 
 /**
@@ -30,9 +29,9 @@ import com.tencent.tilvbsdk.core.TILVBRoomOption;
  */
 public class channelActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "channelActivity";
-    private LinearLayout llMain, llLogin, llChannel, llControl, llChange;
-    private EditText etId, etChannel, etWavFile;
-    private TextView tvId, tvBgVolume, tvPitchSemi, tvSpeed;
+    private LinearLayout llChannel, llControl, llChange;
+    private EditText etChannel, etWavFile;
+    private TextView tvBgVolume, tvPitchSemi, tvSpeed;
     private Button btnMic;
     private CheckBox cbBgMusic, cbChange;
     private SeekBar sbBkVolume, sbPitchSemi, sbSpeed;
@@ -54,14 +53,17 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             if (AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND ==  srcType) {  // 语音发送混入背景音乐
                 synchronized (obj) {
                     if (null != mReader) {
-                        audioFrame.sampleRate = (int) mReader.getSampleRate();
+/*                        audioFrame.sampleRate = (int) mReader.getSampleRate();
                         audioFrame.channelNum = mReader.getNumChannels();
                         audioFrame.bits = mReader.getBitPerSample();
                         audioFrame.dataLen = audioFrame.sampleRate * audioFrame.channelNum * 2 / 50;
                         if (position + audioFrame.dataLen > mReader.getDataLen()) {
                             position = 0;
-                        }
+                        }*/
                         int len = audioFrame.data.length;
+                        if (position + len > mReader.getDataLen()) {
+                            position = 0;
+                        }
                         System.arraycopy(mReader.getData(), position, audioFrame.data, 0, len);
                         position += len;
                     }
@@ -81,13 +83,6 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         super.onCreate(savedInstanceState);
         setContentView(R.layout.channel_activity);
 
-        TILVBSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
-
-        TILVBRoom.getInstance().init(new TILVBRoomConfig()
-                .imSupport(false)
-                .highAudioQuality(true)
-                .autoRender(false));
-
         mSoundTouch = new SoundTouch(0, 2, 1, 2, 1, 1);
 
         initView();
@@ -97,26 +92,20 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     public void onBackPressed() {
         if (bEnterRoom){
             quit(bLogin);
-        }else if (bLogin){
-            logout();
         }
         super.onBackPressed();
     }
 
     private void initView(){
-        llMain = (LinearLayout)findViewById(R.id.ll_main);
-        llLogin = (LinearLayout)findViewById(R.id.ll_login);
         llChannel = (LinearLayout)findViewById(R.id.ll_channel);
         llControl = (LinearLayout)findViewById(R.id.ll_channel_ctrl);
         llChange = (LinearLayout)findViewById(R.id.ll_change);
 
-        etId = (EditText)findViewById(R.id.et_id);
         etChannel = (EditText)findViewById(R.id.et_channel);
         etWavFile = (EditText)findViewById(R.id.et_wav_file);
 
         btnMic = (Button)findViewById(R.id.btn_mic);
 
-        tvId = (TextView)findViewById(R.id.tv_id);
         tvBgVolume = (TextView)findViewById(R.id.tv_bg_volume);
         tvPitchSemi = (TextView)findViewById(R.id.tv_pitchsemi);
         tvSpeed = (TextView)findViewById(R.id.tv_speed);
@@ -139,80 +128,42 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         etWavFile.setText("/sdcard/oneMin.wav");
     }
 
-    /**
-     *  SDK登陆
-     */
-    private void login(String id){
-        TILVBLoginManager.getInstance().tilvbLogin(id, "123", new TILVBCallBack() {
-            @Override
-            public void onSuccess(Object o) {
-                llMain.setVisibility(View.VISIBLE);
-                llLogin.setVisibility(View.GONE);
-                llControl.setVisibility(View.GONE);
-                llChannel.setVisibility(View.VISIBLE);
-                tvId.setText(TILVBSDK.getInstance().getMyUserId());
-                bLogin = true;
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-    }
-
-    private void onLogout(){
-        llMain.setVisibility(View.GONE);
-        llLogin.setVisibility(View.VISIBLE);
-        llControl.setVisibility(View.GONE);
-        llChannel.setVisibility(View.GONE);
-        bLogin = false;
-    }
-
     private void onRoomQuit(final boolean bNeedLogout){
         llControl.setVisibility(View.GONE);
         llChannel.setVisibility(View.VISIBLE);
         bEnterRoom = false;
-        if (bNeedLogout){
-            logout();
-        }
-    }
-
-    private void logout(){
-        TILVBLoginManager.getInstance().tilvbLogout(new TILVBCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                onLogout();
-            }
-
-            @Override
-            public void onError(int errCode, String errMsg) {
-                onLogout();
-            }
-        });
     }
 
     /**
      *  加入频道
      */
-    private void join(String strChannel){
+    private void join(final String strChannel, boolean bCreated){
         int channel = Integer.valueOf(strChannel);
-        TILVBRoomOption option = new TILVBRoomOption(channel, TILVBSDK.getInstance().getMyUserId())
+        TILVBRoomOption option = new TILVBRoomOption(TILVBSDK.getInstance().getMyUserId())
                 .autoCamera(false)
                 .autoMic(false);
-        TILVBRoom.getInstance().createRoom(option, new TILVBCallBack() {
+        TILVBCallBack callBack = new TILVBCallBack() {
             @Override
-            public void onSuccess(Object o) {
+            public void onSuccess(Object data) {
                 llControl.setVisibility(View.VISIBLE);
                 llChannel.setVisibility(View.GONE);
                 bEnterRoom = true;
             }
 
             @Override
-            public void onError(int i, String s) {
-                Log.v(TAG, "create room failed: i:" + i + "|" + s);
+            public void onError(String module, int errCode, String errMsg) {
+                Log.v(TAG, "create room failed: errCode:" + errCode + "|" + errMsg);
+                if (10021 == errCode){
+                    join(strChannel, false);
+                }
             }
-        });
+        };
+
+        if (bCreated){
+            TILVBRoomManager.getInstance().createRoom(channel, option, callBack);
+        }else{
+            TILVBRoomManager.getInstance().joinRoom(channel, option, callBack);
+        }
     }
 
     /**
@@ -221,12 +172,15 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     private int changeMic(){
         int ret = TILVBConstants.NO_ERR;
         if (bMicEnable){
-            ret = TILVBAudioManager.getInstance().closeMic();
+            ret = TILVBRoomManager.getInstance().enableMic(false);
+            cbBgMusic.setChecked(false);
+            cbChange.setChecked(false);
+            TILVBSDK.getInstance().getAvAudioCtrl().unregistAudioDataCallbackAll();
         }else{
-            ret = TILVBAudioManager.getInstance().openMic();
+            ret = TILVBRoomManager.getInstance().enableMic(true);
 
-            TILVBAudioManager.getInstance().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, mAudioDataCompleteCallback);
-            TILVBAudioManager.getInstance().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, mAudioDataCompleteCallback);
+            TILVBSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, mAudioDataCompleteCallback);
+            TILVBSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, mAudioDataCompleteCallback);
         }
 
         if (TILVBConstants.NO_ERR == ret){
@@ -241,14 +195,14 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      * 退出频道
      */
     private void quit(final boolean bNeedLogout){
-        TILVBRoom.getInstance().quitRoom(new TILVBCallBack() {
+        TILVBRoomManager.getInstance().quitRoom(new TILVBCallBack() {
             @Override
             public void onSuccess(Object o) {
                 onRoomQuit(bNeedLogout);
             }
 
             @Override
-            public void onError(int i, String s) {
+            public void onError(String s, int i, String s1) {
                 onRoomQuit(bNeedLogout);
             }
         });
@@ -260,15 +214,9 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_login){
-            if (!TextUtils.isEmpty(etId.getText().toString())){
-                login(etId.getText().toString());
-            }
-        }else if (v.getId() == R.id.btn_logout){
-            logout();
-        }else if (v.getId() == R.id.btn_join_channel){
+        if (v.getId() == R.id.btn_join_channel){
             if (!TextUtils.isEmpty(etChannel.getText().toString())){
-                join(etChannel.getText().toString());
+                join(etChannel.getText().toString(), true);
             }
         }else if (v.getId() == R.id.btn_quit){
             quit(false);
@@ -288,11 +236,11 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         if (seekBar.getId() == R.id.sb_bg_volume){  // 背景音量
             float volume = (float)progress / 100;
             tvBgVolume.setText(progress+"%");
-            TILVBAudioManager.getInstance().setAudioDataVolume(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, volume);
+            TILVBSDK.getInstance().getAvAudioCtrl().setAudioDataVolume(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, volume);
         }else if (seekBar.getId() == R.id.sb_pitchsemi){     // 语调
             float pitchSemi = progress - 12;
             tvPitchSemi.setText(""+pitchSemi);
-            mSoundTouch.setTempoChange(pitchSemi);
+            mSoundTouch.setPitchSemi(pitchSemi);
         }else if (seekBar.getId() == R.id.sb_speed){         // 语速
             float speed = progress - 50;
             tvSpeed.setText(""+speed);
@@ -326,8 +274,9 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                         audioFrameDesc.channelNum = mReader.getNumChannels();
                         audioFrameDesc.bits = mReader.getBitPerSample();
 
+                        Log.v("ILVB-DBG", "read wav file rate:"+mReader.getSampleRate()+", channel:"+mReader.getNumChannels()+", bits:"+mReader.getBitPerSample());
                         audioFrameDesc.srcTye = AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND;
-                        TILVBAudioManager.getInstance().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
+                        TILVBSDK.getInstance().getAvAudioCtrl().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
 
                         mSoundTouch.setChannels(mReader.getNumChannels());
                         mSoundTouch.setSamplingRate((int)mReader.getSampleRate());
