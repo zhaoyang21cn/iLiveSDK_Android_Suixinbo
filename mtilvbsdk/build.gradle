@@ -21,12 +21,4 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.tencent.tilvbsdk:tilvbsdk:0.6'
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/beacon_android_v1.9.9.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/imsdk.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/qavsdk.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/mobilepb.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/tls_sdk.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/qalsdk.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/libs/wup-1.0.0-SNAPSHOT.jar')
-    compile files('build/intermediates/exploded-aar/com.tencent.tilvbsdk/tilvbsdk/0.6/jars/classes.jar')
 }
