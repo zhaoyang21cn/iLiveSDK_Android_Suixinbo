@@ -12,12 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.tdemofm.channelActivity;
 import com.tencent.tdemolive.LiveActivity;
 import com.tencent.tdemovideocall.ContactActivity;
-import com.tencent.tilvbsdk.TILVBCallBack;
-import com.tencent.tilvbsdk.TILVBSDK;
-import com.tencent.tilvbsdk.core.TILVBLoginManager;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class MainMenu extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TILVBSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
 
         setContentView(R.layout.activity_mainmenu);
 
@@ -99,12 +99,12 @@ public class MainMenu extends Activity implements View.OnClickListener{
      *  SDK登陆
      */
     private void login(String id){
-        TILVBLoginManager.getInstance().tilvbLogin(id, "123", new TILVBCallBack() {
+        ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
             @Override
             public void onSuccess(Object o) {
                 llMain.setVisibility(View.VISIBLE);
                 llLogin.setVisibility(View.GONE);
-                tvId.setText(TILVBSDK.getInstance().getMyUserId());
+                tvId.setText(ILiveSDK.getInstance().getMyUserId());
             }
 
             @Override
@@ -120,7 +120,7 @@ public class MainMenu extends Activity implements View.OnClickListener{
     }
 
     private void logout(){
-        TILVBLoginManager.getInstance().tilvbLogout(new TILVBCallBack() {
+        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 onLogout();

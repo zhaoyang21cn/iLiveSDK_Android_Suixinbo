@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         minSdkVersion 16
@@ -23,4 +23,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22+'
     compile project(':mtilvbsdk')
+//    compile 'com.tencent.tilvbsdk:tilvbsdk:0.6'
 }

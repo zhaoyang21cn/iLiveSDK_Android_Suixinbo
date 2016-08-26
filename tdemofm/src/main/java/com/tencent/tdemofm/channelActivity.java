@@ -16,13 +16,11 @@ import android.widget.TextView;
 import com.smp.soundtouchandroid.SoundTouch;
 import com.tencent.av.sdk.AVAudioCtrl;
 import com.tencent.av.sdk.AVError;
-import com.tencent.tilvbsdk.TILVBCallBack;
-import com.tencent.tilvbsdk.TILVBConstants;
-import com.tencent.tilvbsdk.TILVBSDK;
-import com.tencent.tilvbsdk.core.TILVBLoginManager;
-import com.tencent.tilvbsdk.core.TILVBRoomConfig;
-import com.tencent.tilvbsdk.core.TILVBRoomManager;
-import com.tencent.tilvbsdk.core.TILVBRoomOption;
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveConstants;
+import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.core.ILiveRoomOption;
 
 /**
  * 变声Activity
@@ -139,10 +137,10 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      */
     private void join(final String strChannel, boolean bCreated){
         int channel = Integer.valueOf(strChannel);
-        TILVBRoomOption option = new TILVBRoomOption(TILVBSDK.getInstance().getMyUserId())
+        ILiveRoomOption option = new ILiveRoomOption(ILiveSDK.getInstance().getMyUserId())
                 .autoCamera(false)
                 .autoMic(false);
-        TILVBCallBack callBack = new TILVBCallBack() {
+        ILiveCallBack callBack = new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 llControl.setVisibility(View.VISIBLE);
@@ -160,9 +158,9 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         };
 
         if (bCreated){
-            TILVBRoomManager.getInstance().createRoom(channel, option, callBack);
+            ILiveRoomManager.getInstance().createRoom(channel, option, callBack);
         }else{
-            TILVBRoomManager.getInstance().joinRoom(channel, option, callBack);
+            ILiveRoomManager.getInstance().joinRoom(channel, option, callBack);
         }
     }
 
@@ -170,20 +168,20 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      * 修改Mic
      */
     private int changeMic(){
-        int ret = TILVBConstants.NO_ERR;
+        int ret = ILiveConstants.NO_ERR;
         if (bMicEnable){
-            ret = TILVBRoomManager.getInstance().enableMic(false);
+            ret = ILiveRoomManager.getInstance().enableMic(false);
             cbBgMusic.setChecked(false);
             cbChange.setChecked(false);
-            TILVBSDK.getInstance().getAvAudioCtrl().unregistAudioDataCallbackAll();
+            ILiveSDK.getInstance().getAvAudioCtrl().unregistAudioDataCallbackAll();
         }else{
-            ret = TILVBRoomManager.getInstance().enableMic(true);
+            ret = ILiveRoomManager.getInstance().enableMic(true);
 
-            TILVBSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, mAudioDataCompleteCallback);
-            TILVBSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, mAudioDataCompleteCallback);
+            ILiveSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, mAudioDataCompleteCallback);
+            ILiveSDK.getInstance().getAvAudioCtrl().registAudioDataCallback(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, mAudioDataCompleteCallback);
         }
 
-        if (TILVBConstants.NO_ERR == ret){
+        if (ILiveConstants.NO_ERR == ret){
             bMicEnable = !bMicEnable;
             btnMic.setText(bMicEnable ? R.string.tip_close_mic : R.string.tip_open_mic);
         }
@@ -195,7 +193,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      * 退出频道
      */
     private void quit(final boolean bNeedLogout){
-        TILVBRoomManager.getInstance().quitRoom(new TILVBCallBack() {
+        ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
             @Override
             public void onSuccess(Object o) {
                 onRoomQuit(bNeedLogout);
@@ -236,7 +234,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         if (seekBar.getId() == R.id.sb_bg_volume){  // 背景音量
             float volume = (float)progress / 100;
             tvBgVolume.setText(progress+"%");
-            TILVBSDK.getInstance().getAvAudioCtrl().setAudioDataVolume(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, volume);
+            ILiveSDK.getInstance().getAvAudioCtrl().setAudioDataVolume(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, volume);
         }else if (seekBar.getId() == R.id.sb_pitchsemi){     // 语调
             float pitchSemi = progress - 12;
             tvPitchSemi.setText(""+pitchSemi);
@@ -276,7 +274,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
 
                         Log.v("ILVB-DBG", "read wav file rate:"+mReader.getSampleRate()+", channel:"+mReader.getNumChannels()+", bits:"+mReader.getBitPerSample());
                         audioFrameDesc.srcTye = AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND;
-                        TILVBSDK.getInstance().getAvAudioCtrl().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
+                        ILiveSDK.getInstance().getAvAudioCtrl().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
 
                         mSoundTouch.setChannels(mReader.getNumChannels());
                         mSoundTouch.setSamplingRate((int)mReader.getSampleRate());

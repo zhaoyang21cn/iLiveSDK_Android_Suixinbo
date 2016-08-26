@@ -1,6 +1,6 @@
 package com.smp.soundtouchandroid;
 
-import com.tencent.tilvbsdk.core.TILVBLog;
+import com.tencent.ilivesdk.core.ILiveLog;
 
 public class SoundTouch {
     private final String TAG = "SoundTouch";
@@ -98,7 +98,7 @@ public class SoundTouch {
 
     public void setTempoChange(float tempoChange){
         if (tempoChange < -50 || tempoChange > 100)
-            TILVBLog.e(TAG, "Tempo percentage must be between -50 and 100");
+            ILiveLog.e(TAG, "Tempo percentage must be between -50 and 100");
         this.tempo = 1.0f + 0.01f * tempoChange;
         setTempoChange(track, tempoChange);
     }

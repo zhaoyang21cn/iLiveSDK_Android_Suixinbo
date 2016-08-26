@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.tencent.tilvbsdk.view.AVRootView
+    <com.tencent.ilivesdk.view.AVRootView
         android:id="@+id/av_root_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -6,12 +6,13 @@
     <LinearLayout
         android:id="@+id/ll_main"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
@@ -46,6 +47,8 @@
 
         <TextView
             android:text="@string/tip_menu_title"
+            android:textSize="25sp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <ListView
@@ -57,7 +60,7 @@
 
     <LinearLayout
         android:id="@+id/ll_login"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
