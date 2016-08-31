@@ -1,1 +1,1 @@
-include ':app', ':mtilvbsdk', ':tdemovideocall', ':tdemofm',':tdemolive'
+include ':app', ':tdemovideocall', ':tdemofm',':tdemolive'

@@ -49,7 +49,7 @@
             android:id="@+id/room_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="input room num"
+            android:hint="room id"
             android:textColor="@color/white"
             android:textColorHint="@color/colorGray3" />
 

@@ -94,7 +94,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main);
-
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
         ILVCallManager.getInstance().init(new ILVCallConfig());
         initView();
 

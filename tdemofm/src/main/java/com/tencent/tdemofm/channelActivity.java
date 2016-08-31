@@ -82,7 +82,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         setContentView(R.layout.channel_activity);
 
         mSoundTouch = new SoundTouch(0, 2, 1, 2, 1, 1);
-
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
         initView();
     }
 

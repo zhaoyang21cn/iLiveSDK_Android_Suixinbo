@@ -3,7 +3,6 @@ package com.tencent.tilvbsdkdemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,9 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.tencent.ilivesdk.ILiveCallBack;
-import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.tdemofm.channelActivity;
 import com.tencent.tdemolive.LiveActivity;
 import com.tencent.tdemovideocall.ContactActivity;
@@ -24,7 +20,7 @@ import java.util.ArrayList;
 /**
  * 示例菜单
  */
-public class MainMenu extends Activity implements View.OnClickListener{
+public class MainMenu extends Activity {
     private ListView lvMenu;
 
     private LinearLayout llLogin, llMain;
@@ -37,15 +33,12 @@ public class MainMenu extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
-
         setContentView(R.layout.activity_mainmenu);
-
-        llLogin = (LinearLayout)findViewById(R.id.ll_login);
-        llMain = (LinearLayout)findViewById(R.id.ll_main);
-        etId = (EditText)findViewById(R.id.et_id);
-        tvId = (TextView)findViewById(R.id.tv_id);
-        lvMenu = (ListView)findViewById(R.id.lv_menu);
+        llLogin = (LinearLayout) findViewById(R.id.ll_login);
+        llMain = (LinearLayout) findViewById(R.id.ll_main);
+        etId = (EditText) findViewById(R.id.et_id);
+        tvId = (TextView) findViewById(R.id.tv_id);
+        lvMenu = (ListView) findViewById(R.id.lv_menu);
 
         listDemo.add("VideoCall: 双人视频");
         listDemo.add("FM: 广播电台");
@@ -58,16 +51,16 @@ public class MainMenu extends Activity implements View.OnClickListener{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
 
-                switch (position){
-                case 0:
-                    intent.setClass(MainMenu.this, ContactActivity.class);
-                    break;
-                case 1:
-                    intent.setClass(MainMenu.this, channelActivity.class);
-                    break;
-                case 2:
-                    intent.setClass(MainMenu.this, LiveActivity.class);
-                    break;
+                switch (position) {
+                    case 0:
+                        intent.setClass(MainMenu.this, ContactActivity.class);
+                        break;
+                    case 1:
+                        intent.setClass(MainMenu.this, channelActivity.class);
+                        break;
+                    case 2:
+                        intent.setClass(MainMenu.this, LiveActivity.class);
+                        break;
                 }
 
                 startActivity(intent);
@@ -75,61 +68,4 @@ public class MainMenu extends Activity implements View.OnClickListener{
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        logout();
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-        case R.id.btn_login:
-            if (!TextUtils.isEmpty(etId.getText().toString())){
-                login(etId.getText().toString());
-            }
-            break;
-        case R.id.btn_logout:
-            logout();
-            break;
-        }
-    }
-
-    /**
-     *  SDK登陆
-     */
-    private void login(String id){
-        ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object o) {
-                llMain.setVisibility(View.VISIBLE);
-                llLogin.setVisibility(View.GONE);
-                tvId.setText(ILiveSDK.getInstance().getMyUserId());
-            }
-
-            @Override
-            public void onError(String s, int i, String s1) {
-
-            }
-        });
-    }
-
-    private void onLogout(){
-        llMain.setVisibility(View.GONE);
-        llLogin.setVisibility(View.VISIBLE);
-    }
-
-    private void logout(){
-        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                onLogout();
-            }
-
-            @Override
-            public void onError(String s, int i, String s1) {
-                onLogout();
-            }
-        });
-    }
 }
