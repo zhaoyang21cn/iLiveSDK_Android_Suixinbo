@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.smp.soundtouchandroid.SoundTouch;
 import com.tencent.av.sdk.AVAudioCtrl;
@@ -19,6 +20,7 @@ import com.tencent.av.sdk.AVError;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 
@@ -27,9 +29,9 @@ import com.tencent.ilivesdk.core.ILiveRoomOption;
  */
 public class channelActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "channelActivity";
-    private LinearLayout llChannel, llControl, llChange;
-    private EditText etChannel, etWavFile;
-    private TextView tvBgVolume, tvPitchSemi, tvSpeed;
+    private LinearLayout llMain, llLogin, llChannel, llControl, llChange;
+    private EditText etId, etChannel, etWavFile;
+    private TextView tvId, tvBgVolume, tvPitchSemi, tvSpeed;
     private Button btnMic;
     private CheckBox cbBgMusic, cbChange;
     private SeekBar sbBkVolume, sbPitchSemi, sbSpeed;
@@ -51,13 +53,6 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             if (AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND ==  srcType) {  // 语音发送混入背景音乐
                 synchronized (obj) {
                     if (null != mReader) {
-/*                        audioFrame.sampleRate = (int) mReader.getSampleRate();
-                        audioFrame.channelNum = mReader.getNumChannels();
-                        audioFrame.bits = mReader.getBitPerSample();
-                        audioFrame.dataLen = audioFrame.sampleRate * audioFrame.channelNum * 2 / 50;
-                        if (position + audioFrame.dataLen > mReader.getDataLen()) {
-                            position = 0;
-                        }*/
                         int len = audioFrame.data.length;
                         if (position + len > mReader.getDataLen()) {
                             position = 0;
@@ -91,19 +86,26 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         if (bEnterRoom){
             quit(bLogin);
         }
+        if (View.VISIBLE == llMain.getVisibility()){
+            logout();
+        }
         super.onBackPressed();
     }
 
     private void initView(){
+        llMain = (LinearLayout)findViewById(R.id.ll_main);
+        llLogin = (LinearLayout)findViewById(R.id.ll_login);
         llChannel = (LinearLayout)findViewById(R.id.ll_channel);
         llControl = (LinearLayout)findViewById(R.id.ll_channel_ctrl);
         llChange = (LinearLayout)findViewById(R.id.ll_change);
 
+        etId = (EditText)findViewById(R.id.et_id);
         etChannel = (EditText)findViewById(R.id.et_channel);
         etWavFile = (EditText)findViewById(R.id.et_wav_file);
 
         btnMic = (Button)findViewById(R.id.btn_mic);
 
+        tvId = (TextView)findViewById(R.id.tv_id);
         tvBgVolume = (TextView)findViewById(R.id.tv_bg_volume);
         tvPitchSemi = (TextView)findViewById(R.id.tv_pitchsemi);
         tvSpeed = (TextView)findViewById(R.id.tv_speed);
@@ -126,6 +128,47 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         etWavFile.setText("/sdcard/oneMin.wav");
     }
 
+    /**
+     *  SDK登陆
+     */
+    private void login(String id){
+        ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                llMain.setVisibility(View.VISIBLE);
+                llLogin.setVisibility(View.GONE);
+                llControl.setVisibility(View.GONE);
+                llChannel.setVisibility(View.VISIBLE);
+                tvId.setText(ILiveSDK.getInstance().getMyUserId());
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(channelActivity.this, "login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void onLogout(){
+        llMain.setVisibility(View.GONE);
+        llLogin.setVisibility(View.VISIBLE);
+        llControl.setVisibility(View.GONE);
+        llChannel.setVisibility(View.GONE);
+    }
+
+    private void logout(){
+        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                onLogout();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                onLogout();
+            }
+        });
+    }
     private void onRoomQuit(final boolean bNeedLogout){
         llControl.setVisibility(View.GONE);
         llChannel.setVisibility(View.VISIBLE);
@@ -138,6 +181,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     private void join(final String strChannel, boolean bCreated){
         int channel = Integer.valueOf(strChannel);
         ILiveRoomOption option = new ILiveRoomOption(ILiveSDK.getInstance().getMyUserId())
+                .imsupport(false)
                 .autoCamera(false)
                 .autoMic(false);
         ILiveCallBack callBack = new ILiveCallBack() {
@@ -151,6 +195,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 Log.v(TAG, "create room failed: errCode:" + errCode + "|" + errMsg);
+                Toast.makeText(channelActivity.this, "join room failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
                 if (10021 == errCode){
                     join(strChannel, false);
                 }
@@ -212,7 +257,13 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_join_channel){
+        if (v.getId() == R.id.btn_login){
+            if (!TextUtils.isEmpty(etId.getText().toString())){
+                login(etId.getText().toString());
+            }
+        }else if(v.getId() == R.id.btn_logout){
+            logout();
+        }else if (v.getId() == R.id.btn_join_channel){
             if (!TextUtils.isEmpty(etChannel.getText().toString())){
                 join(etChannel.getText().toString(), true);
             }
