@@ -34,7 +34,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     Button createBtn, joinbtn, backBtn, sendBtn, inviteBtn, closeMemBtn, thumbUpBtn;
     AVRootView avRootView;
     Button loginBtn;
-    EditText inputId, roomNum, textInput, memId, hostIdInput;
+    EditText inputId, roomNum, roomNumJoin,textInput, memId, hostIdInput;
     private static final String TAG = LiveActivity.class.getSimpleName();
 
     @Override
@@ -55,6 +55,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         loginBtn = (Button) findViewById(R.id.btn_login);
         inputId = (EditText) findViewById(R.id.id_input);
         roomNum = (EditText) findViewById(R.id.room_num);
+        roomNumJoin = (EditText) findViewById(R.id.room_num_join);
         textInput = (EditText) findViewById(R.id.text_input);
         hostIdInput = (EditText) findViewById(R.id.host_id);
         memId = (EditText) findViewById(R.id.mem_id);
@@ -201,7 +202,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILiveRoomOption hostOption = new ILiveRoomOption(null).
                     controlRole("Host")
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
-                    .cameraId(ILiveConstants.BACK_CAMERA)
+                    .cameraId(ILiveConstants.FRONT_CAMERA)
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
 
             ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
@@ -218,7 +219,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         }
 
         if (view.getId() == R.id.join) {
-            int room = Integer.parseInt("" + roomNum.getText());
+            int room = Integer.parseInt("" + roomNumJoin.getText());
             String hostId = "" + hostIdInput.getText();
             //加入房间配置项
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)

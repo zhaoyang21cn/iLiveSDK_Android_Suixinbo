@@ -25,7 +25,7 @@
         android:hint="input your id"
         android:textColorHint="@color/colorGray3"
         android:text=""
-        android:textColor="@color/white" />
+        android:textColor="@color/btn_blue" />
 
         <Button
         android:id="@+id/btn_login"
@@ -49,8 +49,8 @@
             android:id="@+id/room_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="room id"
-            android:textColor="@color/white"
+            android:hint="roomid(int)"
+            android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
         <Button
@@ -60,23 +60,8 @@
             android:text="create"
             android:textColor="@color/white" />
 
-        <EditText
-            android:id="@+id/host_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="host id"
-            android:textColor="@color/white"
-            android:textColorHint="@color/colorGray3" />
-
-        <Button
-            android:id="@+id/join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="join"
-            android:textColor="@color/white" />
-
-
     </LinearLayout>
+
 
 
     <LinearLayout
@@ -86,12 +71,48 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/room_num_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="roomid(int)"
+            android:textColor="@color/btn_blue"
+            android:textColorHint="@color/colorGray3" />
+
+
+        <EditText
+            android:id="@+id/host_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="hostId"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/btn_blue"
+            android:textColorHint="@color/colorGray3" />
+
+        <Button
+            android:id="@+id/join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="join"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:orientation="horizontal">
+
+        <EditText
             android:id="@+id/text_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             android:hint="text msg"
-            android:textColor="@color/white"
+            android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
         <Button
@@ -108,6 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <EditText
@@ -116,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             android:hint="mem id"
-            android:textColor="@color/white"
+            android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
         <Button
@@ -138,6 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="thumbUp"
+            android:visibility="gone"
             android:textColor="@color/white" />
     </LinearLayout>
 
