@@ -1,4 +1,4 @@
-package com.tencent.tilvbsdkdemo;
+package com.tencent.ilivedemo;
 
 import android.app.Activity;
 import android.content.Intent;
