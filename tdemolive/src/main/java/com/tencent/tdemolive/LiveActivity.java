@@ -40,7 +40,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_layout);
+        setContentView(R.layout.live_layout);
 
         createBtn = (Button) findViewById(R.id.create);
         joinbtn = (Button) findViewById(R.id.join);
