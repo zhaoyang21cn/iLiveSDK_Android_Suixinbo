@@ -80,11 +80,13 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         //设置消息回调接口
         liveConfig.setMsgListener(new ILVLiveConfig.TILVBLiveMsgListener() {
             @Override
+            //群文本消息
             public void onNewGroupTextMsg(String text, String id, TIMUserProfile userProfile, TIMGroupMemberInfo groupMemberInfo) {
                 Toast.makeText(LiveActivity.this, "" + text, Toast.LENGTH_SHORT).show();
             }
 
             @Override
+            //自定消息 包括C2C和群
             public void onNewCustomMsg(TIMCustomElem elem, String id, TIMUserProfile userProfile, TIMGroupMemberInfo groupMemberInfo) {
                 Log.i(TAG, "onNewCustomMsg ");
                 handleCustomMsg(elem, id);
@@ -126,9 +128,9 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * 处理自定义消息
-     * @param elem
-     * @param id
+     * 处理自定义消息  更多自定义消息可以查看类ILVLiveConstants,也支持用户自定义自己的消息
+     * @param elem 自定义消息类型
+     * @param id 发送者
      */
     private void handleCustomMsg(TIMCustomElem elem, String id) { //解析Jason格式Custom消息
         try {
@@ -138,7 +140,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             JSONObject json = (JSONObject) jsonParser.nextValue();
             int action = json.getInt(ILVLiveConstants.CMD_KEY);
             switch (action) {
-                case ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE: //主播邀请上麦
+                case ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE: //以定义的上麦消息
                     Log.i(TAG, "handleCustomMsg ");
                     ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
                         @Override
@@ -152,20 +154,10 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                         }
                     });
                     break;
-                case ILVLiveConstants.AVIMCMD_MUlTI_JOIN:
-                    break;
-                case ILVLiveConstants.AVIMCMD_MUlTI_REFUSE:
-                    break;
-                case ILVLiveConstants.AVIMCMD_THUMBUP:
+                case ILVLiveConstants.AVIMCMD_THUMBUP://处理点赞
                     Toast.makeText(LiveActivity.this, "thumb up !!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
                     break;
-                case ILVLiveConstants.AVIMCMD_ENTERLIVE:
-                    //mLiveView.refreshText("Step in live", sendId);
-                    break;
-                case ILVLiveConstants.AVIMCMD_EXITLIVE:
-                    //mLiveView.refreshText("quite live", sendId);
-                    break;
-                case ILVLiveConstants.AVIMCMD_MULTI_CLOSE_INTERACT://主播关闭摄像头命令
+                case ILVLiveConstants.AVIMCMD_MULTI_CLOSE_INTERACT://关闭消息
                     ILVLiveManager.getInstance().downToNorMember(ILVLiveConstants.NORMAL_MEMBER_AUTH, ILVLiveConstants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
                         @Override
                         public void onSuccess(Object data) {
@@ -177,16 +169,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                         }
                     });
-                    break;
-                case ILVLiveConstants.AVIMCMD_MULTI_HOST_CANCELINVITE:
-                    break;
-                case ILVLiveConstants.AVIMCMD_MULTI_HOST_CONTROLL_CAMERA:
-                    break;
-                case ILVLiveConstants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
-                    break;
-                case ILVLiveConstants.AVIMCMD_HOST_LEAVE:
-                    break;
-                case ILVLiveConstants.AVIMCMD_HOST_BACK:
                     break;
                 default:
                     break;
@@ -231,7 +213,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
-
+            //创建房间
             ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
@@ -255,6 +237,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
                     .autoMic(false);//是否自动打开mic
+            //加入房间
             ILVLiveManager.getInstance().joinRoom(room, memberOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
@@ -268,7 +251,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             });
         }
 
-        if (view.getId() == R.id.back) { //退出房间
+        if (view.getId() == R.id.back) {
+            //退出房间
             ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
@@ -283,7 +267,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         }
 
 
-        if (view.getId() == R.id.text_send) { //发送消息
+        if (view.getId() == R.id.text_send) {
+            //发送消息
             ILiveSDK.getInstance().setMyUserId("" + inputId.getText());
             ILVLiveManager.getInstance().sendGroupTextMsg("" + textInput.getText(), new ILiveCallBack() {
                 @Override
@@ -300,7 +285,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         }
 
 
-        if (view.getId() == R.id.invite) { //邀请上麦
+        if (view.getId() == R.id.invite) {
+            //邀请上麦
             String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE, "");
             ILVLiveManager.getInstance().sendC2CCustomMessage(inviteVideo, "" + memId.getText(), TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
                 @Override
@@ -318,7 +304,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         }
 
-        if (view.getId() == R.id.close_mem) {//关闭上麦
+        if (view.getId() == R.id.close_mem) {
+            //关闭上麦
             String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_MULTI_CLOSE_INTERACT, "");
             ILVLiveManager.getInstance().sendC2CCustomMessage(inviteVideo, "" + memId.getText(), TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
                 @Override
@@ -335,7 +322,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
 
         }
-        if (view.getId() == R.id.thumbUp) {//点赞
+        if (view.getId() == R.id.thumbUp) {
+            //发送点赞
             String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_THUMBUP, "");
             ILVLiveManager.getInstance().sendGroupCustomMessage(inviteVideo, TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
                 @Override
