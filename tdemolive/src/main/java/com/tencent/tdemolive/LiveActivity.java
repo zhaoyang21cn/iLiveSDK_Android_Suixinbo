@@ -60,7 +60,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         hostIdInput = (EditText) findViewById(R.id.host_id);
         memId = (EditText) findViewById(R.id.mem_id);
 
-
         createBtn.setOnClickListener(this);
         joinbtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
@@ -129,8 +128,9 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
     /**
      * 处理自定义消息  更多自定义消息可以查看类ILVLiveConstants,也支持用户自定义自己的消息
+     *
      * @param elem 自定义消息类型
-     * @param id 发送者
+     * @param id   发送者
      */
     private void handleCustomMsg(TIMCustomElem elem, String id) { //解析Jason格式Custom消息
         try {
@@ -141,7 +141,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             int action = json.getInt(ILVLiveConstants.CMD_KEY);
             switch (action) {
                 case ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE: //以定义的上麦消息
-                    Log.i(TAG, "handleCustomMsg ");
+                    Toast.makeText(this, "receive a video invitation !!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "handleCustomMsg  AVIMCMD_MUlTI_HOST_INVITE ");
                     ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
                         @Override
                         public void onSuccess(Object data) {
@@ -188,7 +189,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
         if (view.getId() == R.id.btn_login) { //登陆房间
             ILiveSDK.getInstance().setMyUserId("" + inputId.getText());
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
@@ -252,6 +252,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         }
 
         if (view.getId() == R.id.back) {
+            if (avRootView != null)
+                avRootView.clearUserView();
             //退出房间
             ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
                 @Override
