@@ -126,7 +126,6 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
 
         // 添加通话回调
         ILVCallManager.getInstance().addCallListener(this);
-
         Intent intent = getIntent();
         mHostId = intent.getStringExtra("HostId");
         mCallId = intent.getIntExtra("CallId", 0);
@@ -182,10 +181,6 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
         }
     }
 
-    // 回调方法
-    @Override
-    public void onNewIncomingCall(int callId, int callType, String fromUserId, String strTips) {
-    }
 
     /**
      * 会话建立回调
@@ -209,11 +204,6 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
 
     @Override
     public void onException(int i, int i1, String s) {
-
-    }
-
-    @Override
-    public void onMembersUpdate() {
 
     }
 }

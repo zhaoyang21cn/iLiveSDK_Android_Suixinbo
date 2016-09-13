@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tencent.TIMMessage;
+import com.tencent.TIMMessageListener;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
@@ -22,6 +25,7 @@ import com.tencent.ilivesdk.business.callbusiness.ILVCallConstants;
 import com.tencent.ilivesdk.business.callbusiness.ILVCallListener;
 import com.tencent.ilivesdk.business.callbusiness.ILVCallManager;
 import com.tencent.ilivesdk.business.callbusiness.ILVCallOption;
+import com.tencent.ilivesdk.business.callbusiness.ILVIncomingListener;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 
 import java.util.ArrayList;
@@ -30,10 +34,10 @@ import java.util.List;
 /**
  * 联系人界面
  */
-public class ContactActivity extends Activity implements View.OnClickListener, ILVCallListener {
+public class ContactActivity extends Activity implements View.OnClickListener, ILVIncomingListener, ILVCallListener {
     private static String TAG = "ContactActivity";
-//    private TextView tvMyAddr;
-    private EditText etDstAddr,inputId;
+    //    private TextView tvMyAddr;
+    private EditText etDstAddr, inputId;
     private Button loginBtn;
     private ListView lvCallList;
     ArrayList<String> callList = new ArrayList<String>();
@@ -41,7 +45,6 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     private AlertDialog mIncomingDlg;
     private int mCurIncomingId;
 
-    // 内部方法
     private void initView() {
 //        tvMyAddr = (TextView) findViewById(R.id.tv_my_address);
         etDstAddr = (EditText) findViewById(R.id.et_dst_address);
@@ -56,8 +59,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
                 makeCall(remoteId);
             }
         });
-        inputId =  (EditText) findViewById(R.id.id_input);
-        loginBtn =  (Button) findViewById(R.id.btn_login);
+        inputId = (EditText) findViewById(R.id.id_input);
+        loginBtn = (Button) findViewById(R.id.btn_login);
         loginBtn.setOnClickListener(this);
 //        tvMyAddr.setText(ILiveSDK.getInstance().getMyUserId());
     }
@@ -76,9 +79,13 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
      * @param remoteId
      */
     private void makeCall(String remoteId) {
-        List<String> ids = new ArrayList<String>();
-        ids.add(remoteId);
-        int callId = ILVCallManager.getInstance().makeCall(ids, new ILVCallOption(ILiveSDK.getInstance().getMyUserId(), ILVCallConstants.CALL_TYPE_VIDEO));
+//        List<String> ids = new ArrayList<String>();
+//        ids.add(remoteId);
+        ILVCallOption option = new ILVCallOption(ILiveSDK.getInstance().getMyUserId());
+        option.setCallType(ILVCallConstants.CALL_TYPE_VIDEO);
+        option.setRoomId(0);
+
+        int callId = ILVCallManager.getInstance().makeCall(remoteId, option);
         if (ILiveConstants.INVALID_INTETER_VALUE != callId) {
             // 成功处理
             Intent intent = new Intent();
@@ -89,7 +96,6 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         }
     }
 
-    // 覆盖方法
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +106,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
 
         // 设置通话回调
         ILVCallManager.getInstance().addCallListener(this);
+        ILVCallManager.getInstance().addIncomingListener(this);
     }
 
     @Override
@@ -134,12 +141,13 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
      * 回调接口 来电
      *
      * @param callId     来电ID
-     * @param callType   来电类型
+     * @param callType   来电类型11
      * @param fromUserId
      * @param strTips    提示消息
      */
     @Override
     public void onNewIncomingCall(int callId, final int callType, final String fromUserId, String strTips) {
+        Log.d(TAG, "onNewIncomingCall: " + callId);
         if (null != mIncomingDlg) {  // 关闭遗留来电对话框
             mIncomingDlg.dismiss();
         }
@@ -150,7 +158,10 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ILVCallManager.getInstance().acceptCall(mCurIncomingId, new ILVCallOption(fromUserId,ILVCallConstants.CALL_TYPE_VIDEO));
+                        ILVCallOption option = new ILVCallOption(fromUserId);
+                        option.setCallType(ILVCallConstants.CALL_TYPE_VIDEO);
+                        option.setRoomId(0);
+                        ILVCallManager.getInstance().acceptCall(mCurIncomingId, option);//接收通话
                         Intent intent = new Intent();
                         intent.setClass(ContactActivity.this, CallActivity.class);
                         intent.putExtra("HostId", fromUserId);
@@ -161,7 +172,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
                 .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ILVCallManager.getInstance().rejectCall(mCurIncomingId);
+                        ILVCallManager.getInstance().rejectCall(mCurIncomingId);//拒绝通话
                     }
                 })
                 .create();
@@ -186,8 +197,4 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
 
     }
 
-    @Override
-    public void onMembersUpdate() {
-
-    }
 }
