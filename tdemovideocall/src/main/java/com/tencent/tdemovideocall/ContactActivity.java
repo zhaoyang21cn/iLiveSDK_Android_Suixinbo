@@ -110,6 +110,22 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     }
 
     @Override
+    protected void onDestroy() {
+        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+
+            }
+        });
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_make_call) {
             String remoteId = etDstAddr.getText().toString();
