@@ -21,6 +21,7 @@ import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.ilivesdk.core.ILiveRoomConfig;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 
@@ -78,6 +79,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
 
         mSoundTouch = new SoundTouch(0, 2, 1, 2, 1, 1);
         ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
+        ILiveRoomManager.getInstance().init(new ILiveRoomConfig());
         initView();
     }
 
