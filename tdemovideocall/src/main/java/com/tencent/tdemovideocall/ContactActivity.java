@@ -45,6 +45,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     private AlertDialog mIncomingDlg;
     private int mCurIncomingId;
 
+    private boolean bLogin = false;
+
     private void initView() {
 //        tvMyAddr = (TextView) findViewById(R.id.tv_my_address);
         etDstAddr = (EditText) findViewById(R.id.et_dst_address);
@@ -111,17 +113,22 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
 
     @Override
     protected void onDestroy() {
-        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
+        ILVCallManager.getInstance().removeIncomingListener(this);
+        ILVCallManager.getInstance().removeCallListener(this);
+        if (bLogin) {
+            ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
+                @Override
+                public void onSuccess(Object data) {
 
-            }
+                }
 
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
 
-            }
-        });
+                }
+            });
+        }
+        ILVCallManager.getInstance().shutdown();
         super.onDestroy();
     }
 
@@ -141,6 +148,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bLogin = true;
                     Toast.makeText(ContactActivity.this, "login success !", Toast.LENGTH_SHORT).show();
                 }
 
