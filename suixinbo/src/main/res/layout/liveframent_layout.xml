@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/livetitle"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@color/btn_red_hover"
+        android:gravity="center"
+        android:text="@string/live_titile"
+        android:textSize="20sp" />
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/testHostId"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="willguo" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/JoinLive"-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_gravity="bottom|center_horizontal"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:background="@color/btn_red"-->
+    <!--android:clickable="true"-->
+    <!--android:focusable="true"-->
+    <!--android:gravity="center"-->
+    <!--android:text="Join"-->
+    <!--android:textSize="20sp" />-->
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/live_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:divider="@null" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

@@ -25,4 +25,5 @@ dependencies {
     compile project(':tdemofm')
     compile project(':tdemovideocall')
     compile project(':tdemolive')
+    compile project(':suixinbo')
 }

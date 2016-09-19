@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="qq_list">
+    </string-array>
+    <string-array name="openid_list">
+    </string-array>
+    <string-array name="openkey_list">
+    </string-array>
+</resources>

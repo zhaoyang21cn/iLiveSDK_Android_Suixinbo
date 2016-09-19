@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_style">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30px">
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="名称"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/record_filename"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/text1"
+            android:layout_toRightOf="@id/text1"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+         />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/text1"
+            android:text="标签"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/record_tag"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/text2"
+            android:layout_toRightOf="@id/text2"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/text2"
+            android:text="分类"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/record_class"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/text3"
+            android:layout_toRightOf="@id/text3"
+            android:inputType="number"
+            android:text="8921"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/text3"
+            android:text="转码"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:id="@+id/record_tran_code"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@id/text4"
+            android:layout_toRightOf="@id/text4"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/text5"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/text4"
+            android:text="截图"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:id="@+id/record_screen_shot"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@id/text5"
+            android:layout_toRightOf="@id/text5"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:id="@+id/text6"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/text5"
+            android:text="水印"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/black"/>
+
+        <CheckBox
+            android:id="@+id/record_water_mark"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@id/text6"
+            android:layout_toRightOf="@id/text6"
+            android:layout_marginLeft="15dp"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2px"
+        android:layout_marginTop="57px"
+        android:background="#d1d1d1"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="153px"
+        android:orientation="horizontal"
+        android:background="@drawable/dialog_style"
+        >
+
+        <Button
+            android:id="@+id/btn_record_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_btn_style"
+            android:text="取消录制"
+            android:textSize="@dimen/text_size"
+            android:textColor="@color/colorGray2"/>
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="fill_parent"
+            android:background="#d1d1d1"
+            />
+
+        <Button
+            android:id="@+id/btn_record_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_btn_style"
+            android:text="开始录制"
+            android:textSize="@dimen/text_size"
+            android:textColor="#dc3839"/>
+    </LinearLayout>
+</LinearLayout>
