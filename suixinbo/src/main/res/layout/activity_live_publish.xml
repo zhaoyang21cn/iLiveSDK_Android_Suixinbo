@@ -75,7 +75,7 @@
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/background"
                 android:gravity="top"
                 android:hint="@string/text_live_title_input"
                 android:lines="4"
