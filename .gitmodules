@@ -1,6 +1,3 @@
-[submodule "ilivesdk"]
-	path = ilivesdk
-	url = http://git.code.oa.com/willguo/ilivesdk.git
 [submodule "ilivesdkmodule"]
 	path = ilivesdkmodule
 	url = http://git.code.oa.com/willguo/ilivesdk.git
