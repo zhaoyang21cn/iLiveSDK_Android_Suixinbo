@@ -10,3 +10,5 @@ gi*.iml
 /captures
 .idea/vcs.xml
 *.iml
+.gitmodules
+ilivesdkmodule/
