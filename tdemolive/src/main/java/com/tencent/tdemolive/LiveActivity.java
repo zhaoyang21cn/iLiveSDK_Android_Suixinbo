@@ -51,6 +51,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         thumbUpBtn = (Button) findViewById(R.id.thumbUp);
 
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
+        ILVLiveManager.getInstance().setAvVideoView(avRootView);
 
         loginBtn = (Button) findViewById(R.id.btn_login);
         inputId = (EditText) findViewById(R.id.id_input);
@@ -94,7 +95,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         //初始化直播场景
         ILVLiveManager.getInstance().init(liveConfig);
         //设置渲染界面
-        ILVLiveManager.getInstance().setAvVideoView(avRootView);
+
 
         //设置小窗口初始位置
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
