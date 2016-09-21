@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.tencent.customstream.CameraActivity;
 import com.tencent.qcloud.suixinbo.adapters.LiveShowAdapter;
 import com.tencent.qcloud.suixinbo.views.LoginActivity;
 import com.tencent.tdemofm.channelActivity;
@@ -49,6 +50,7 @@ public class MainMenu extends Activity {
         listDemo.add("Live: 直播");
         listDemo.add("新随心播");
         listDemo.add("LiveShow: 播放特性展示");
+        listDemo.add("CustomStream: 自定义输入");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 listDemo);
         lvMenu.setAdapter(adapterDemo);
@@ -72,6 +74,9 @@ public class MainMenu extends Activity {
                         break;
                     case 4:
                         intent.setClass(MainMenu.this, LiveshowActivity.class);
+                        break;
+                    case 5:
+                        intent.setClass(MainMenu.this, CameraActivity.class);
                         break;
                 }
 

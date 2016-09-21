@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tencent.customstream.CameraActivity">
+
+    <com.tencent.ilivesdk.view.AVRootView
+        android:id="@+id/av_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:background="@color/white" />
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/id_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="input your id"
+                android:textColorHint="@color/colorGray3"
+                android:textColor="@color/btn_blue" />
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="login"
+                android:onClick="onClick"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/id_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="input room"
+                android:textColorHint="@color/colorGray3"
+                android:text=""
+                android:inputType="number"
+                android:textColor="@color/btn_blue" />
+
+
+            <Button
+                android:id="@+id/btn_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CREATE"
+                android:onClick="onClick"
+                android:textColor="@color/white"
+                />
+            <Button
+                android:id="@+id/btn_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CAMERA"
+                android:onClick="onClick"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/id_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="host id"
+                android:textColorHint="@color/colorGray3"
+                android:text=""
+                android:textColor="@color/btn_blue" />
+            <EditText
+                android:id="@+id/id_host_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="host room"
+                android:textColorHint="@color/colorGray3"
+                android:textColor="@color/btn_blue" />
+
+
+            <Button
+                android:id="@+id/btn_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JOIN"
+                android:onClick="onClick"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

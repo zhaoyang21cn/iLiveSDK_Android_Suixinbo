@@ -27,4 +27,5 @@ dependencies {
     compile project(':tdemolive')
     compile project(':suixinbo')
     compile project(':tdemoliveshow')
+    compile project(':customstream')
 }
