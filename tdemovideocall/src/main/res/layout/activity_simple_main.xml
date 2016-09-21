@@ -1,99 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/local_tip"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="20sp"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:text="本机号码" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/tv_my_address"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="20sp"-->
-            <!--android:layout_marginLeft="20dp"-->
-            <!--android:layout_toRightOf="@id/local_tip"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--android:layout_centerVertical="true" />-->
-    <!--</RelativeLayout>-->
-
-
     <LinearLayout
+        android:id="@+id/call_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/id_input"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
-            android:hint="input your id"
-            android:text=""
-             />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:layout_marginTop="0dp"
-            android:text="login"
-            />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/local_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:text="本机号码" />
 
+            <TextView
+                android:id="@+id/tv_my_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/local_tip"
+                android:textColor="@color/colorAccent"
+                android:layout_centerVertical="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:onClick="onClick"
+                android:text="注销" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="对方号码" />
+
+            <EditText
+                android:id="@+id/et_dst_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="请输入需要拨打手机号"
+                android:singleLine="true"
+                android:textSize="6pt" />
+
+            <Button
+                android:id="@+id/btn_make_call"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:onClick="onClick"
+                android:text="发起呼叫" />
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="对方号码" />
+            android:layout_marginTop="20dp"
+            android:text="@string/tip_call_list" />
 
-        <EditText
-            android:id="@+id/et_dst_address"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:hint="请输入需要拨打手机号"
-            android:inputType="phone"
-            android:singleLine="true"
-            android:textSize="6pt" />
-
-        <Button
-            android:id="@+id/btn_make_call"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:onClick="onClick"
-            android:text="发起呼叫" />
+        <ListView
+            android:id="@+id/lv_call_list"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/login_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/tip_call_list" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lv_call_list"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-</LinearLayout>
+        <TextView
+            android:text="@string/tip_welcome"
+            android:textSize="8pt"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="@string/tip_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/id_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="@string/tip_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/id_password"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/regist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="注册" />
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确认" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
