@@ -68,7 +68,7 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 2广播电台 ：纯音频场景的示例，演示混音功能     
 3基础直播 ：互动直播基础演示基础功能 登录进房间 加入房间 发消息 自定义消息等    
 4新随心播 ：基于ILiveSDK接口重构的随心播        
-5直播特性 ：在直播场景上加入一些特色小功能演示
+5直播特性 ：在直播场景上加入一些特色小功能演示   <br />
 6自定义视频输入 ： [详细文档](/customstream/)
 ##API文档
 在DEMO工程中附带了一份API文档 
