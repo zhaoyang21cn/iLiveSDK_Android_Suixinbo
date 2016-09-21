@@ -63,7 +63,7 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 
             
 ##DEMO
-有六个示例
+有六个示例  <br />
 1双人视频 ：双人通话场景的简单示例，类微信视频聊天。    
 2广播电台 ：纯音频场景的示例，演示混音功能     
 3基础直播 ：互动直播基础演示基础功能 登录进房间 加入房间 发消息 自定义消息等    
