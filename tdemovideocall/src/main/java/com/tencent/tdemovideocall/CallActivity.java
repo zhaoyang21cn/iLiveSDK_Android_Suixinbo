@@ -170,11 +170,15 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
     }
 
     @Override
+    public void onBackPressed() {
+        ILVCallManager.getInstance().endCall(mCallId);
+    }
+
+    @Override
     public void onClick(View v) {
         // library中不能使用switch索引资源id
         if (v.getId() == R.id.btn_end){
             ILVCallManager.getInstance().endCall(mCallId);
-            finish();
         }else if (v.getId() == R.id.btn_camera){
             changeCamera();
         }else if(v.getId() == R.id.btn_mic){
