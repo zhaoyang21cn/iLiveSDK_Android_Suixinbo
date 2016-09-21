@@ -45,8 +45,8 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
         View view = inflater.inflate(R.layout.liveframent_layout, container, false);
         mLiveList = (ListView) view.findViewById(R.id.live_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout_list);
-        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
-                android.R.color.holo_orange_light, android.R.color.holo_red_light);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),getResources().getColor(android.R.color.holo_red_light));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         adapter = new LiveShowAdapter(getActivity(), R.layout.item_liveshow, liveList);

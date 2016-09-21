@@ -32,7 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/background"
         android:orientation="horizontal">
 
         <ImageView
@@ -47,6 +47,9 @@
             android:focusableInTouchMode="false"
             android:src="@drawable/icon_tab_profile_default"
             />
+
+
+
 
         <LinearLayout
             android:layout_width="wrap_content"
