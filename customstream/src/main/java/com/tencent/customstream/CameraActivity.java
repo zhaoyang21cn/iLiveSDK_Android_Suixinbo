@@ -51,19 +51,18 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     }
 
 
-    /** A safe way to get an instance of the Camera object. */
-    private static Camera getCameraInstance(){
+    /**
+     * A safe way to get an instance of the Camera object.
+     */
+    private static Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
     }
-
-
 
 
     /**
@@ -87,11 +86,11 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 }
             });
         }
-        if (view.getId() == R.id.btn_create){
+        if (view.getId() == R.id.btn_create) {
             avRootView.setVisibility(View.GONE);
             join();
         }
-        if (view.getId() == R.id.btn_camera){
+        if (view.getId() == R.id.btn_camera) {
             mCamera = getCameraInstance();
             mPreview = new CameraPreview(this, mCamera);
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -128,8 +127,8 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
 
     // 加入房间
-    private void join(){
-        if (!TextUtils.isEmpty(roomNum.getText().toString())){
+    private void join() {
+        if (!TextUtils.isEmpty(roomNum.getText().toString())) {
             ILiveRoomOption option = new ILiveRoomOption("")
                     .imsupport(false)
                     .autoCamera(false)
@@ -154,7 +153,8 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         ILVLiveManager.getInstance().onPause();
-        mPreview.release();
+        if (mPreview != null)
+            mPreview.release();
     }
 
     @Override
@@ -162,7 +162,6 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         super.onResume();
         ILVLiveManager.getInstance().onResume();
     }
-
 
 
     @Override
