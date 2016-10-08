@@ -140,6 +140,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
 
     @Override
     protected void onDestroy() {
+        ILVCallManager.getInstance().removeIncomingListener(this);
+        ILVCallManager.getInstance().removeCallListener(this);
         if (bLogin){
             ILiveLoginManager.getInstance().tilvbLogout(null);
         }
