@@ -31,6 +31,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
     Button loginBtn;
     EditText inputId, roomNum, roomNumJoin, textInput, memId, hostIdInput;
     private static final String TAG = LiveshowActivity.class.getSimpleName();
+    private boolean bLogin = false; // 记录登陆状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +135,9 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
+        if (bLogin){    // 关闭界面时注销用户
+            ILiveLoginManager.getInstance().tilvbLogout(null);
+        }
         ILVLiveManager.getInstance().shutdown();
         super.onDestroy();
     }
@@ -145,6 +149,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bLogin = true;
                     Toast.makeText(LiveshowActivity.this, "login success !", Toast.LENGTH_SHORT).show();
                 }
 
