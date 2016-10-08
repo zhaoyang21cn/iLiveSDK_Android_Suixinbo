@@ -31,6 +31,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     int iRoomNum;
     EditText inputId, roomNum, hostIdInput, hostRoom;
     boolean bEnterRoom;
+    private boolean bLogin;     // 记录登录状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bLogin = true;
                     Toast.makeText(CameraActivity.this, "login success !", Toast.LENGTH_SHORT).show();
                 }
 
@@ -166,6 +168,9 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
+        if (bLogin){
+            ILiveLoginManager.getInstance().tilvbLogout(null);
+        }
         ILVLiveManager.getInstance().shutdown();
         super.onDestroy();
     }

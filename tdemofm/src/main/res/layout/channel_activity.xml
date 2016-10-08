@@ -193,6 +193,12 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/tv_log"
+            android:gravity="bottom"
+            android:textColor="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <LinearLayout
