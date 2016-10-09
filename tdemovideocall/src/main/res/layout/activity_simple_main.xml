@@ -62,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:hint="请输入需要拨打手机号"
-                android:singleLine="true"
-                android:textSize="6pt" />
+                android:singleLine="true" />
 
             <Button
                 android:id="@+id/btn_make_call"
@@ -94,7 +93,6 @@
 
         <TextView
             android:text="@string/tip_welcome"
-            android:textSize="8pt"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

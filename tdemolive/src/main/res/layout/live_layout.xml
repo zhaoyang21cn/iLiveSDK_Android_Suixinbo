@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="roomid(int)"
+            android:inputType="number"
             android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
@@ -75,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="roomid(int)"
+            android:inputType="number"
             android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
