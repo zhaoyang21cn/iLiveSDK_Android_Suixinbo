@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -703,6 +704,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 //开启摄像头渲染画面
                 SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
+                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                editor.putBoolean("living", true);
+                editor.apply();
+
             } else {
                 //发消息通知上线
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
@@ -733,6 +738,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             if ((getBaseContext() != null) && (null != mDetailDialog) && (mDetailDialog.isShowing() == false)) {
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_QUIT_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "quite room callback"
                         + LogConstants.DIV + LogConstants.STATUS.SUCCEED + LogConstants.DIV + "id status " + id_status);
+                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                editor.putBoolean("living", false);
+                editor.apply();
                 mDetailTime.setText(formatTime);
                 mDetailAdmires.setText("" + CurLiveInfo.getAdmires());
                 mDetailWatchCount.setText("" + watchCount);

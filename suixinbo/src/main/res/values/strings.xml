@@ -6,7 +6,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="tencent_tls_ui_independentLoginTitle">用户名登录</string>
     <string name="tencent_tls_ui_independentRegisterTitle">用户名注册</string>
-
+    <string name="title_living">是否回到上次直播</string>
     <string name="action_settings">settings</string>
 
 

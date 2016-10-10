@@ -2,6 +2,7 @@ package cn.jx.tdemoliveshow;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -35,9 +36,15 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liveshow);
+        Looper.getMainLooper().setMessageLogging(new LooperMonitor(new LooperMonitor.BlockListener() {
+            @Override
+            public void onBlockEvent(long realStartTime, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
 
+            }
+        }, 200));
         createBtn = (Button) findViewById(R.id.create);
         joinbtn = (Button) findViewById(R.id.join);
         backBtn = (Button) findViewById(R.id.back);
