@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.tencent.customstream.CameraActivity">
 
-    <com.tencent.ilivesdk.view.AVRootView
-        android:id="@+id/av_root_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:background="@color/white" />
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
@@ -20,7 +13,7 @@
     </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +22,8 @@
 
             <EditText
                 android:id="@+id/id_input"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:hint="input your id"
@@ -53,10 +47,11 @@
 
             <EditText
                 android:id="@+id/id_room"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
-                android:hint="input room"
+                android:hint="room id"
                 android:textColorHint="@color/colorGray3"
                 android:text=""
                 android:inputType="number"
@@ -80,6 +75,15 @@
                 android:textColor="@color/white"
                 />
 
+            <Button
+                android:id="@+id/btn_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SCREEN"
+                android:onClick="onClick"
+                android:textColor="@color/white"
+                />
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,7 +92,8 @@
 
             <EditText
                 android:id="@+id/id_host"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:hint="host id"
@@ -97,7 +102,8 @@
                 android:textColor="@color/btn_blue" />
             <EditText
                 android:id="@+id/id_host_room"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:hint="host room"
@@ -114,5 +120,12 @@
                 android:textColor="@color/white"
                 />
         </LinearLayout>
+        <com.tencent.ilivesdk.view.AVRootView
+            android:id="@+id/av_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:background="@color/white" />
     </LinearLayout>
 </RelativeLayout>
