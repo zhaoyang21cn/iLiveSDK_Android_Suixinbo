@@ -1,7 +1,9 @@
 package com.tencent.qcloud.suixinbo.views;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
@@ -20,6 +22,7 @@ import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseFragmentActivity;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.qcloud.suixinbo.views.customviews.NotifyDialog;
 
 import java.util.List;
 
@@ -42,6 +45,8 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
         SxbLog.i(TAG, "HomeActivity onStart");
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        boolean living = pref.getBoolean("living", false);
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         layoutInflater = LayoutInflater.from(this);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.contentPanel);
@@ -71,6 +76,21 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
         if (TextUtils.isEmpty(MySelfInfo.getInstance().getAvatar())) {
             infoHelper = new ProfileInfoHelper(this);
             infoHelper.getMyProfile();
+        }
+        if (living) {
+            NotifyDialog dialog = new NotifyDialog();
+            dialog.show(getString(R.string.title_living), getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
         }
     }
 
