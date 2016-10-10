@@ -31,6 +31,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     int iRoomNum;
     EditText inputId, roomNum, hostIdInput, hostRoom;
     boolean bEnterRoom;
+    private boolean bLogin;     // 记录登录状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +52,18 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     }
 
 
-    /** A safe way to get an instance of the Camera object. */
-    private static Camera getCameraInstance(){
+    /**
+     * A safe way to get an instance of the Camera object.
+     */
+    private static Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
     }
-
-
 
 
     /**
@@ -78,6 +78,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bLogin = true;
                     Toast.makeText(CameraActivity.this, "login success !", Toast.LENGTH_SHORT).show();
                 }
 
@@ -87,11 +88,11 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 }
             });
         }
-        if (view.getId() == R.id.btn_create){
+        if (view.getId() == R.id.btn_create) {
             avRootView.setVisibility(View.GONE);
             join();
         }
-        if (view.getId() == R.id.btn_camera){
+        if (view.getId() == R.id.btn_camera) {
             mCamera = getCameraInstance();
             mPreview = new CameraPreview(this, mCamera);
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -128,8 +129,8 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
 
     // 加入房间
-    private void join(){
-        if (!TextUtils.isEmpty(roomNum.getText().toString())){
+    private void join() {
+        if (!TextUtils.isEmpty(roomNum.getText().toString())) {
             ILiveRoomOption option = new ILiveRoomOption("")
                     .imsupport(false)
                     .autoCamera(false)
@@ -154,7 +155,8 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         ILVLiveManager.getInstance().onPause();
-        mPreview.release();
+        if (mPreview != null)
+            mPreview.release();
     }
 
     @Override
@@ -164,9 +166,11 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     }
 
 
-
     @Override
     protected void onDestroy() {
+        if (bLogin){
+            ILiveLoginManager.getInstance().tilvbLogout(null);
+        }
         ILVLiveManager.getInstance().shutdown();
         super.onDestroy();
     }

@@ -46,9 +46,9 @@ public class MainMenu extends Activity {
         lvMenu = (ListView) findViewById(R.id.lv_menu);
 
         listDemo.add("VideoCall: 双人视频");
-        listDemo.add("FM: 广播电台");
         listDemo.add("Live: 直播");
         listDemo.add("Suixinbo:新随心播");
+        listDemo.add("FM: 广播电台");
         listDemo.add("LiveShow: 播放特性展示");
         listDemo.add("CustomStream: 自定义输入");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
@@ -64,13 +64,13 @@ public class MainMenu extends Activity {
                         intent.setClass(MainMenu.this, ContactActivity.class);
                         break;
                     case 1:
-                        intent.setClass(MainMenu.this, channelActivity.class);
-                        break;
-                    case 2:
                         intent.setClass(MainMenu.this, LiveActivity.class);
                         break;
-                    case 3:
+                    case 2:
                         intent.setClass(MainMenu.this, LoginActivity.class);
+                        break;
+                    case 3:
+                        intent.setClass(MainMenu.this, channelActivity.class);
                         break;
                     case 4:
                         intent.setClass(MainMenu.this, LiveshowActivity.class);

@@ -45,6 +45,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     private AlertDialog mIncomingDlg;
     private int mCurIncomingId;
 
+    private boolean bLogin; // 记录登录状态
+
     // 内部方法
     private void initView() {
         tvMyAddr = (TextView) findViewById(R.id.tv_my_address);
@@ -137,6 +139,14 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     }
 
     @Override
+    protected void onDestroy() {
+        if (bLogin){
+            ILiveLoginManager.getInstance().tilvbLogout(null);
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         if (R.id.btn_logout == v.getId()){
             logout();
@@ -224,6 +234,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
                 ILiveLoginManager.getInstance().tilvbLogin(id, userSig, new ILiveCallBack() {
                     @Override
                     public void onSuccess(Object data) {
+                        bLogin = true;
                         ILiveSDK.getInstance().setMyUserId(id);
                         tvMyAddr.setText(ILiveSDK.getInstance().getMyUserId());
                         callView.setVisibility(View.VISIBLE);

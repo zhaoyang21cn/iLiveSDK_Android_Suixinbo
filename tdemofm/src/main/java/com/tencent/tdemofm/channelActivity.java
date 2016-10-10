@@ -2,6 +2,8 @@ package com.tencent.tdemofm;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +27,11 @@ import com.tencent.ilivesdk.core.ILiveRoomConfig;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
 /**
  * 变声Activity
  */
@@ -32,18 +39,32 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     private static final String TAG = "channelActivity";
     private LinearLayout llMain, llLogin, llChannel, llControl, llChange;
     private EditText etId, etChannel, etWavFile;
-    private TextView tvId, tvBgVolume, tvPitchSemi, tvSpeed;
+    private TextView tvId, tvBgVolume, tvPitchSemi, tvSpeed, tvLog;
     private Button btnMic;
     private CheckBox cbBgMusic, cbChange;
     private SeekBar sbBkVolume, sbPitchSemi, sbSpeed;
 
     private boolean bMicEnable = false;
+    private String mStrLog="", mResPath;
     private WaveFileReader mReader = null;
     private int position = 0;
     private Object obj = new Object();
 
     private SoundTouch mSoundTouch;
     private boolean bEnterRoom = false, bLogin = false;
+
+    private Handler mHandler = new Handler(){
+        public void handleMessage(Message msg){
+            switch (msg.what){
+            case 0:
+                addLog("拷贝资源文件成功");
+                break;
+            case 1:
+                addLog("拷贝资源文件失败:"+msg.obj);
+                break;
+            }
+        }
+    };
 
     private AVAudioCtrl.RegistAudioDataCompleteCallback mAudioDataCompleteCallback = new AVAudioCtrl.RegistAudioDataCompleteCallback(){
         @Override
@@ -53,7 +74,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
 
             if (AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND ==  srcType) {  // 语音发送混入背景音乐
                 synchronized (obj) {
-                    if (null != mReader) {
+                    if (null != mReader && mReader.getDataLen() > audioFrame.data.length) {
                         int len = audioFrame.data.length;
                         if (position + len > mReader.getDataLen()) {
                             position = 0;
@@ -81,6 +102,8 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
         ILiveRoomManager.getInstance().init(new ILiveRoomConfig());
         initView();
+        addLog("初始化ILiveSDK...");
+        initResource();
     }
 
     @Override
@@ -111,6 +134,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         tvBgVolume = (TextView)findViewById(R.id.tv_bg_volume);
         tvPitchSemi = (TextView)findViewById(R.id.tv_pitchsemi);
         tvSpeed = (TextView)findViewById(R.id.tv_speed);
+        tvLog = (TextView)findViewById(R.id.tv_log);
 
         cbBgMusic = (CheckBox)findViewById(R.id.cb_bg_music);
         cbChange = (CheckBox)findViewById(R.id.cb_change_voice);
@@ -126,14 +150,49 @@ public class channelActivity extends Activity implements View.OnClickListener, S
 
         cbBgMusic.setOnCheckedChangeListener(this);
         cbChange.setOnCheckedChangeListener(this);
+    }
 
-        etWavFile.setText("/sdcard/oneMin.wav");
+    private void initResource(){
+        addLog("初始化资源文件...");
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    InputStream is = getResources().openRawResource(R.raw.onemin);
+                    File tempfile = File.createTempFile("tempfile", ".wav", getDir("filez", 0));
+
+                    FileOutputStream os=new FileOutputStream(tempfile);
+                    byte[] buffer=new byte[16000];
+                    int length=0;
+                    while((length=is.read(buffer))!=-1){
+                        os.write(buffer,0,length);
+                    }
+                    os.close();
+                    is.close();
+                    mResPath = tempfile.getPath();
+                    mHandler.sendEmptyMessage(0);
+                }catch (Exception e){
+                    Log.e("ILVB-DBG", "open resource failed:"+e.toString());
+                    Message msg = new Message();
+                    msg.what = 1;
+                    msg.obj = e.toString();
+                    mHandler.sendMessage(msg);
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void addLog(String strInfo){
+        mStrLog += strInfo + "\r\n";
+        tvLog.setText(mStrLog);
     }
 
     /**
      *  SDK登陆
      */
     private void login(String id){
+        addLog("正在登录用户"+id+"...");
         ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
             @Override
             public void onSuccess(Object o) {
@@ -142,11 +201,13 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 llControl.setVisibility(View.GONE);
                 llChannel.setVisibility(View.VISIBLE);
                 tvId.setText(ILiveSDK.getInstance().getMyUserId());
+                addLog("登录成功，欢迎用户"+ILiveSDK.getInstance().getMyUserId());
             }
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 Toast.makeText(channelActivity.this, "login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                addLog("登录失败:"+module+"|"+errCode+"|"+errMsg);
             }
         });
     }
@@ -182,6 +243,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      */
     private void join(final String strChannel, boolean bCreated){
         int channel = Integer.valueOf(strChannel);
+        addLog((bCreated ? "尝试创建广播频道:" : "尝试加入广播频道:")+strChannel+"...");
         ILiveRoomOption option = new ILiveRoomOption(ILiveSDK.getInstance().getMyUserId())
                 .imsupport(false)
                 .autoCamera(false)
@@ -192,6 +254,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 llControl.setVisibility(View.VISIBLE);
                 llChannel.setVisibility(View.GONE);
                 bEnterRoom = true;
+                addLog("进入广播频道"+strChannel+"成功");
             }
 
             @Override
@@ -199,7 +262,10 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 Log.v(TAG, "create room failed: errCode:" + errCode + "|" + errMsg);
                 Toast.makeText(channelActivity.this, "join room failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
                 if (10021 == errCode){
+                    addLog("创建广播频道失败:频道已存在，尝试加入频道"+strChannel);
                     join(strChannel, false);
+                }else{
+                    addLog("进入广播频道失败:"+module+"|"+errCode+"|"+errMsg);
                 }
             }
         };
@@ -240,14 +306,17 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      * 退出频道
      */
     private void quit(final boolean bNeedLogout){
+        addLog("正在退出广播频道...");
         ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
             @Override
             public void onSuccess(Object o) {
+                addLog("退出广播频道成功");
                 onRoomQuit(bNeedLogout);
             }
 
             @Override
-            public void onError(String s, int i, String s1) {
+            public void onError(String module, int errCode, String errMsg) {
+                addLog("退出广播频道失败:"+module+"|"+errCode+"|"+errMsg);
                 onRoomQuit(bNeedLogout);
             }
         });
@@ -316,25 +385,33 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             if (isChecked) {
                 sbBkVolume.setProgress(100);
                 String filePath = etWavFile.getText().toString();
-                if (null != filePath) {
-                    if(filePath.endsWith("wav")) {
-                        mReader = new WaveFileReader(filePath);
-                        // 根据背景音乐调整设备参数
-                        AVAudioCtrl.AudioFrameDesc audioFrameDesc = new AVAudioCtrl.AudioFrameDesc();
-                        audioFrameDesc.sampleRate = (int) mReader.getSampleRate();
-                        audioFrameDesc.channelNum = mReader.getNumChannels();
-                        audioFrameDesc.bits = mReader.getBitPerSample();
 
-                        Log.v("ILVB-DBG", "read wav file rate:"+mReader.getSampleRate()+", channel:"+mReader.getNumChannels()+", bits:"+mReader.getBitPerSample());
-                        audioFrameDesc.srcTye = AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND;
-                        ILiveSDK.getInstance().getAvAudioCtrl().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
-
-                        mSoundTouch.setChannels(mReader.getNumChannels());
-                        mSoundTouch.setSamplingRate((int)mReader.getSampleRate());
-                    }
+                if (!TextUtils.isEmpty(filePath) && filePath.endsWith("wav")){
+                    mReader = new WaveFileReader(filePath);
+                    addLog("混入背景音乐:"+filePath);
+                }else if (!TextUtils.isEmpty(mResPath)){  // 加载资源
+                    mReader = new WaveFileReader(mResPath);
+                    addLog("混入默认背景音乐");
+                }else{
+                    mReader = null;
+                    return;
                 }
+
+                // 根据背景音乐调整设备参数
+                AVAudioCtrl.AudioFrameDesc audioFrameDesc = new AVAudioCtrl.AudioFrameDesc();
+                audioFrameDesc.sampleRate = (int) mReader.getSampleRate();
+                audioFrameDesc.channelNum = mReader.getNumChannels();
+                audioFrameDesc.bits = mReader.getBitPerSample();
+
+                Log.v(TAG, "read wav file rate:"+mReader.getSampleRate()+", channel:"+mReader.getNumChannels()+", bits:"+mReader.getBitPerSample());
+                audioFrameDesc.srcTye = AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND;
+                ILiveSDK.getInstance().getAvAudioCtrl().setAudioDataFormat(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_MIXTOSEND, audioFrameDesc);
+
+                mSoundTouch.setChannels(mReader.getNumChannels());
+                mSoundTouch.setSamplingRate((int)mReader.getSampleRate());
             } else {
                 mReader = null;
+                addLog("关闭背景音乐");
             }
         }else if(buttonView.getId() == R.id.cb_change_voice){
             if (isChecked) {

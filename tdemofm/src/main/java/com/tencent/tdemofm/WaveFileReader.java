@@ -89,6 +89,7 @@ public class WaveFileReader {
 
     private void initReader(String filename) {
         this.filename = filename;
+        Log.v("ILVB-DBG", "initReader->filename:"+filename);
 
         try {
             fis = new FileInputStream(this.filename);
