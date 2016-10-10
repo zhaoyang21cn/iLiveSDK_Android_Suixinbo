@@ -176,15 +176,17 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     }
 
 
+
     /**
      * 回调接口 来电
      * @param callId  来电ID
      * @param callType 来电类型
      * @param fromUserId
      * @param strTips    提示消息
+     * @param strCustom 用户自定义字段
      */
     @Override
-    public void onNewIncomingCall(int callId, final int callType, final String fromUserId, String strTips) {
+    public void onNewIncomingCall(int callId, final int callType, final String fromUserId, String strTips, String strCustom) {
         if (null != mIncomingDlg){  // 关闭遗留来电对话框
             mIncomingDlg.dismiss();
         }
