@@ -620,6 +620,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             bDelayQuit = false;
             quiteLiveByPurpose();
         }else{
+            clearOldData();
             finish();
         }
     }
@@ -752,6 +753,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 clearOldData();
                 mHostLeaveLayout.setVisibility(View.VISIBLE);
             }else{
+                clearOldData();
                 finish();
             }
         }
