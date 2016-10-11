@@ -2,9 +2,11 @@
 ILiveSDK 提供了账号登录，音视频互动，文本互动等直播类应用的基础功能
 
 ##ILiveSDK导入
-在gradle里增加一行（后面是版本号）    
+1 在gradle里增加一行（后面是版本号）
 
 compile 'com.tencent.ilivesdk:ilivesdk:0.2.0'
+
+2 [eclipse集成方案](./eclipse_readme.md)
 
 ##基础使用
 ###初始化SDK
@@ -72,5 +74,5 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 6自定义视频输入 ： [详细文档](/customstream/)
 ##API文档
 在DEMO工程中附带了一份API文档 
-	
+
 
