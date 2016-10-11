@@ -4,7 +4,7 @@
 
  1. 在[jcenter](https://bintray.com/ilive/maven/ilivesdk/0.2.7#files/com/tencent/ilivesdk/ilivesdk/0.2.7)上面下载iliveSDK的aar包
  2. 将aar包解压缩，将classes.jar改名为ilivesdk.jar后和libs文件夹下的jar一起放在eclipse工程的libs文件夹中
- 3. 将aar包中jni文件夹中内容放到eclipse工程的libs文件夹中
+ 3. 将aar包中jni文件夹中内容放到eclipse工程的libs文件夹中，如图![](http://i.imgur.com/hufucC2.png)
  4. 在工程的AndroidManifest.xml中加入权限以及一些必须的服务（[详细参考](https://www.qcloud.com/doc/product/269/%E6%A6%82%E8%BF%B0%EF%BC%88Android%20SDK%EF%BC%89#1.3-.E5.88.9B.E5.BB.BA.E5.BA.94.E7.94.A8)）
 
 `<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
