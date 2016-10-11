@@ -145,7 +145,6 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
         if (bLogin){    // 关闭界面时注销用户
             ILiveLoginManager.getInstance().tilvbLogout(null);
         }
-        ILVLiveManager.getInstance().shutdown();
         super.onDestroy();
     }
 

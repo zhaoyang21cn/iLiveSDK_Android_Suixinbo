@@ -190,8 +190,6 @@ public class TestSDK extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        ILVLiveManager.getInstance().shutdown();
-
         super.onDestroy();
     }
 

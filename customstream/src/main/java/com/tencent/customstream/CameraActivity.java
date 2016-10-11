@@ -292,7 +292,6 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                     if (bLogin){
                         ILiveLoginManager.getInstance().tilvbLogout(null);
                     }
-                    ILVLiveManager.getInstance().shutdown();
                 }
 
                 @Override
@@ -300,7 +299,6 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                     if (bLogin){
                         ILiveLoginManager.getInstance().tilvbLogout(null);
                     }
-                    ILVLiveManager.getInstance().shutdown();
                 }
             });
         }

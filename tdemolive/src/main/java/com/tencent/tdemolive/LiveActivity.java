@@ -21,6 +21,7 @@ import com.tencent.ilivesdk.business.livebusiness.ILVLiveConfig;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveConstants;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.ilivesdk.view.AVRootView;
 
@@ -36,6 +37,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     Button loginBtn;
     EditText inputId, roomNum, roomNumJoin, textInput, memId, hostIdInput;
     private static final String TAG = LiveActivity.class.getSimpleName();
+
+    private boolean bLogin = false, bEnterRoom = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,8 +187,33 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        ILVLiveManager.getInstance().shutdown();
         super.onDestroy();
+    }
+
+    private void logout(boolean quit){
+        if (bLogin){
+            ILiveLoginManager.getInstance().tilvbLogout(null);
+        }
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bEnterRoom){
+            ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
+                @Override
+                public void onSuccess(Object data) {
+                    logout(true);
+                }
+
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
+                    logout(true);
+                }
+            });
+        }else{
+            logout(true);
+        }
     }
 
     @Override
@@ -195,6 +223,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bLogin = true;
                     Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
                 }
 
@@ -242,6 +271,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILVLiveManager.getInstance().joinRoom(room, memberOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bEnterRoom = true;
                     Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
                 }
 
@@ -259,6 +289,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
+                    bEnterRoom = false;
                     Toast.makeText(LiveActivity.this, "quit room  ok ", Toast.LENGTH_SHORT).show();
                 }
 
