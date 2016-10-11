@@ -8,6 +8,9 @@
     <string name="tip_account">用户名</string>
     <string name="tip_password">密码</string>
 
+    <string name="tip_hit_account">用户名为4~24个字符，不能为纯数字</string>
+    <string name="tip_hit_password">密码长度为8~16个字符</string>
+
     <string name="tip_logout">注销</string>
 
     <string name="tip_my_address">本机号码</string>

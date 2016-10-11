@@ -107,10 +107,11 @@
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/id_account"
+                android:hint="@string/tip_hit_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="50dp" />
+                android:layout_marginLeft="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,10 +124,11 @@
             <EditText
                 android:id="@+id/id_password"
                 android:inputType="textPassword"
+                android:hint="@string/tip_hit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="50dp" />
+                android:layout_marginLeft="20dp" />
         </LinearLayout>
 
         <LinearLayout
