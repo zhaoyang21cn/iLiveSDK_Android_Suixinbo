@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * 变声Activity
@@ -52,6 +53,8 @@ public class channelActivity extends Activity implements View.OnClickListener, S
 
     private SoundTouch mSoundTouch;
     private boolean bEnterRoom = false, bLogin = false;
+
+    private DiscussSer mDisSer;
 
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg){
@@ -201,6 +204,21 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 llControl.setVisibility(View.GONE);
                 llChannel.setVisibility(View.VISIBLE);
                 tvId.setText(ILiveSDK.getInstance().getMyUserId());
+                mDisSer = new DiscussSer("FM", new DiscussSer.onInitListener() {
+                    @Override
+                    public void onInitComplete(int result) {
+                        mDisSer.quaryStatus(new DiscussSer.onGetStatusList() {
+                            @Override
+                            public void onQueryComplete(List<String> list) {
+                                if (null != list){
+                                    for (String id : list){
+                                        addLog("频道: "+id);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
                 addLog("登录成功，欢迎用户"+ILiveSDK.getInstance().getMyUserId());
             }
 
@@ -219,7 +237,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
         llChannel.setVisibility(View.GONE);
     }
 
-    private void logout(){
+    private void innerLogout(){
         ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
@@ -232,10 +250,22 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             }
         });
     }
+
+    private void logout(){
+        if (bEnterRoom){    // 先退出房间
+            quit(true);
+        }else {
+            innerLogout();
+        }
+    }
     private void onRoomQuit(final boolean bNeedLogout){
         llControl.setVisibility(View.GONE);
         llChannel.setVisibility(View.VISIBLE);
+        mDisSer.modifyStatus("");
         bEnterRoom = false;
+        if (bNeedLogout){
+            innerLogout();
+        }
     }
 
     /**
@@ -254,6 +284,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                 llControl.setVisibility(View.VISIBLE);
                 llChannel.setVisibility(View.GONE);
                 bEnterRoom = true;
+                mDisSer.modifyStatus(strChannel);
                 addLog("进入广播频道"+strChannel+"成功");
             }
 
@@ -336,7 +367,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
             logout();
         }else if (v.getId() == R.id.btn_join_channel){
             if (!TextUtils.isEmpty(etChannel.getText().toString())){
-                join(etChannel.getText().toString(), true);
+                join(etChannel.getText().toString(), false);
             }
         }else if (v.getId() == R.id.btn_quit){
             quit(false);

@@ -107,7 +107,6 @@
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/id_account"
-                android:hint="@string/tip_hit_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -115,6 +114,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -138,6 +138,7 @@
 
             <Button
                 android:id="@+id/regist"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="注册" />
