@@ -65,8 +65,7 @@
                 android:hint="请输入广播频道"
                 android:inputType="phone"
                 android:singleLine="true"
-                android:phoneNumber="true"
-                android:textSize="6pt" />
+                android:phoneNumber="true" />
 
             <Button
                 android:id="@+id/btn_join_channel"
@@ -210,7 +209,6 @@
 
         <TextView
             android:text="@string/tip_welcome"
-            android:textSize="8pt"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

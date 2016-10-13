@@ -67,7 +67,6 @@
 
         <TextView
             android:text="@string/tip_welcome"
-            android:textSize="8pt"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
