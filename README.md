@@ -2,11 +2,13 @@
 ILiveSDK 提供了账号登录，音视频互动，文本互动等直播类应用的基础功能
 
 ##ILiveSDK导入
-1 Android Studio方案 gradle里增加一行（后面是版本号）
+ILiveSDK在Android Studio上开发。
+导入只需要在gradle里增加一行（后面是版本号）
 
 compile 'com.tencent.ilivesdk:ilivesdk:0.2.7'
 
-2 [eclipse集成方案](./eclipse_readme.md)
+如果您还在使用eclipse进行Android的开发，请参考这里[eclipse集成方案](./eclipse_readme.md)。    
+Android Studio在google支持度，编译便利性等多方面远超eclipse。我们强烈建议还在使用eclipse的用户尽快升级。
 
 ##基础使用
 ###初始化SDK
