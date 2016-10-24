@@ -116,7 +116,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
 
                         Log.v("XDBG", "onImageAvailable->enter: " + outFrame.length);
 
-                        // YVU(NV12) =>YUV(I420)
+                        // YVU(YV12) =>YUV(I420)
                         ByteBuffer sourceBuffer = planes[0].getBuffer();
                         sourceBuffer.get(outFrame, 0, YSIZE);
 
@@ -169,6 +169,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         if (requestCode == SCREEN_REQUEST_CODE && resultCode == RESULT_OK){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mMediaPrj = mMediaPrjMgr.getMediaProjection(resultCode, data);
+                //mImageReader = ImageReader.newInstance(SCREEN_WIDTH, SCREEN_HEIGHT, ImageFormat.YV12, 30);
                 mImageReader = ImageReader.newInstance(SCREEN_WIDTH, SCREEN_HEIGHT, ImageFormat.YV12, 30);
                 mImageReader.setOnImageAvailableListener(mImageListener, null);
                 mMediaPrj.createVirtualDisplay("Screen", SCREEN_WIDTH, SCREEN_HEIGHT, 1,
@@ -224,9 +225,9 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
                     .imsupport(false)
                     .autoCamera(false) //是否自动打开摄像头
-                    .controlRole("NormalMember") //角色设置
-                    .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
-                    .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
+                    //.controlRole("NormalMember") //角色设置
+                    //.authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
+                    //.videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
                     .autoMic(false);//是否自动打开mic
             //加入房间
             ILVLiveManager.getInstance().joinRoom(room, memberOption, new ILiveCallBack() {

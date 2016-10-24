@@ -72,6 +72,7 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
     private void changeCamera() {
         if (bCameraEnable) {
             ILiveSDK.getInstance().getAvVideoCtrl().enableCamera(mCurCameraId, false, mCameraCallback);
+            avRootView.closeUserView(ILiveSDK.getInstance().getMyUserId(), true);
         } else {
             ILiveSDK.getInstance().getAvVideoCtrl().enableCamera(mCurCameraId, true, mCameraCallback);
         }

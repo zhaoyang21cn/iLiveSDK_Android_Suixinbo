@@ -45,6 +45,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     private AlertDialog mIncomingDlg;
     private int mCurIncomingId;
 
+    private AccountMgr mAccountMgr = new AccountMgr();
+
     private boolean bLogin; // 记录登录状态
 
     // 内部方法
@@ -84,6 +86,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
     private void onLogout() {
         // 注销成功清除用户信息，并跳转到登陆界面
         //finish();
+        bLogin = false;
         callView.setVisibility(View.INVISIBLE);
         loginView.setVisibility(View.VISIBLE);
     }
@@ -127,7 +130,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_main);
         //TODO 初始化随心播
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400016949, 8002);
         // 关闭IM群组
         ILVCallManager.getInstance().init(new ILVCallConfig());
 
@@ -180,10 +183,10 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
             if (TextUtils.isEmpty(idInput.getText().toString()) || TextUtils.isEmpty(pwdInput.getText().toString())) {
                 return;
             } else {
-                //regist(idInput.getText().toString(), pwdInput.getText().toString());
+                regist(idInput.getText().toString(), pwdInput.getText().toString());
             }
         }else if (R.id.confirm == v.getId()){
-            if (TextUtils.isEmpty(idInput.getText().toString())) {
+            if (TextUtils.isEmpty(idInput.getText().toString()) || TextUtils.isEmpty(pwdInput.getText().toString())) {
                 return;
             } else {
                 login(idInput.getText().toString(), pwdInput.getText().toString());
@@ -191,7 +194,80 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         }
     }
 
+    /**
+     * 使用userSig登录iLiveSDK(独立模式下获有userSig直接调用登录)
+     */
+    private void loginSDK(final String id, String userSig){
+        ILiveLoginManager.getInstance().tilvbLogin(id, userSig, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                bLogin = true;
+                ILiveSDK.getInstance().setMyUserId(id);
+                tvMyAddr.setText(ILiveSDK.getInstance().getMyUserId());
+                callView.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(ContactActivity.this, "Login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                loginView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    /**
+     * 登录并获取userSig(*托管模式，独立模式下直接用userSig调用loginSDK登录)
+     */
+    private void login(final String id, String password) {
+        loginView.setVisibility(View.INVISIBLE);
+
+        mAccountMgr.login(id, password, new AccountMgr.RequestCallBack(){
+            @Override
+            public void onResult(int error, String response) {
+                if (0 == error){
+                    loginSDK(id, response);
+                }else{
+                    Toast.makeText(getApplicationContext(), "login failed:"+response, Toast.LENGTH_SHORT).show();
+                    loginView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+/*        ILiveLoginManager.getInstance().tlsLogin(id, password, new ILiveCallBack<String>() {
+            @Override
+            public void onSuccess(String userSig) {
+                loginSDK(id, userSig);
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(getApplicationContext(), "login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                loginView.setVisibility(View.VISIBLE);
+            }
+        });*/
+    }
+
+    /**
+     *  注册用户名(*托管模式，独立模式下请向自己私有服务器注册)
+     */
+    private void regist(String account, String password){
+        mAccountMgr.regist(account, password, new AccountMgr.RequestCallBack(){
+            @Override
+            public void onResult(int error, String response) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        });
+/*        ILiveLoginManager.getInstance().tlsRegister(account, password, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                Toast.makeText(getApplicationContext(), "Regist success!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(getApplicationContext(), "Regist failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });*/
+    }
 
     /**
      * 回调接口 来电
@@ -244,70 +320,6 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
             mIncomingDlg.dismiss();
         }
     }
-
-    /**
-     * 调用SDK登陆
-     */
-    private void login(final String id, String password) {
-        loginView.setVisibility(View.INVISIBLE);
-
-        // 直接使用sig登录(不再使用托管模式)
-        ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                bLogin = true;
-                ILiveSDK.getInstance().setMyUserId(id);
-                tvMyAddr.setText(ILiveSDK.getInstance().getMyUserId());
-                callView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                Toast.makeText(ContactActivity.this, "Login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
-                loginView.setVisibility(View.VISIBLE);
-            }
-        });
-
-/*        ILiveLoginManager.getInstance().tlsLogin(id, password, new ILiveCallBack<String>() {
-            @Override
-            public void onSuccess(String userSig) {
-                ILiveLoginManager.getInstance().tilvbLogin(id, userSig, new ILiveCallBack() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        bLogin = true;
-                        ILiveSDK.getInstance().setMyUserId(id);
-                        tvMyAddr.setText(ILiveSDK.getInstance().getMyUserId());
-                        callView.setVisibility(View.VISIBLE);
-                        loginView.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onError(String module, int errCode, String errMsg) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                Toast.makeText(getApplicationContext(), "login failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-    }
-
-/*    private void regist(String account, String password){
-        ILiveLoginManager.getInstance().tlsRegister(account, password, new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                Toast.makeText(getApplicationContext(), "Regist success!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                Toast.makeText(getApplicationContext(), "Regist failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 
     @Override
     public void onException(int iExceptionId, int errCode, String errMsg) {
