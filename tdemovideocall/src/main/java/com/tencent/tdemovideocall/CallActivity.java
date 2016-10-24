@@ -41,18 +41,6 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
     private boolean bMicEnalbe = true;
     private boolean bSpeaker = true;
     private int mCurCameraId = ILiveConstants.FRONT_CAMERA;
-    AVVideoCtrl.EnableCameraCompleteCallback mCameraCallback = new AVVideoCtrl.EnableCameraCompleteCallback(){
-        @Override
-        protected void onComplete(boolean b, int i) {
-            super.onComplete(b, i);
-        }
-    };
-    AVVideoCtrl.SwitchCameraCompleteCallback mSwitchCameraCompleteCallback = new AVVideoCtrl.SwitchCameraCompleteCallback(){
-        @Override
-        protected void onComplete(int i, int i1) {
-            super.onComplete(i, i1);
-        }
-    };
 
     private void initView() {
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
@@ -71,10 +59,10 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
 
     private void changeCamera() {
         if (bCameraEnable) {
-            ILiveSDK.getInstance().getAvVideoCtrl().enableCamera(mCurCameraId, false, mCameraCallback);
+            ILVCallManager.getInstance().enableCamera(mCurCameraId, false);
             avRootView.closeUserView(ILiveSDK.getInstance().getMyUserId(), true);
         } else {
-            ILiveSDK.getInstance().getAvVideoCtrl().enableCamera(mCurCameraId, true, mCameraCallback);
+            ILVCallManager.getInstance().enableCamera(mCurCameraId, true);
         }
         bCameraEnable = !bCameraEnable;
         btnCamera.setText(bCameraEnable ? R.string.tip_close_camera : R.string.tip_open_camera);
@@ -82,9 +70,9 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
 
     private void changeMic() {
         if (bMicEnalbe) {
-            ILiveSDK.getInstance().getAvAudioCtrl().enableMic(false);
+            ILVCallManager.getInstance().enableMic(false);
         } else {
-            ILiveSDK.getInstance().getAvAudioCtrl().enableMic(true);
+            ILVCallManager.getInstance().enableMic(true);
         }
 
         bMicEnalbe = !bMicEnalbe;
@@ -103,7 +91,7 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
 
     private void switchCamera() {
         mCurCameraId = (ILiveConstants.FRONT_CAMERA==mCurCameraId) ? ILiveConstants.BACK_CAMERA : ILiveConstants.FRONT_CAMERA;
-        ILiveSDK.getInstance().getAvVideoCtrl().switchCamera(mCurCameraId, mSwitchCameraCompleteCallback);
+        ILVCallManager.getInstance().switchCamera(mCurCameraId);
     }
 
     private void setBeauty() {
