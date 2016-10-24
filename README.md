@@ -75,6 +75,6 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 5直播特性 ：在直播场景上加入一些特色小功能演示   <br />
 6自定义视频输入 ： [详细文档](/customstream/)
 ##API文档
-在DEMO工程中附带了一份API文档 
+[API文档](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
 
 
