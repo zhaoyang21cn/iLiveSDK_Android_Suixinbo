@@ -7,19 +7,7 @@ ILiveSDK在Android Studio上开发。
 
 compile 'com.tencent.ilivesdk:ilivesdk:0.3.1'
 
-由于目前只支持armeabi架构，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
-<pre>
-android{
-    defaultConfig{
-        ndk{
-            abiFilter 'armeabi'
-        }
-    }
-}
-</pre>
 
-如果您还在使用eclipse进行Android的开发，请参考这里[eclipse集成方案](./eclipse_readme.md)。    
-Android Studio在google支持度，编译便利性等多方面远超eclipse。我们强烈建议还在使用eclipse的用户尽快升级。
 
 ##基础使用
 ###初始化SDK
@@ -78,14 +66,28 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 
             
 ##DEMO
-有六个示例  <br />
-1双人视频 ：双人通话场景的简单示例，类微信视频聊天。    
-2广播电台 ：纯音频场景的示例，演示混音功能     
-3基础直播 ：互动直播基础演示基础功能 登录进房间 加入房间 发消息 自定义消息等    
-4新随心播 ：基于ILiveSDK接口重构的随心播        
-5直播特性 ：在直播场景上加入一些特色小功能演示   <br />
-6自定义视频输入 ： [详细文档](/customstream/)
+有三个示例  <br />
+1视频聊天 ：双人通话场景的简单示例，类微信视频聊天。    
+2基础直播 ：互动直播基础演示基础功能 登录进房间 加入房间 发消息 自定义消息等     
+3新随心播 ：基于ILiveSDK接口重构的随心播        
 ##API文档
 [API文档](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+
+##已知问题
+
+由于目前只支持armeabi架构，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
+<pre>
+android{
+    defaultConfig{
+        ndk{
+            abiFilter 'armeabi'
+        }
+    }
+}
+</pre>
+
+如果您还在使用eclipse进行Android的开发，请参考这里[eclipse集成方案](./eclipse_readme.md)。    
+Android Studio在google支持度，编译便利性等多方面远超eclipse。我们强烈建议还在使用eclipse的用户尽快升级。
+
 
 
