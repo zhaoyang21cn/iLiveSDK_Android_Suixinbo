@@ -7,6 +7,17 @@ ILiveSDK在Android Studio上开发。
 
 compile 'com.tencent.ilivesdk:ilivesdk:0.3.1'
 
+由于目前只支持armeabi架构，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
+<pre>
+android{
+    defaultConfig{
+        ndk{
+            abiFilter 'armeabi'
+        }
+    }
+}
+</pre>
+
 如果您还在使用eclipse进行Android的开发，请参考这里[eclipse集成方案](./eclipse_readme.md)。    
 Android Studio在google支持度，编译便利性等多方面远超eclipse。我们强烈建议还在使用eclipse的用户尽快升级。
 
