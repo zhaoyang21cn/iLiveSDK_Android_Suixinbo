@@ -1,5 +1,5 @@
 # ILiveSDK
-ILiveSDK 提供了账号登录，音视频互动，文本互动等直播类应用的基础功能
+ILiveSDK 提供了账号登录，音视频互动，文本互动等直播类应用的基础功能，顺利的话一天之内即可集成音视频能力
 
 ##ILiveSDK导入
 ILiveSDK在Android Studio上开发。
