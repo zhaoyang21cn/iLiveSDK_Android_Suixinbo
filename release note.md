@@ -1,4 +1,7 @@
 ##Release Note
+###V0.3.4 (2016-11-02)
+- 添加多人视频支持
+- 修改自定义信令无效等bug
 
 ###V0.3.3 (2016-10-28)
 - [在Room类新增质量数据获取接口(getQualityData)](/doc/ILiveSDK/quality.md)
