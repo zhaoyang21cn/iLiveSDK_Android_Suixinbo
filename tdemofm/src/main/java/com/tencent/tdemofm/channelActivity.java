@@ -196,14 +196,14 @@ public class channelActivity extends Activity implements View.OnClickListener, S
      */
     private void login(String id){
         addLog("正在登录用户"+id+"...");
-        ILiveLoginManager.getInstance().tilvbLogin(id, "123", new ILiveCallBack() {
+        ILiveLoginManager.getInstance().iLiveLogin(id, "123", new ILiveCallBack() {
             @Override
             public void onSuccess(Object o) {
                 llMain.setVisibility(View.VISIBLE);
                 llLogin.setVisibility(View.GONE);
                 llControl.setVisibility(View.GONE);
                 llChannel.setVisibility(View.VISIBLE);
-                tvId.setText(ILiveSDK.getInstance().getMyUserId());
+                tvId.setText(ILiveLoginManager.getInstance().getMyUserId());
                 mDisSer = new DiscussSer("FM", new DiscussSer.onInitListener() {
                     @Override
                     public void onInitComplete(int result) {
@@ -219,7 +219,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
                         });
                     }
                 });
-                addLog("登录成功，欢迎用户"+ILiveSDK.getInstance().getMyUserId());
+                addLog("登录成功，欢迎用户"+ILiveLoginManager.getInstance().getMyUserId());
             }
 
             @Override
@@ -238,7 +238,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     }
 
     private void innerLogout(){
-        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
+        ILiveLoginManager.getInstance().iLiveLogout(new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 onLogout();
@@ -274,7 +274,7 @@ public class channelActivity extends Activity implements View.OnClickListener, S
     private void join(final String strChannel, boolean bCreated){
         int channel = Integer.valueOf(strChannel);
         addLog((bCreated ? "尝试创建广播频道:" : "尝试加入广播频道:")+strChannel+"...");
-        ILiveRoomOption option = new ILiveRoomOption(ILiveSDK.getInstance().getMyUserId())
+        ILiveRoomOption option = new ILiveRoomOption(ILiveLoginManager.getInstance().getMyUserId())
                 .imsupport(false)
                 .autoCamera(false)
                 .autoMic(false);

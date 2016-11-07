@@ -10,6 +10,7 @@ import com.tencent.TIMManager;
 import com.tencent.TIMValueCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class DiscussSer {
     }
 
     public void modifyStatus(final String status){
-        TIMGroupManager.getInstance().modifyGroupMemberInfoSetNameCard(mGroupId, ILiveSDK.getInstance().getMyUserId(),
+        TIMGroupManager.getInstance().modifyGroupMemberInfoSetNameCard(mGroupId, ILiveLoginManager.getInstance().getMyUserId(),
                 status, new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {

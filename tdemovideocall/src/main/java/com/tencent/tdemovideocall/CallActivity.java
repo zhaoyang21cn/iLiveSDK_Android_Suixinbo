@@ -14,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.av.sdk.AVAudioCtrl;
-import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.business.callbusiness.ILVCallListener;
 import com.tencent.ilivesdk.business.callbusiness.ILVCallManager;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 
@@ -60,7 +60,7 @@ public class CallActivity extends Activity implements ILVCallListener, View.OnCl
     private void changeCamera() {
         if (bCameraEnable) {
             ILVCallManager.getInstance().enableCamera(mCurCameraId, false);
-            avRootView.closeUserView(ILiveSDK.getInstance().getMyUserId(), true);
+            avRootView.closeUserView(ILiveLoginManager.getInstance().getMyUserId(), true);
         } else {
             ILVCallManager.getInstance().enableCamera(mCurCameraId, true);
         }

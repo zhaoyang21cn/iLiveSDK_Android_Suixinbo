@@ -7,6 +7,7 @@
         android:supportsRtl="true">
         <activity android:name=".ContactActivity" android:screenOrientation="portrait" />
         <activity android:name=".CallActivity" android:screenOrientation="portrait" />
+        <activity android:name=".MutiCallActivity" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

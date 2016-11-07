@@ -106,9 +106,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
         //初始化SDK
         ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
         // 关闭IM群组
-        ILVLiveConfig liveConfig = (ILVLiveConfig) new ILVLiveConfig()
-                .autoRender(true)
-                .highAudioQuality(true);
+        ILVLiveConfig liveConfig = (ILVLiveConfig) new ILVLiveConfig();
 
         //初始化直播场景
         ILVLiveManager.getInstance().init(liveConfig);
@@ -138,7 +136,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         if (bLogin){    // 关闭界面时注销用户
-            ILiveLoginManager.getInstance().tilvbLogout(null);
+            ILiveLoginManager.getInstance().iLiveLogout(null);
         }
         super.onDestroy();
     }
@@ -146,8 +144,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_login) { //登陆房间
-            ILiveSDK.getInstance().setMyUserId("" + inputId.getText());
-            ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
+            ILiveLoginManager.getInstance().iLiveLogin(""+inputId.getText(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     bLogin = true;
@@ -191,6 +188,7 @@ public class LiveshowActivity extends Activity implements View.OnClickListener {
             //加入房间配置项
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
+                    .autoRender(true)   // 打开自动渲染
                     .controlRole("NormalMember") //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收

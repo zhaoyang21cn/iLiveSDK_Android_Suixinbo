@@ -53,7 +53,7 @@ public class AccountMgr {
      * @return
      * @throws Exception
      */
-    public static String getHttpGetRsp(String strAction) throws Exception{
+    public static String getHttpGetRsp(String strAction) throws Exception {
         Log.v(TAG, "getHttpGetRsp->request: \n" + strAction);
         URL _url = new URL(strAction.replace(" ", "%20"));
         HttpURLConnection _conn = (HttpURLConnection)_url.openConnection();
