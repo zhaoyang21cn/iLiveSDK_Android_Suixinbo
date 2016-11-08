@@ -12,31 +12,49 @@
         android:background="@color/white" />
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-        android:id="@+id/id_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
-        android:hint="input your id"
-        android:textColorHint="@color/colorGray3"
-        android:text=""
-        android:textColor="@color/btn_blue" />
+        <TextView
+            android:id="@+id/my_login_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorRed"
+            android:text="111" />
+
+        <!--<EditText-->
+            <!--android:id="@+id/id_input"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left|top"-->
+            <!--android:hint="input your id"-->
+            <!--android:textColor="@color/btn_blue"-->
+            <!--android:textColorHint="@color/colorGray3" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_login"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="top|left"-->
+            <!--android:layout_marginTop="0dp"-->
+            <!--android:text="login"-->
+            <!--android:textColor="@color/white" />-->
 
         <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="0dp"
-        android:text="login"
-        android:textColor="@color/white"
-        />
-    </LinearLayout>
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="0dp"
+            android:text="logout"
+            android:textColor="@color/white" />
+    </FrameLayout>
 
 
     <LinearLayout
@@ -64,7 +82,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,8 +102,8 @@
             android:id="@+id/host_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="hostId"
             android:layout_marginLeft="10dp"
+            android:hint="hostId"
             android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
@@ -97,9 +114,8 @@
             android:text="join"
             android:textColor="@color/white" />
 
+
     </LinearLayout>
-
-
 
 
     <LinearLayout
@@ -131,8 +147,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:visibility="visible"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/mem_id"
@@ -162,8 +178,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="thumbUp"
-            android:visibility="gone"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 
 
@@ -172,8 +188,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:text="back"
+        android:text="back33"
         android:textColor="@color/white" />
+
+
+    <FrameLayout
+        android:id="@+id/login_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/my_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="your id    "
+                android:textColor="@color/white"
+                android:textColorHint="@color/colorGray1" />
+
+            <EditText
+                android:id="@+id/my_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="your pwd  "
+                android:textColor="@color/white"
+                android:textColorHint="@color/colorGray1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
+
+            <Button
+                android:id="@+id/login_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="login" />
+
+            <Button
+                android:id="@+id/register_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="register" />
+        </LinearLayout>
+    </FrameLayout>
 
 
 </FrameLayout>

@@ -1,42 +1,46 @@
 package com.tencent.tdemolive;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tencent.TIMCustomElem;
-import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMMessage;
-import com.tencent.TIMMessagePriority;
-import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.business.livebusiness.ILVCustomCmd;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveConfig;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveConstants;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
+import com.tencent.ilivesdk.business.livebusiness.ILVText;
+import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.ilivesdk.view.AVRootView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LiveActivity extends Activity implements View.OnClickListener {
     Button createBtn, joinbtn, backBtn, sendBtn, inviteBtn, closeMemBtn, thumbUpBtn;
     AVRootView avRootView;
-    Button loginBtn;
-    EditText inputId, roomNum, roomNumJoin, textInput, memId, hostIdInput;
+    Button loginBtn,logoutBtn,loginLive,registLive;
+    EditText inputId, roomNum, roomNumJoin, textInput, memId, hostIdInput,myId,myPwd;
+    TextView myLoginId;
+    FrameLayout loginView;
     private static final String TAG = LiveActivity.class.getSimpleName();
+    private final int REQUEST_PHONE_PERMISSIONS = 0;
 
     private boolean bLogin = false, bEnterRoom = false;
 
@@ -53,46 +57,95 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         closeMemBtn = (Button) findViewById(R.id.close_mem);
         thumbUpBtn = (Button) findViewById(R.id.thumbUp);
 
+        loginLive = (Button) findViewById(R.id.login_live);
+        registLive = (Button) findViewById(R.id.register_live);
+        loginView =  (FrameLayout)findViewById(R.id.login_fragment);
+
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
 
-        loginBtn = (Button) findViewById(R.id.btn_login);
-        inputId = (EditText) findViewById(R.id.id_input);
+        logoutBtn = (Button) findViewById(R.id.btn_logout);
         roomNum = (EditText) findViewById(R.id.room_num);
         roomNumJoin = (EditText) findViewById(R.id.room_num_join);
         textInput = (EditText) findViewById(R.id.text_input);
         hostIdInput = (EditText) findViewById(R.id.host_id);
         memId = (EditText) findViewById(R.id.mem_id);
+        myId= (EditText) findViewById(R.id.my_id);
+        myPwd =(EditText) findViewById(R.id.my_pwd);
+        myLoginId = (TextView) findViewById(R.id.my_login_id);
 
         createBtn.setOnClickListener(this);
         joinbtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
-        loginBtn.setOnClickListener(this);
+        logoutBtn.setOnClickListener(this);
         sendBtn.setOnClickListener(this);
         inviteBtn.setOnClickListener(this);
         closeMemBtn.setOnClickListener(this);
         thumbUpBtn.setOnClickListener(this);
+        loginLive.setOnClickListener(this);
+        registLive.setOnClickListener(this);
+        checkPermission();
+
+
+
 
         //初始化SDK
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1104620500, 107);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400013700, 7285);
         // 关闭IM群组
-        ILVLiveConfig liveConfig = (ILVLiveConfig) new ILVLiveConfig()
-                .autoRender(true)
-                .highAudioQuality(true);
+        ILVLiveConfig liveConfig = new ILVLiveConfig();
 
-        //设置消息回调接口
-        liveConfig.setMsgListener(new ILVLiveConfig.TILVBLiveMsgListener() {
+        liveConfig.setLiveMsgListener(new ILVLiveConfig.ILVLiveMsgListener() {
             @Override
-            //群文本消息
-            public void onNewGroupTextMsg(String text, String id, TIMUserProfile userProfile, TIMGroupMemberInfo groupMemberInfo) {
-                Toast.makeText(LiveActivity.this, "" + text, Toast.LENGTH_SHORT).show();
+            public void onNewTextMsg(String text, String id) {
+                Toast.makeText(LiveActivity.this, "onNewTextMsg : " + text, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            //自定消息 包括C2C和群
-            public void onNewCustomMsg(TIMCustomElem elem, String id, TIMUserProfile userProfile, TIMGroupMemberInfo groupMemberInfo) {
-                Log.i(TAG, "onNewCustomMsg ");
-                handleCustomMsg(elem, id);
+            public void onNewCmdMsg(int cmd, String param, String id) {
+                switch (cmd) {
+                    case ILVLiveConstants.ILVLIVE_CMD_INVITE:
+                        Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
+                        ILiveLog.d(TAG, "ILVB-LiveApp|received ");
+                        ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+                            @Override
+                            public void onSuccess(Object data) {
+
+                            }
+
+                            @Override
+                            public void onError(String module, int errCode, String errMsg) {
+
+                            }
+                        });
+                        break;
+                    case  ILVLiveConstants.ILVLIVE_CMD_INVITE_CANCEL:
+
+                        break;
+                    case ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE:
+                        ILVLiveManager.getInstance().downToNorMember(ILVLiveConstants.NORMAL_MEMBER_AUTH, ILVLiveConstants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+                            @Override
+                            public void onSuccess(Object data) {
+
+                            }
+
+                            @Override
+                            public void onError(String module, int errCode, String errMsg) {
+
+                            }
+                        });
+                        break;
+                    case ILVLiveConstants.ILVLIVE_CMD_INTERACT_AGREE:
+                        break;
+                    case  ILVLiveConstants.ILVLIVE_CMD_INTERACT_REJECT:
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onNewCustomMsg(int cmd, String param, String id) {
+                Toast.makeText(LiveActivity.this, "cmd "+ cmd, Toast.LENGTH_SHORT).show();
+
             }
         });
         //初始化直播场景
@@ -130,76 +183,22 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         ILVLiveManager.getInstance().onResume();
     }
 
-    /**
-     * 处理自定义消息  更多自定义消息可以查看类ILVLiveConstants,也支持用户自定义自己的消息
-     *
-     * @param elem 自定义消息类型
-     * @param id   发送者
-     */
-    private void handleCustomMsg(TIMCustomElem elem, String id) { //解析Jason格式Custom消息
-        try {
-            Log.i(TAG, "handleCustomMsg ");
-            String customText = new String(elem.getData(), "UTF-8");
-            JSONTokener jsonParser = new JSONTokener(customText);
-            JSONObject json = (JSONObject) jsonParser.nextValue();
-            int action = json.getInt(ILVLiveConstants.CMD_KEY);
-            switch (action) {
-                case ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE: //以定义的上麦消息
-                    Toast.makeText(this, "receive a video invitation !!", Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, "handleCustomMsg  AVIMCMD_MUlTI_HOST_INVITE ");
-                    ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
-                        @Override
-                        public void onSuccess(Object data) {
-
-                        }
-
-                        @Override
-                        public void onError(String module, int errCode, String errMsg) {
-
-                        }
-                    });
-                    break;
-                case ILVLiveConstants.AVIMCMD_THUMBUP://处理点赞
-                    Toast.makeText(LiveActivity.this, "thumb up !!!!!!!!!!!!!", Toast.LENGTH_SHORT).show();
-                    break;
-                case ILVLiveConstants.AVIMCMD_MULTI_CLOSE_INTERACT://关闭消息
-                    ILVLiveManager.getInstance().downToNorMember(ILVLiveConstants.NORMAL_MEMBER_AUTH, ILVLiveConstants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
-                        @Override
-                        public void onSuccess(Object data) {
-
-                        }
-
-                        @Override
-                        public void onError(String module, int errCode, String errMsg) {
-
-                        }
-                    });
-                    break;
-                default:
-                    break;
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
-    private void logout(boolean quit){
-        if (bLogin){
-            ILiveLoginManager.getInstance().tilvbLogout(null);
+    private void logout(boolean quit) {
+        if (bLogin) {
+            ILiveLoginManager.getInstance().iLiveLogout(null);
         }
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        if (bEnterRoom){
+        if (bEnterRoom) {
             ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
@@ -211,25 +210,26 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     logout(true);
                 }
             });
-        }else{
+        } else {
             logout(true);
         }
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btn_login) { //登陆房间
-            ILiveSDK.getInstance().setMyUserId("" + inputId.getText());
-            ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
+        if (view.getId() == R.id.btn_logout) { //登陆房间
+            ILiveLoginManager.getInstance().iLiveLogout( new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
-                    bLogin = true;
-                    Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
+                    bLogin = false;
+                    loginView.setVisibility(View.VISIBLE);
+                    Toast.makeText(LiveActivity.this, "logout success !", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-                    Toast.makeText(LiveActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(LiveActivity.this, module + "|logout fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -240,6 +240,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             //创建房间配置项
             ILiveRoomOption hostOption = new ILiveRoomOption(null).
                     controlRole("Host")//角色设置
+                    .autoFocus(true)
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
@@ -303,8 +304,10 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.text_send) {
             //发送消息
-            ILiveSDK.getInstance().setMyUserId("" + inputId.getText());
-            ILVLiveManager.getInstance().sendGroupTextMsg("" + textInput.getText(), new ILiveCallBack() {
+            ILVText iliveText = new ILVText("ss", "", ILVLiveConstants.GROUP_TYPE);
+            iliveText.setText("" + textInput.getText());
+            //发送消息
+            ILVLiveManager.getInstance().sendText(iliveText, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "send succ!", Toast.LENGTH_SHORT).show();
@@ -321,8 +324,12 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.invite) {
             //邀请上麦
-            String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_MUlTI_HOST_INVITE, "");
-            ILVLiveManager.getInstance().sendC2CCustomMessage(inviteVideo, "" + memId.getText(), TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
+            ILVCustomCmd cmd = new ILVCustomCmd();
+            cmd.setCmd(ILVLiveConstants.ILVLIVE_CMD_INVITE);
+            cmd.setType(ILVLiveConstants.C2C_TYPE);
+            cmd.setDestid("" + memId.getText());
+            cmd.setParam("");
+            ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
                 @Override
                 public void onSuccess(TIMMessage data) {
                     Toast.makeText(LiveActivity.this, "invite send succ!", Toast.LENGTH_SHORT).show();
@@ -340,8 +347,12 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.close_mem) {
             //关闭上麦
-            String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_MULTI_CLOSE_INTERACT, "");
-            ILVLiveManager.getInstance().sendC2CCustomMessage(inviteVideo, "" + memId.getText(), TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
+            ILVCustomCmd cmd = new ILVCustomCmd();
+            cmd.setCmd(ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE);
+            cmd.setType(ILVLiveConstants.C2C_TYPE);
+            cmd.setDestid("" + memId.getText());
+            cmd.setParam("");
+            ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
                 @Override
                 public void onSuccess(TIMMessage data) {
                     Toast.makeText(LiveActivity.this, "invite send succ!", Toast.LENGTH_SHORT).show();
@@ -354,26 +365,49 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
             });
 
-
         }
-        if (view.getId() == R.id.thumbUp) {
-            //发送点赞
-            String inviteVideo = jasonToString(ILVLiveConstants.AVIMCMD_THUMBUP, "");
-            ILVLiveManager.getInstance().sendGroupCustomMessage(inviteVideo, TIMMessagePriority.High, new ILiveCallBack<TIMMessage>() {
+
+        if(view.getId()==R.id.register_live){
+            Log.i(TAG, "onClick: register ");
+            ILiveLoginManager.getInstance().tlsRegister(""+myId.getText(), ""+myPwd.getText(), new ILiveCallBack() {
                 @Override
-                public void onSuccess(TIMMessage data) {
-                    Toast.makeText(LiveActivity.this, "invite send thumbup succ!", Toast.LENGTH_SHORT).show();
+                public void onSuccess(Object data) {
+                    Toast.makeText(LiveActivity.this, "register suc !!!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
+                    Toast.makeText(LiveActivity.this, "register failed : "+errMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        if(view.getId()==R.id.login_live){
+            ILiveLoginManager.getInstance().tlsLogin("" + myId.getText(), "" + myPwd.getText(), new ILiveCallBack<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    ILiveLoginManager.getInstance().iLiveLogin("" + myId.getText(), data, new ILiveCallBack() {
+                        @Override
+                        public void onSuccess(Object data) {
+                            bLogin = true;
+                            Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
+                            myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
+                            loginView.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onError(String module, int errCode, String errMsg) {
+                            Toast.makeText(LiveActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
 
                 }
-
             });
-
         }
-
     }
 
     @Override
@@ -382,16 +416,24 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     }
 
 
-    private String jasonToString(int cmd, String param) {
-        JSONObject inviteCmd = new JSONObject();
-        try {
-            inviteCmd.put(ILVLiveConstants.CMD_KEY, cmd);
-            inviteCmd.put(ILVLiveConstants.CMD_PARAM, param);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    void checkPermission() {
+        final List<String> permissionsList = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.CAMERA);
+            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.RECORD_AUDIO);
+            if ((checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.WAKE_LOCK);
+            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+            if (permissionsList.size() != 0) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_PHONE_PERMISSIONS);
+            }
         }
-        return inviteCmd.toString();
     }
-
 
 }
