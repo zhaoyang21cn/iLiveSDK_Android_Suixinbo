@@ -33,10 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiveActivity extends Activity implements View.OnClickListener {
-    Button createBtn, joinbtn, backBtn, sendBtn, inviteBtn, closeMemBtn, thumbUpBtn;
+    Button createBtn, joinbtn, backBtn, sendBtn, inviteBtn, closeMemBtn;
     AVRootView avRootView;
-    Button loginBtn,logoutBtn,loginLive,registLive;
-    EditText inputId, roomNum, roomNumJoin, textInput, memId, hostIdInput,myId,myPwd;
+    Button logoutBtn,loginLive,registLive;
+    EditText roomNum, roomNumJoin, textInput, memId, hostIdInput,myId,myPwd;
     TextView myLoginId;
     FrameLayout loginView;
     private static final String TAG = LiveActivity.class.getSimpleName();
@@ -55,7 +55,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         sendBtn = (Button) findViewById(R.id.text_send);
         inviteBtn = (Button) findViewById(R.id.invite);
         closeMemBtn = (Button) findViewById(R.id.close_mem);
-        thumbUpBtn = (Button) findViewById(R.id.thumbUp);
 
         loginLive = (Button) findViewById(R.id.login_live);
         registLive = (Button) findViewById(R.id.register_live);
@@ -81,7 +80,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         sendBtn.setOnClickListener(this);
         inviteBtn.setOnClickListener(this);
         closeMemBtn.setOnClickListener(this);
-        thumbUpBtn.setOnClickListener(this);
         loginLive.setOnClickListener(this);
         registLive.setOnClickListener(this);
         checkPermission();
@@ -249,6 +247,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -274,6 +274,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 public void onSuccess(Object data) {
                     bEnterRoom = true;
                     Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -292,6 +294,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 public void onSuccess(Object data) {
                     bEnterRoom = false;
                     Toast.makeText(LiveActivity.this, "quit room  ok ", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.VISIBLE);
+                    backBtn.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
