@@ -12,34 +12,34 @@
         android:background="@color/white" />
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-        android:id="@+id/id_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
-        android:hint="input your id"
-        android:textColorHint="@color/colorGray3"
-        android:text=""
-        android:textColor="@color/btn_blue" />
+        <TextView
+            android:id="@+id/my_login_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/btn_blue"
+            android:textSize="22sp" />
 
         <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="0dp"
-        android:text="login"
-        android:textColor="@color/white"
-        />
-    </LinearLayout>
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="0dp"
+            android:text="logout"
+            android:textColor="@color/white" />
+    </FrameLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -49,6 +49,7 @@
             android:id="@+id/room_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:hint="roomid(int)"
             android:inputType="number"
             android:textColor="@color/btn_blue"
@@ -58,11 +59,20 @@
             android:id="@+id/create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="create"
+            android:layout_toRightOf="@+id/room_num"
+            android:text="createRoom"
             android:textColor="@color/white" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="backRoom"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
 
+    </RelativeLayout>
 
 
     <LinearLayout
@@ -85,8 +95,8 @@
             android:id="@+id/host_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="hostId"
             android:layout_marginLeft="10dp"
+            android:hint="hostId"
             android:textColor="@color/btn_blue"
             android:textColorHint="@color/colorGray3" />
 
@@ -94,12 +104,11 @@
             android:id="@+id/join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="join"
+            android:text="joinRoom"
             android:textColor="@color/white" />
 
+
     </LinearLayout>
-
-
 
 
     <LinearLayout
@@ -131,8 +140,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:visibility="visible"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/mem_id"
@@ -157,23 +166,74 @@
             android:text="closeMem"
             android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/thumbUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="thumbUp"
-            android:visibility="gone"
-            android:textColor="@color/white" />
+        <!--<Button-->
+        <!--android:id="@+id/thumbUp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="thumbUp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:visibility="gone" />-->
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:text="back"
-        android:textColor="@color/white" />
+    <FrameLayout
+        android:id="@+id/login_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:text="简单直播 (ID不能是纯数字,纯中文)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="100dp">
+
+            <EditText
+                android:id="@+id/my_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="your id    "
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray1" />
+
+            <EditText
+                android:id="@+id/my_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="your pwd  "
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorGray1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="140dp">
+
+            <Button
+                android:id="@+id/login_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="login" />
+
+            <Button
+                android:id="@+id/register_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="register" />
+        </LinearLayout>
+    </FrameLayout>
 
 
 </FrameLayout>

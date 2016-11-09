@@ -6,7 +6,12 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.tencent.av.sdk.AVRoomMulti;
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveMemStatusLisenter;
 import com.tencent.ilivesdk.business.livebusiness.ILVLiveConfig;
+import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
+import com.tencent.ilivesdk.core.ILiveLog;
+import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
@@ -15,13 +20,6 @@ import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.LogConstants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
-import com.tencent.ilivesdk.ILiveCallBack;
-import com.tencent.ilivesdk.ILiveMemStatusLisenter;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
-import com.tencent.ilivesdk.core.ILiveLog;
-import com.tencent.ilivesdk.core.ILiveRoomConfig;
-import com.tencent.ilivesdk.core.ILiveRoomManager;
-import com.tencent.ilivesdk.core.ILiveRoomOption;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,13 +58,13 @@ public class EnterLiveHelper extends Presenter implements ILiveMemStatusLisenter
     public void startEnterRoom() {
         //TODO 配置房间
         ILVLiveConfig liveConfig = new ILVLiveConfig();
-        liveConfig.setRoomMemberStatusLisenter(this);
         ILVLiveManager.getInstance().init(liveConfig);
         if (MySelfInfo.getInstance().isCreateRoom() == true) {
             //TODO 新方式创建房间
             ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId()).
                     controlRole("Host")
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
+                    .setRoomMemberStatusLisenter(this)
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
             ILVLiveManager.getInstance().createRoom(MySelfInfo.getInstance().getMyRoomNum(), hostOption, new ILiveCallBack() {
                 @Override

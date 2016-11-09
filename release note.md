@@ -1,4 +1,11 @@
 ##Release Note
+###V0.3.5 (2016-11-08)
+- 在AVVideoView中添加首帧到达事件回调setRecvFirstFrameListener
+- 在ILiveRoomManager中添加获取当前打开摄像头id接口getActiveCameraId
+- 在ILiveRoomManager中添加判断是否加入房间接口isEnterRoom
+- 优化登录模块
+- 重新实现摄像头对焦功能
+
 ###V0.3.4 (2016-11-02)
 - 添加多人视频支持
 - 修改自定义信令无效等bug

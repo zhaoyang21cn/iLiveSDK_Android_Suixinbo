@@ -53,7 +53,7 @@ public class LoginHelper extends Presenter {
     public void imLogin(final String identify, String userSig) {
         //TODO 新方式登录ILiveSDK
         ILiveSDK.getInstance().initSdk(QavsdkApplication.getContext(), Constants.SDK_APPID, Constants.ACCOUNT_TYPE);
-        ILiveLoginManager.getInstance().tilvbLogin(identify, userSig, new ILiveCallBack() {
+        ILiveLoginManager.getInstance().iLiveLogin(identify, userSig, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + identify + LogConstants.DIV + "request room id");
@@ -79,7 +79,7 @@ public class LoginHelper extends Presenter {
      */
     public void imLogout() {
         //TODO 新方式登出ILiveSDK
-        ILiveLoginManager.getInstance().tilvbLogout(new ILiveCallBack() {
+        ILiveLoginManager.getInstance().iLiveLogout(new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 SxbLog.i(TAG, "IMLogout succ !");

@@ -1,11 +1,15 @@
 # ILiveSDK
-ILiveSDK 提供了账号登录，音视频互动，文本互动等直播类应用的基础功能，顺利的话一天之内即可集成音视频能力
+ILiveSDK 提供了账号登录，音视频互动，文本互动等基础功能，顺利的话一天之内即可集成音视频能力。
+
+支持以下场景     
+1 视频直播类 类似now直播,映客 一人直播,多人观看,发文本消息,赞,送礼物。    
+2 视频聊天类 类似微信视频通话功能呢,支持多人同时上麦(最多4路)。
 
 ##ILiveSDK导入
 ILiveSDK在Android Studio上开发。
-导入只需要在gradle里增加一行（后面是版本号）
+导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明](./release note.md)
 
-compile 'com.tencent.ilivesdk:ilivesdk:0.3.1'
+compile 'com.tencent.ilivesdk:ilivesdk:0.3.5'
 
 
 
