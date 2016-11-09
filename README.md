@@ -3,7 +3,7 @@ ILiveSDK 提供了账号登录，音视频互动，文本互动等基础功能�
 
 支持以下场景     
 1 视频直播类 类似now直播,映客 一人直播,多人观看,发文本消息,赞,送礼物。    
-2 视频聊天类 类似微信视频通话功能呢,支持多人同时上麦(最多4路)。
+2 [视频聊天类](./ILVCallManager.md) 类似微信视频通话功能呢,支持多人同时上麦(最多4路)。
 
 ##ILiveSDK导入
 ILiveSDK在Android Studio上开发。
@@ -43,7 +43,7 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
             //创建房间
-            ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
+            ILiveRoomManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
