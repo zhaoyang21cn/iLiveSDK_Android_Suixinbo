@@ -1,5 +1,5 @@
 ##Release Note
-###V0.3.6 (2016-11-08)
+###V0.3.6 (2016-11-10)
 - 双人视频的option中添加在线模式配置setOnlineCall
 - AVRootView添加自动旋转配置setAutoOrientation
 - 进房间option中添加录制视频纠正配置degreeFix
