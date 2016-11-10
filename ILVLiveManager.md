@@ -76,4 +76,4 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
         
-［信息及上麦参见](./ILVLiveManager.md)        
+［信令及上麦参见](../ILVLiveSenior.md)        
