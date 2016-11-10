@@ -37,6 +37,31 @@
                     Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
+###加入房间
+           //加入房间配置项
+            ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
+                    .autoCamera(false) //是否自动打开摄像头
+                    .controlRole("NormalMember") //角色设置
+                    .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO |              AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
+                    .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
+                    .autoMic(false);//是否自动打开mic
+            //加入房间
+            ILVLiveManager.getInstance().joinRoom(room, memberOption, new ILiveCallBack() {
+                @Override
+                public void onSuccess(Object data) {
+                    bEnterRoom = true;
+                    Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
+                    Toast.makeText(LiveActivity.this, module + "|join fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+            
+            
             
 ###渲染
 
