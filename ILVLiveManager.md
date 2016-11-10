@@ -1,4 +1,5 @@
-﻿ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
+###初始化
+ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 
 
 
