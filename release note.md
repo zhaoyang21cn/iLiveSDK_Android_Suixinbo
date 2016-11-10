@@ -1,4 +1,11 @@
 ##Release Note
+###V0.3.6 (2016-11-08)
+- 双人视频的option中添加在线模式配置setOnlineCall
+- AVRootView添加自动旋转配置setAutoOrientation
+- 进房间option中添加录制视频纠正配置degreeFix
+- 双人视频内部忽略sender为自己的信令
+- 修正退出房间curCameraId未重置问题
+
 ###V0.3.5 (2016-11-08)
 - 在AVVideoView中添加首帧到达事件回调setRecvFirstFrameListener
 - 在ILiveRoomManager中添加获取当前打开摄像头id接口getActiveCameraId
