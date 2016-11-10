@@ -1,4 +1,4 @@
-##发消息
+##互动上麦及消息
 
 ###发文本消息
             //发送消息
@@ -19,9 +19,6 @@
             });
             
 ###上麦邀请  
-
-
-
             //邀请上麦
             ILVCustomCmd cmd = new ILVCustomCmd();
             cmd.setCmd(ILVLiveConstants.ILVLIVE_CMD_INVITE);
