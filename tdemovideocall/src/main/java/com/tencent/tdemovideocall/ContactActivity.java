@@ -142,7 +142,8 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
      */
     private void makeCall(String remoteId) {
         ILVCallOption option = new ILVCallOption(ILiveLoginManager.getInstance().getMyUserId())
-            .setCallType(ILVCallConstants.CALL_TYPE_VIDEO);
+                .setOnlineCall(true)
+                .setCallType(ILVCallConstants.CALL_TYPE_VIDEO);
         int callId = ILVCallManager.getInstance().makeCall(remoteId, option);
         if (ILiveConstants.INVALID_INTETER_VALUE != callId) {
             // 成功处理
@@ -367,11 +368,11 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         if (null != mIncomingDlg){  // 关闭遗留来电对话框
             mIncomingDlg.dismiss();
         }
-        long curSec = ILiveFunc.getCurrentSec();
+/*        long curSec = ILiveFunc.getCurrentSec();
         if (curSec < timeStamp || (curSec-timeStamp)>30){    //忽略超过30秒的消息
             Log.v(TAG, "onNewIncomingCall->ignore expired incoming:"+(curSec-timeStamp)+"s ago");
             return;
-        }
+        }*/
         mCurIncomingId = callId;
         mIncomingDlg = new AlertDialog.Builder(this)
                 .setTitle("New Call From "+fromUserId)
@@ -379,7 +380,7 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (0 == ILVCallManager.getInstance().acceptCall(mCurIncomingId, new ILVCallOption(fromUserId).setCallType(callType))) {
+                        if (0 == ILVCallManager.getInstance().acceptCall(mCurIncomingId, new ILVCallOption(fromUserId).setCallType(callType).setOnlineCall(true))) {
                             Intent intent = new Intent();
                             intent.setClass(ContactActivity.this, CallActivity.class);
                             intent.putExtra("HostId", fromUserId);
@@ -405,11 +406,11 @@ public class ContactActivity extends Activity implements View.OnClickListener, I
         if (null != mIncomingDlg){  // 关闭遗留来电对话框
             mIncomingDlg.dismiss();
         }
-        long curSec = ILiveFunc.getCurrentSec();
+/*        long curSec = ILiveFunc.getCurrentSec();
         if (curSec < timeStamp || (curSec-timeStamp)>30){    //忽略超过30秒的消息
             Log.v(TAG, "onNewMutiIncomingCall->ignore expired incoming:"+(curSec-timeStamp)+"s ago");
             return;
-        }
+        }*/
         mCurIncomingId = callId;
         mIncomingDlg = new AlertDialog.Builder(this)
                 .setTitle("New Muti Call From "+sponser)
