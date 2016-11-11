@@ -88,7 +88,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
 
         //初始化SDK
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400013700, 7285);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400001692, 884);
         // 关闭IM群组
         ILVLiveConfig liveConfig = new ILVLiveConfig();
 
