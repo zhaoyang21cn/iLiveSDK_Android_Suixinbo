@@ -5,8 +5,8 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 
 ###账号登录
 使用托管方式或独立模式，在获取到用户的sig后，使用登陆接口，完成相应初始化（包括avsdk）
-
-      ILiveLoginManager.getInstance().tilvbLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
+```java
+      ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     bLogin = true;
@@ -18,7 +18,8 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
                     Toast.makeText(ContactActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
-            
+```            
+```java            
 ###创建房间
             //创建房间配置项
             ILiveRoomOption hostOption = new ILiveRoomOption(null).
@@ -38,6 +39,8 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
                     Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
+```
+```java  
 ###加入房间
            //加入房间配置项
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
@@ -61,11 +64,11 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
                     Toast.makeText(LiveActivity.this, module + "|join fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
-            
+```            
             
             
 ###渲染
-
+```java
     <com.tencent.ilivesdk.view.AVRootView
         android:id="@+id/av_root_view"
         android:layout_width="match_parent"
@@ -75,5 +78,5 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
         
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
-        
+```          
 [信令及上麦参见](./ILVLiveSenior.md)        
