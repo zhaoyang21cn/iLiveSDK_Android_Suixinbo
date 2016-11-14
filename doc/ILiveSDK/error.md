@@ -1,0 +1,28 @@
+﻿##错误码
+
+
+模块名称常量|模块名称取值|错误码
+Module_ILIVESDK|ILiveSDK|见下表
+Module_AVSDK|AVSDK|[查看](https://www.qcloud.com/doc/product/268/3223)
+Module_IMSDK|IMSDK|[查看](https://www.qcloud.com/doc/product/269/1671)
+Module_TLSSDK|TLSSDK|[查看](http://bbs.qcloud.com/thread-8309-1-1.html)
+
+### ILiveSDK错误码
+常量定义|错误码|错误描述
+:--|--:|:--:
+NO_ERR                  |0|成功
+ERR_IM_NOT_READY        |8001|IM模块未就绪或
+ERR_AV_NOT_READY        |8002|AV模块未就绪或未加载
+ERR_NO_ROOM             |8003|无有效的房间
+ERR_ALREADY_EXIST       |8004|目标已存在
+ERR_NULL_POINTER        |8005|空指针错误
+ERR_ENTER_AV_ROOM_FAIL  |8006|进入AV房间失败
+ERR_USER_CANCEL         |8007|用户取消
+ERR_WRONG_STATE         |8008|状态异常
+ERR_SDK_FAILED          |8020|iLiveSDK处理失败(通用)
+ERR_INVALID_PARAM       |8021|无效的参数
+ERR_NOT_FOUND           |8022|无法找到目标
+ERR_NOT_SUPPORT         |8023|请求不支持
+ERR_ALREADY_STATE       |8024|状态已到位(一般为重复调用引起)
+ERR_KICK_OUT            |8050|被踢下线
+ERR_EXPIRE              |8051|票据过期(需更新票据userSig)
