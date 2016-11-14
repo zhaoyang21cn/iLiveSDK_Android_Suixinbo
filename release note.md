@@ -1,4 +1,10 @@
 ##Release Note
+
+###V0.3.7 (2016-11-14)
+- 修复自动渲染临时绑定未解绑问题
+- 修复双人视频心跳相关问题
+- 统一双人视频主叫方和接收方错误码
+
 ###V0.3.6 (2016-11-10)
 - 双人视频的option中添加在线模式配置setOnlineCall
 - AVRootView添加自动旋转配置setAutoOrientation
