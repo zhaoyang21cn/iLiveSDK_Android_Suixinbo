@@ -11,16 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.tencent.customstream.CameraActivity;
-import com.tencent.qcloud.suixinbo.adapters.LiveShowAdapter;
 import com.tencent.qcloud.suixinbo.views.LoginActivity;
-import com.tencent.tdemofm.channelActivity;
 import com.tencent.tdemolive.LiveActivity;
 import com.tencent.tdemovideocall.ContactActivity;
 
 import java.util.ArrayList;
-
-import cn.jx.tdemoliveshow.LiveshowActivity;
 
 /**
  * 示例菜单
@@ -48,9 +43,6 @@ public class MainMenu extends Activity {
         listDemo.add("VideoCall: 双人视频");
         listDemo.add("Live: 直播");
         listDemo.add("Suixinbo:新随心播");
-        //listDemo.add("FM: 广播电台");
-        //listDemo.add("LiveShow: 播放特性展示");
-        //listDemo.add("CustomStream: 自定义输入");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 listDemo);
         lvMenu.setAdapter(adapterDemo);
@@ -68,15 +60,6 @@ public class MainMenu extends Activity {
                         break;
                     case 2:
                         intent.setClass(MainMenu.this, LoginActivity.class);
-                        break;
-                    case 3:
-                        intent.setClass(MainMenu.this, channelActivity.class);
-                        break;
-                    case 4:
-                        intent.setClass(MainMenu.this, LiveshowActivity.class);
-                        break;
-                    case 5:
-                        intent.setClass(MainMenu.this, CameraActivity.class);
                         break;
                 }
 

@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">CustomStream</string>
-
-    <string name="system_not_support">手机录屏功能需要Android 5.0以上机器才能支持</string>
-</resources>
