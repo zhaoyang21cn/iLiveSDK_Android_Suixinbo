@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.LogConstants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -175,6 +176,7 @@ public class OKhttpHelper {
             JSONObject req = new JSONObject();
             req.put("pageIndex", page);
             req.put("pageSize", pagesize);
+            req.put("appid", Constants.SDK_APPID);
             String response = OKhttpHelper.getInstance().post(GET_LIVELIST, req.toString());
 
             SxbLog.i(TAG, "getLiveList " + response.toString());

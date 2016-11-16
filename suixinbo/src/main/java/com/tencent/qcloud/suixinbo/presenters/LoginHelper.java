@@ -3,6 +3,7 @@ package com.tencent.qcloud.suixinbo.presenters;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.qcloud.suixinbo.QavsdkApplication;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LoginView;
@@ -27,7 +28,6 @@ public class LoginHelper extends Presenter {
     private static final String TAG = LoginHelper.class.getSimpleName();
     private LoginView mLoginView;
     private LogoutView mLogoutView;
-    private int RoomId = -1;
 
     public LoginHelper(Context context) {
         mContext = context;
@@ -52,7 +52,6 @@ public class LoginHelper extends Presenter {
      */
     public void imLogin(final String identify, String userSig) {
         //TODO 新方式登录ILiveSDK
-        ILiveSDK.getInstance().initSdk(QavsdkApplication.getContext(), Constants.SDK_APPID, Constants.ACCOUNT_TYPE);
         ILiveLoginManager.getInstance().iLiveLogin(identify, userSig, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
@@ -101,43 +100,20 @@ public class LoginHelper extends Presenter {
      * @param id
      * @param password
      */
-    public void tlsLogin(String id, String password) {
-        int ret = InitBusinessHelper.getmLoginHelper().TLSPwdLogin(id, password.getBytes(), new TLSPwdLoginListener() {
+    public void tlsLogin(final String id, String password) {
+        ILiveLoginManager.getInstance().tlsLogin(id, password, new ILiveCallBack<String>() {
             @Override
-            public void OnPwdLoginSuccess(TLSUserInfo tlsUserInfo) {//获取用户信息
-//                Toast.makeText(mContext, "TLS login succ ! " + tlsUserInfo.identifier, Toast.LENGTH_SHORT).show();
-//                SxbLog.i(TAG, "TLS OnPwdLoginSuccess " + tlsUserInfo.identifier);
-                String userSig = InitBusinessHelper.getmLoginHelper().getUserSig(tlsUserInfo.identifier);
-                MySelfInfo.getInstance().setId(tlsUserInfo.identifier);
+            public void onSuccess(String userSig) {
+                MySelfInfo.getInstance().setId(id);
                 MySelfInfo.getInstance().setUserSig(userSig);
-                imLogin(tlsUserInfo.identifier, userSig);
+                imLogin(id, userSig);
             }
 
             @Override
-            public void OnPwdLoginReaskImgcodeSuccess(byte[] bytes) {
-
-            }
-
-            @Override
-            public void OnPwdLoginNeedImgcode(byte[] bytes, TLSErrInfo tlsErrInfo) {
-
-            }
-
-            @Override
-            public void OnPwdLoginFail(TLSErrInfo tlsErrInfo) {
-                SxbLog.e(TAG, "OnPwdLoginFail " + tlsErrInfo.Msg);
-                Toast.makeText(mContext, "OnPwdLoginFail：\n" + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void OnPwdLoginTimeout(TLSErrInfo tlsErrInfo) {
-                SxbLog.e(TAG, "OnPwdLoginTimeout " + tlsErrInfo.Msg);
-                Toast.makeText(mContext, "OnPwdLoginTimeout：\n" + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(mContext, "OnPwdLoginFail|"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
             }
         });
-        if (ret != -1001) {
-            Toast.makeText(mContext, "input invalid !", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -148,27 +124,19 @@ public class LoginHelper extends Presenter {
      * @param psw
      */
     public void tlsRegister(final String id, final String psw) {
-        int ret = InitBusinessHelper.getmAccountHelper().TLSStrAccReg(id, psw, new TLSStrAccRegListener() {
+        ILiveLoginManager.getInstance().tlsRegister(id, psw, new ILiveCallBack() {
             @Override
-            public void OnStrAccRegSuccess(TLSUserInfo tlsUserInfo) {
-                Toast.makeText(mContext, tlsUserInfo.identifier + " register a user succ !  ", Toast.LENGTH_SHORT).show();
+            public void onSuccess(Object data) {
+                Toast.makeText(mContext, id + " register a user succ !  ", Toast.LENGTH_SHORT).show();
                 //继续登录流程
                 tlsLogin(id, psw);
             }
 
             @Override
-            public void OnStrAccRegFail(TLSErrInfo tlsErrInfo) {
-                Toast.makeText(mContext, " register a user fail ! " + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void OnStrAccRegTimeout(TLSErrInfo tlsErrInfo) {
-                Toast.makeText(mContext, " register timeout ! " + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(mContext, "tlsRegister->failed|"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
             }
         });
-        if (ret != -1001) {
-            Toast.makeText(mContext, "input invalid !", Toast.LENGTH_SHORT).show();
-        }
     }
 
 

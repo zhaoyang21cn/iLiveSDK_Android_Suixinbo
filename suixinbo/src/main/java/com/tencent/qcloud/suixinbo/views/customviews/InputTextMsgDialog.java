@@ -16,8 +16,9 @@ import android.widget.Toast;
 
 import com.tencent.TIMMessage;
 import com.tencent.TIMTextElem;
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.qcloud.suixinbo.R;
-import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.LiveActivity;
 
@@ -35,7 +36,6 @@ public class InputTextMsgDialog extends Dialog {
     private EditText messageTextView;
     private static final String TAG = InputTextMsgDialog.class.getSimpleName();
     private Context mContext;
-    private LiveHelper mLiveControlHelper;
     private Activity mVideoPlayActivity;
     private InputMethodManager imm;
     private RelativeLayout rlDlg;
@@ -43,10 +43,9 @@ public class InputTextMsgDialog extends Dialog {
     private final String reg = "[`~@#$%^&*()-_+=|{}':;,/.<>￥…（）—【】‘；：”“’。，、]";
     private Pattern pattern = Pattern.compile(reg);
 
-    public InputTextMsgDialog(Context context, int theme, LiveHelper presenter, LiveActivity activity) {
+    public InputTextMsgDialog(Context context, int theme, LiveActivity activity) {
         super(context, theme);
         mContext = context;
-        mLiveControlHelper = presenter;
         mVideoPlayActivity = activity;
         setContentView(R.layout.input_text_dialog);
         messageTextView = (EditText) findViewById(R.id.input_message);
@@ -157,7 +156,17 @@ public class InputTextMsgDialog extends Dialog {
         if (Nmsg.addElement(elem) != 0) {
             return;
         }
-        mLiveControlHelper.sendGroupText(Nmsg);
+        ILiveRoomManager.getInstance().sendGroupMessage(Nmsg, new ILiveCallBack<TIMMessage>() {
+            @Override
+            public void onSuccess(TIMMessage data) {
+                SxbLog.d(TAG, "sendGroupMessage->success");
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(mContext, "send msg failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

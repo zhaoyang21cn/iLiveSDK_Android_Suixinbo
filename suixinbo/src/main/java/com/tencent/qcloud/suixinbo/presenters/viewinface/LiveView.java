@@ -2,6 +2,7 @@ package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 
 import com.tencent.av.TIMAvManager;
+import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 
 import java.util.List;
 
@@ -10,7 +11,9 @@ import java.util.List;
  */
 public interface LiveView extends MvpView {
 
-    void showVideoView(boolean isHost, String id);
+    void enterRoomComplete(int id_status, boolean succ);
+
+    void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo);
 
     void showInviteDialog();
 

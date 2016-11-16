@@ -1,411 +1,469 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.tencent.TIMConversation;
-import com.tencent.TIMConversationType;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
 import com.tencent.TIMGroupSystemElem;
 import com.tencent.TIMGroupSystemElemType;
-import com.tencent.TIMManager;
 import com.tencent.TIMMessage;
-import com.tencent.TIMMessageListener;
 import com.tencent.TIMTextElem;
-import com.tencent.TIMUserProfile;
-import com.tencent.TIMValueCallBack;
 import com.tencent.av.TIMAvManager;
-import com.tencent.av.sdk.AVAudioCtrl;
-import com.tencent.av.sdk.AVEndpoint;
-import com.tencent.av.sdk.AVError;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
-import com.tencent.av.sdk.AVView;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.MembersDialogView;
-import com.tencent.qcloud.suixinbo.utils.Constants;
-import com.tencent.qcloud.suixinbo.utils.LogConstants;
-import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveMemStatusLisenter;
 import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.ILiveConstants;
+import com.tencent.ilivesdk.business.livebusiness.ILVCustomCmd;
+import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.core.ILiveRoomOption;
+import com.tencent.qcloud.suixinbo.R;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
+import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.tencent.qcloud.suixinbo.utils.LogConstants;
+import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
- * 直播的控制类presenter
+ * Created by xkazerzhang on 2016/11/15.
  */
-public class LiveHelper extends Presenter {
+public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILiveRoomOption.onRoomDisconnectListener, Observer {
+    private final String TAG = "LiveHelper";
     private LiveView mLiveView;
-    private MembersDialogView mMembersDialogView;
     public Context mContext;
-    private static final String TAG = LiveHelper.class.getSimpleName();
-    private static final int CAMERA_NONE = -1;
-    private static final int FRONT_CAMERA = 0;
-    private static final int BACK_CAMERA = 1;
-    private static final int MAX_REQUEST_VIEW_COUNT = 4; //当前最大支持请求画面个数
-    private static final boolean LOCAL = true;
-    private static final boolean REMOTE = false;
-    private TIMConversation mGroupConversation;
-    private TIMConversation mC2CConversation;
-    private boolean isMicOpen = false;
-    private static final String UNREAD = "0";
-    private AVView mRequestViewList[] = new AVView[MAX_REQUEST_VIEW_COUNT];
-    private String mRequestIdentifierList[] = new String[MAX_REQUEST_VIEW_COUNT];
-    private Boolean isOpenCamera = false;
-    private AVRoomMulti mRoomMulti;
-    private boolean isBakCameraOpen, isBakMicOpen;      // 切后时备份当前camera及mic状态
 
+    private boolean bCameraOn = false;
+    private boolean bMicOn = false;
+    private boolean flashLgihtStatus = false;
+
+    private long streamChannelID;
+    private NotifyServerLiveEnd liveEndTask;
+
+    class NotifyServerLiveEnd extends AsyncTask<String, Integer, LiveInfoJson> {
+
+        @Override
+        protected LiveInfoJson doInBackground(String... strings) {
+            return OKhttpHelper.getInstance().notifyServerLiveStop(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(LiveInfoJson result) {
+        }
+    }
 
     public LiveHelper(Context context, LiveView liveview) {
         mContext = context;
         mLiveView = liveview;
+
+        MessageEvent.getInstance().addObserver(this);
     }
 
-
-    /**
-     * 开启摄像头和MIC
-     */
-    public void openCameraAndMic() {
-        openCamera();
-        AVAudioCtrl avAudioCtrl = ILiveSDK.getInstance().getAvAudioCtrl();//开启Mic
-        avAudioCtrl.enableMic(true);
-        isMicOpen = true;
-
-    }
-
-
-    /**
-     * 打开摄像头
-     */
-    private void openCamera() {
-        if (mIsFrontCamera) {
-            enableCamera(FRONT_CAMERA, true);
-        } else {
-            enableCamera(BACK_CAMERA, true);
-        }
-    }
-
-
-    public void closeCameraAndMic() {
-        closeCamera();
-        closeMic();
+    @Override
+    public void onDestory() {
+        mLiveView = null;
+        mContext = null;
+        MessageEvent.getInstance().deleteObserver(this);
     }
 
     /**
-     * 开关摄像头
+     * 进入房间
      */
-    public void toggleCamera() {
-        if (isOpenCamera) {
-            closeCamera();
-        } else {
-            openCamera();
+    public void startEnterRoom(){
+        if (MySelfInfo.getInstance().isCreateRoom() == true) {
+            createRoom();
+        }else{
+            joinRoom();
         }
     }
 
+    public void startExitRoom() {
+        ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                ILiveLog.d(TAG, "ILVB-DBG|quitRoom->success");
+                CurLiveInfo.setCurrentRequestCount(0);
+                //通知结束
+                notifyServerLiveEnd();
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                }
+            }
 
-    /**
-     * 开关Mic
-     */
-    public void toggleMic() {
-        if (isMicOpen) {
-            openMic();
-        } else {
-            muteMic();
-        }
-    }
-
-
-    public void closeCamera() {
-        if (mIsFrontCamera) {
-            enableCamera(FRONT_CAMERA, false);
-        } else {
-            enableCamera(BACK_CAMERA, false);
-        }
-    }
-
-    public void closeMic() {
-        AVAudioCtrl avAudioCtrl = ILiveSDK.getInstance().getAvAudioCtrl();//开启Mic
-        avAudioCtrl.enableMic(false);
-        isMicOpen = false;
-    }
-
-
-    /**
-     * 开启摄像头
-     *
-     * @param camera
-     * @param isEnable
-     */
-    private void enableCamera(final int camera, boolean isEnable) {
-        if (isEnable) {
-            isOpenCamera = true;
-        } else {
-            isOpenCamera = false;
-        }
-        SxbLog.i(TAG, "createlive enableCamera camera " + camera + "  isEnable " + isEnable);
-        AVVideoCtrl avVideoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
-        //打开摄像头
-        int ret = avVideoCtrl.enableCamera(camera, isEnable, new AVVideoCtrl.EnableCameraCompleteCallback() {
-            protected void onComplete(boolean enable, int result) {//开启摄像头回调
-                super.onComplete(enable, result);
-                SxbLog.i(TAG, "createlive enableCamera result " + result);
-                if (result == AVError.AV_OK) {//开启成功
-
-                    if (camera == FRONT_CAMERA) {
-                        mIsFrontCamera = true;
-                    } else {
-                        mIsFrontCamera = false;
-                    }
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ILiveLog.d(TAG, "ILVB-DBG|quitRoom->failed:" + module + "|" + errCode + "|" + errMsg);
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
                 }
             }
         });
 
-        SxbLog.i(TAG, "enableCamera " + ret);
-
-    }
-
-    /**
-     * AVSDK 请求主播数据
-     *
-     * @param identifiers 主播ID
-     */
-    public void requestViewList(ArrayList<String> identifiers) {
-        SxbLog.i(TAG, "requestViewList " + identifiers);
-        if (identifiers.size() == 0) return;
-        AVEndpoint endpoint = ((AVRoomMulti) ILiveSDK.getInstance().getAVContext().getRoom()).getEndpointById(identifiers.get(0));
-        SxbLog.d(TAG, "requestViewList hostIdentifier " + identifiers + " endpoint " + endpoint);
-        if (endpoint != null) {
-            ArrayList<String> alreadyIds = new ArrayList<>();//已经存在的IDs
-
-            SxbLog.i(TAG, "requestViewList identifiers : " + identifiers.size());
-            SxbLog.i(TAG, "requestViewList alreadyIds : " + alreadyIds.size());
-            for (String id : identifiers) {//把新加入的添加到后面
-                if (null == ILiveRoomManager.getInstance().getRoomView().getUserAvVideoView(id)) {
-                    alreadyIds.add(id);
-                }
-            }
-            int viewindex = 0;
-            for (String id : alreadyIds) {//一并请求
-                if (viewindex >= 4) break;
-                AVView view = new AVView();
-                view.videoSrcType = AVView.VIDEO_SRC_TYPE_CAMERA;
-                view.viewSizeType = AVView.VIEW_SIZE_TYPE_BIG;
-                //界面数
-                mRequestViewList[viewindex] = view;
-                mRequestIdentifierList[viewindex] = id;
-                viewindex++;
-            }
-            int ret = ILiveRoomManager.getInstance().getAvRoom().requestViewList(mRequestIdentifierList, mRequestViewList, viewindex, mRequestViewListCompleteCallback);
-
-
-        } else {
-            Toast.makeText(mContext, "Wrong Room!!!! Live maybe close already!", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
-
-
-    private AVRoomMulti.RequestViewListCompleteCallback mRequestViewListCompleteCallback = new AVRoomMulti.RequestViewListCompleteCallback() {
-        public void OnComplete(String identifierList[], AVView viewList[], int count, int result) {
-            String ids = "";
-            for (String id : identifierList) {
-                mLiveView.showVideoView(REMOTE, id);
-                ids = ids + " " + id;
-            }
-            SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "get stream data"
-                    + LogConstants.DIV + LogConstants.STATUS.SUCCEED + LogConstants.DIV + "ids " + ids);
-            // TODO
-            SxbLog.d(TAG, "RequestViewListCompleteCallback.OnComplete");
-        }
-    };
-
-    public void sendGroupText(TIMMessage Nmsg) {
-        if (mGroupConversation != null)
-            mGroupConversation.sendMessage(Nmsg, new TIMValueCallBack<TIMMessage>() {
-                @Override
-                public void onError(int i, String s) {
-                    if (i == 85) { //消息体太长
-                        Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
-                    } else if (i == 6011) {//群主不存在
-                        Toast.makeText(mContext, "Host don't exit ", Toast.LENGTH_SHORT).show();
-                    }
-                    SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
-                }
-
-                @Override
-                public void onSuccess(TIMMessage timMessage) {
-                    //发送成回显示消息内容
-                    for (int j = 0; j < timMessage.getElementCount(); j++) {
-                        TIMElem elem = (TIMElem) timMessage.getElement(0);
-                        if (timMessage.isSelf()) {
-                            handleTextMessage(elem, MySelfInfo.getInstance().getNickName());
-                        } else {
-                            TIMUserProfile sendUser = timMessage.getSenderProfile();
-                            String name;
-                            if (sendUser != null) {
-                                name = sendUser.getNickName();
-                            } else {
-                                name = timMessage.getSender();
-                            }
-                            //String sendId = timMessage.getSender();
-                            handleTextMessage(elem, name);
-                        }
-                    }
-                    SxbLog.i(TAG, "Send text Msg ok");
-
-                }
-            });
-    }
-
-    public void sendGroupMessage(int cmd, String param, TIMValueCallBack<TIMMessage> callback) {
-        JSONObject inviteCmd = new JSONObject();
-        try {
-            inviteCmd.put(Constants.CMD_KEY, cmd);
-            inviteCmd.put(Constants.CMD_PARAM, param);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String cmds = inviteCmd.toString();
-        SxbLog.i(TAG, "send cmd : " + cmd + "|" + cmds);
-        TIMMessage Gmsg = new TIMMessage();
-        TIMCustomElem elem = new TIMCustomElem();
-        elem.setData(cmds.getBytes());
-        elem.setDesc("");
-        Gmsg.addElement(elem);
-
-        if (mGroupConversation != null)
-            mGroupConversation.sendMessage(Gmsg, callback);
-    }
-
-    public void sendGroupMessage(int cmd, String param) {
-        sendGroupMessage(cmd, param, new TIMValueCallBack<TIMMessage>() {
-            @Override
-            public void onError(int i, String s) {
-                if (i == 85) { //消息体太长
-                    Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
-                } else if (i == 6011) {//群主不存在
-                    Toast.makeText(mContext, "Host don't exit ", Toast.LENGTH_SHORT).show();
-                }
-                SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
-            }
-
-            @Override
-            public void onSuccess(TIMMessage timMessage) {
-                SxbLog.i(TAG, "onSuccess ");
-            }
-        });
-    }
-
-    /**
-     * 初始化聊天室  设置监听器
-     */
-    public void initTIMListener(String chatRoomId) {
-        SxbLog.v(TAG, "initTIMListener->current room id: " + chatRoomId);
-        mGroupConversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, chatRoomId);
-        TIMManager.getInstance().addMessageListener(msgListener);
-        mC2CConversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, chatRoomId);
-    }
-
-    /**
-     * 已经发完退出消息了
-     */
-    private void notifyQuitReady() {
-        TIMManager.getInstance().removeMessageListener(msgListener);
-        if (mLiveView != null)
-            mLiveView.readyToQuit();
     }
 
     public void perpareQuitRoom(boolean bPurpose) {
         if (bPurpose) {
-            sendGroupMessage(Constants.AVIMCMD_ExitLive, "", new TIMValueCallBack<TIMMessage>() {
-                @Override
-                public void onError(int i, String s) {
-                    notifyQuitReady();
-                }
+            sendGroupCmd(Constants.AVIMCMD_ExitLive, "");
+        }
+        mLiveView.readyToQuit();
+    }
 
-                @Override
-                public void onSuccess(TIMMessage timMessage) {
-                    notifyQuitReady();
+    /**
+     * 发送信令
+     */
+
+    public int sendGroupCmd(int cmd, String param){
+        ILVCustomCmd customCmd = new ILVCustomCmd();
+        customCmd.setCmd(cmd);
+        customCmd.setParam(param);
+        customCmd.setType(false);
+        return sendCmd(customCmd);
+    }
+    public int sendC2CCmd(final int cmd, String param, String destId) {
+        ILVCustomCmd customCmd = new ILVCustomCmd();
+        customCmd.setDestid(destId);
+        customCmd.setCmd(cmd);
+        customCmd.setParam(param);
+        customCmd.setType(true);
+        return sendCmd(customCmd);
+    }
+
+    /**
+     * 打开闪光灯
+     */
+    public void toggleFlashLight() {
+        AVVideoCtrl videoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
+        if (null == videoCtrl) {
+            return;
+        }
+
+        final Object cam = videoCtrl.getCamera();
+        if ((cam == null) || (!(cam instanceof Camera))) {
+            return;
+        }
+        final Camera.Parameters camParam = ((Camera) cam).getParameters();
+        if (null == camParam) {
+            return;
+        }
+
+        Object camHandler = videoCtrl.getCameraHandler();
+        if ((camHandler == null) || (!(camHandler instanceof Handler))) {
+            return;
+        }
+
+        //对摄像头的操作放在摄像头线程
+        if (flashLgihtStatus == false) {
+            ((Handler) camHandler).post(new Runnable() {
+                public void run() {
+                    try {
+                        camParam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        ((Camera) cam).setParameters(camParam);
+                        flashLgihtStatus = true;
+                    } catch (RuntimeException e) {
+                        SxbLog.d("setParameters", "RuntimeException");
+                    }
                 }
             });
         } else {
-            notifyQuitReady();
-        }
-    }
-
-    public void pause() {
-        isBakCameraOpen = isOpenCamera;
-        isBakMicOpen = isMicOpen;
-        if (isBakCameraOpen || isBakMicOpen) {    // 若摄像头或Mic打开
-            sendGroupMessage(Constants.AVIMCMD_Host_Leave, "", new TIMValueCallBack<TIMMessage>() {
-                @Override
-                public void onError(int i, String s) {
-                }
-
-                @Override
-                public void onSuccess(TIMMessage timMessage) {
-                }
-            });
-            closeCameraAndMic();
-        }
-    }
-
-    public void resume() {
-        if (isBakCameraOpen || isBakMicOpen) {
-            sendGroupMessage(Constants.AVIMCMD_Host_Back, "", new TIMValueCallBack<TIMMessage>() {
-                @Override
-                public void onError(int i, String s) {
-                }
-
-                @Override
-                public void onSuccess(TIMMessage timMessage) {
+            ((Handler) camHandler).post(new Runnable() {
+                public void run() {
+                    try {
+                        camParam.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                        ((Camera) cam).setParameters(camParam);
+                        flashLgihtStatus = false;
+                    } catch (RuntimeException e) {
+                        SxbLog.d("setParameters", "RuntimeException");
+                    }
 
                 }
             });
-
-            if (isBakCameraOpen) {
-                openCamera();
-            }
-            if (isBakMicOpen) {
-                openMic();
-            }
         }
     }
 
+    public void startRecord(ILiveRecordOption option) {
+        ILiveRoomManager.getInstance().startRecordVideo(option, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                SxbLog.i(TAG, "start record success ");
+                mLiveView.startRecordCallback(true);
+            }
 
-    /**
-     * 群消息回调
-     */
-    private TIMMessageListener msgListener = new TIMMessageListener() {
-        @Override
-        public boolean onNewMessages(List<TIMMessage> list) {
-            //SxbLog.d(TAG, "onNewMessages readMessage " + list.size());
-            //解析TIM推送消息
-            parseIMMessage(list);
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "start record error " + errCode + "  " + errMsg);
+                mLiveView.startRecordCallback(false);
+            }
+        });
+    }
+
+    public void stopRecord(){
+        ILiveRoomManager.getInstance().stopRecordVideo(new ILiveCallBack<List<String>>() {
+            @Override
+            public void onSuccess(List<String> data) {
+                SxbLog.d(TAG, "stopRecord->success");
+                for (String url : data){
+                    SxbLog.d(TAG, "stopRecord->url:"+url);
+                }
+                mLiveView.stopRecordCallback(true, data);
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "stopRecord->failed:"+module+"|"+errCode+"|"+errMsg);
+                mLiveView.stopRecordCallback(false, null);
+            }
+        });
+    }
+
+    public void startPush(ILivePushOption option){
+        ILiveRoomManager.getInstance().startPushStream(option, new ILiveCallBack<TIMAvManager.StreamRes>() {
+            @Override
+            public void onSuccess(TIMAvManager.StreamRes data) {
+                List<TIMAvManager.LiveUrl> liveUrls = data.getUrls();
+                streamChannelID = data.getChnlId();
+                mLiveView.pushStreamSucc(data);
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "url error " + errCode + " : " + errMsg);
+                Toast.makeText(mContext, "start stream error,try again " + errCode + " : " + errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void stopPush(){
+        ILiveRoomManager.getInstance().stopPushStream(streamChannelID, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                SxbLog.e(TAG, "stopPush->success");
+                mLiveView.stopStreamSucc();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "stopPush->failed:"+module+"|"+errCode+"|"+errMsg);
+            }
+        });
+    }
+
+
+    @Override
+    public boolean onEndpointsUpdateInfo(int eventid, String[] updateList) {
+        SxbLog.d(TAG, "ILVB-DBG|onEndpointsUpdateInfo. eventid = " + eventid + "/" + mLiveView);
+        if (null == mLiveView) {
             return false;
         }
-    };
+
+        switch (eventid) {
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onRoomDisconnect(int errCode, String errMsg) {
+        if (null != mLiveView){
+            mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        List<TIMMessage> list = (List<TIMMessage>)o;
+        parseIMMessage(list);
+    }
+
+    /**
+     * 上报房间信息
+     */
+    private void notifyServerCreateRoom() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject liveInfo = null;
+                try {
+                    liveInfo = new JSONObject();
+                    if (TextUtils.isEmpty(CurLiveInfo.getTitle())) {
+                        liveInfo.put("title", mContext.getString(R.string.text_live_default_title));
+                    } else {
+                        liveInfo.put("title", CurLiveInfo.getTitle());
+                    }
+                    liveInfo.put("cover", CurLiveInfo.getCoverurl());
+                    liveInfo.put("chatRoomId", CurLiveInfo.getChatRoomId());
+                    liveInfo.put("avRoomId", CurLiveInfo.getRoomNum());
+                    JSONObject hostinfo = new JSONObject();
+                    hostinfo.put("uid", MySelfInfo.getInstance().getId());
+                    hostinfo.put("avatar", MySelfInfo.getInstance().getAvatar());
+                    hostinfo.put("username", MySelfInfo.getInstance().getNickName());
+
+                    liveInfo.put("host", hostinfo);
+                    JSONObject lbs = new JSONObject();
+                    lbs.put("longitude", CurLiveInfo.getLong1());
+                    lbs.put("latitude", CurLiveInfo.getLat1());
+                    lbs.put("address", CurLiveInfo.getAddress());
+                    liveInfo.put("lbs", lbs);
+                    liveInfo.put("appid",Constants.SDK_APPID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (liveInfo != null) {
+                    SxbLog.standardEnterRoomLog(TAG, "upload room info to serve", "", "room id " + CurLiveInfo.getRoomNum());
+                    OKhttpHelper.getInstance().notifyServerNewLiveInfo(liveInfo);
+                }
+
+            }
+        }).start();
+    }
+
+    public void toggleCamera(){
+        bCameraOn = !bCameraOn;
+        SxbLog.d(TAG, "toggleCamera->change camera:"+bCameraOn);
+        ILiveRoomManager.getInstance().enableCamera(ILiveRoomManager.getInstance().getCurCameraId(), bCameraOn);
+    }
+
+    public void toggleMic(){
+        bMicOn = !bMicOn;
+        SxbLog.d(TAG, "toggleMic->change mic:"+bMicOn);
+        ILiveRoomManager.getInstance().enableMic(bMicOn);
+    }
+
+    public boolean isMicOn(){
+        return bMicOn;
+    }
+
+    public void upMemberVideo(){
+        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_AUTH, Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                SxbLog.d(TAG, "upToVideoMember->success");
+                bMicOn = true;
+                bCameraOn = true;
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "upToVideoMember->failed:"+module+"|"+errCode+"|"+errMsg);
+            }
+        });
+    }
+
+    public void downMemberVideo(){
+        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                bMicOn = false;
+                bCameraOn = false;
+                SxbLog.e(TAG, "downMemberVideo->onSuccess");
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                SxbLog.e(TAG, "downMemberVideo->failed:"+module+"|"+errCode+"|"+errMsg);
+            }
+        });
+    }
+
+    /**
+     * 通知用户UserServer房间
+     */
+    private void notifyServerLiveEnd() {
+        liveEndTask = new NotifyServerLiveEnd();
+        liveEndTask.execute(MySelfInfo.getInstance().getId());
+    }
+
+    private void createRoom(){
+        ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId())
+                .setRoomMemberStatusLisenter(this)
+                .roomDisconnectListener(this)
+                .controlRole("Host")
+                .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
+                .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
+        ILVLiveManager.getInstance().createRoom(MySelfInfo.getInstance().getMyRoomNum(), hostOption, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                ILiveLog.d(TAG, "ILVB-DBG|startEnterRoom->create room sucess");
+                bCameraOn = true;
+                bMicOn = true;
+                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                notifyServerCreateRoom();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ILiveLog.d(TAG, "ILVB-DBG|startEnterRoom->create room failed:" + module + "|" + errCode + "|" + errMsg);
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                }
+            }
+        });
+    }
+
+    private void joinRoom(){
+        ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
+                .autoCamera(false)
+                .setRoomMemberStatusLisenter(this)
+                .roomDisconnectListener(this)
+                .controlRole("NormalMember")
+                .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
+                .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
+                .autoMic(false);
+        ILVLiveManager.getInstance().joinRoom(CurLiveInfo.getRoomNum(), memberOption, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                ILiveLog.d(TAG, "ILVB-DBG|startEnterRoom->join room sucess");
+                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ILiveLog.d(TAG, "ILVB-DBG|startEnterRoom->join room failed:" + module + "|" + errCode + "|" + errMsg);
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                }
+            }
+        });
+        SxbLog.i(TAG, "joinLiveRoom startEnterRoom ");
+    }
+
+    private int sendCmd(final ILVCustomCmd cmd){
+        return ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                SxbLog.i(TAG, "sendCmd->success:"+cmd.getCmd()+"|"+cmd.getParam());
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(mContext, "sendCmd->failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     /**
      * 解析消息回调
@@ -415,19 +473,8 @@ public class LiveHelper extends Presenter {
     private void parseIMMessage(List<TIMMessage> list) {
         List<TIMMessage> tlist = list;
 
-
-        if (tlist.size() > 0) {
-            if (mGroupConversation != null)
-                mGroupConversation.setReadMessage(tlist.get(0));
-            SxbLog.d(TAG, "parseIMMessage readMessage " + tlist.get(0).timestamp());
-        }
-//        if (!bNeverLoadMore && (tlist.size() < mLoadMsgNum))
-//            bMore = false;
-
         for (int i = tlist.size() - 1; i >= 0; i--) {
             TIMMessage currMsg = tlist.get(i);
-//
-
 
             for (int j = 0; j < currMsg.getElementCount(); j++) {
                 if (currMsg.getElement(j) == null)
@@ -439,8 +486,7 @@ public class LiveHelper extends Presenter {
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {
                     if (TIMGroupSystemElemType.TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE == ((TIMGroupSystemElem) elem).getSubtype()) {
-                        mContext.sendBroadcast(new Intent(
-                                Constants.ACTION_HOST_LEAVE));
+                        mLiveView.hostLeave(ILiveRoomManager.getInstance().getHostId(), null);
                     }
 
                 }
@@ -491,10 +537,8 @@ public class LiveHelper extends Presenter {
      */
     private void handleTextMessage(TIMElem elem, String name) {
         TIMTextElem textElem = (TIMTextElem) elem;
-//        Toast.makeText(mContext, "" + textElem.getText(), Toast.LENGTH_SHORT).show();
 
         mLiveView.refreshText(textElem.getText(), name);
-//        sendToUIThread(REFRESH_TEXT, textElem.getText(), sendId);
     }
 
 
@@ -505,6 +549,9 @@ public class LiveHelper extends Presenter {
      */
     private void handleCustomMsg(TIMElem elem, String identifier, String nickname) {
         try {
+            if (null == mLiveView){
+                return;
+            }
             String customText = new String(((TIMCustomElem) elem).getData(), "UTF-8");
             SxbLog.i(TAG, "cumstom msg  " + customText);
 
@@ -520,7 +567,7 @@ public class LiveHelper extends Presenter {
                     mLiveView.showInviteDialog();
                     break;
                 case Constants.AVIMCMD_MUlTI_JOIN:
-                    Log.i(TAG, "handleCustomMsg " + identifier);
+                    SxbLog.i(TAG, "handleCustomMsg " + identifier);
                     mLiveView.cancelInviteView(identifier);
                     break;
                 case Constants.AVIMCMD_MUlTI_REFUSE:
@@ -531,7 +578,6 @@ public class LiveHelper extends Presenter {
                     mLiveView.refreshThumbUp();
                     break;
                 case Constants.AVIMCMD_EnterLive:
-                    //mLiveView.refreshText("Step in live", sendId);
                     if (mLiveView != null)
                         mLiveView.memberJoin(identifier, nickname);
                     break;
@@ -545,8 +591,7 @@ public class LiveHelper extends Presenter {
                     String closeId = json.getString(Constants.CMD_PARAM);
                     if (closeId.equals(MySelfInfo.getInstance().getId())) {//是自己
                         //TODO 被动下麦 下麦 下麦
-                        changeAuthandRole(false, Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE);
-
+                        downMemberVideo();
                     }
                     //其他人关闭小窗口
                     ILiveRoomManager.getInstance().getRoomView().closeUserView(closeId, true);
@@ -576,255 +621,5 @@ public class LiveHelper extends Presenter {
         } catch (JSONException ex) {
             // 异常处理代码
         }
-    }
-
-
-    public boolean isFrontCamera() {
-        return mIsFrontCamera;
-    }
-
-    private boolean mIsFrontCamera = true;
-
-    /**
-     * 转换前后摄像头
-     *
-     * @return
-     */
-    public int switchCamera() {
-        AVVideoCtrl avVideoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
-        int result = avVideoCtrl.switchCamera(mIsFrontCamera ? BACK_CAMERA : FRONT_CAMERA, mSwitchCameraCompleteCallback);
-        return result;
-    }
-
-
-    /**
-     * 装换摄像头回调
-     */
-    private AVVideoCtrl.SwitchCameraCompleteCallback mSwitchCameraCompleteCallback = new AVVideoCtrl.SwitchCameraCompleteCallback() {
-        protected void onComplete(int cameraId, int result) {
-            super.onComplete(cameraId, result);
-
-            if (result == AVError.AV_OK) {
-                mIsFrontCamera = !mIsFrontCamera;
-            }
-        }
-    };
-
-    public boolean isMicOpen() {
-        return isMicOpen;
-    }
-
-    /**
-     * 开启Mic
-     */
-    public void openMic() {
-        AVAudioCtrl avAudioCtrl = ILiveSDK.getInstance().getAvAudioCtrl();//开启Mic
-        avAudioCtrl.enableMic(true);
-        isMicOpen = true;
-    }
-
-    /**
-     * 关闭Mic
-     */
-    public void muteMic() {
-        AVAudioCtrl avAudioCtrl = ILiveSDK.getInstance().getAvAudioCtrl();//关闭Mic
-        avAudioCtrl.enableMic(false);
-        isMicOpen = false;
-    }
-
-
-    /**
-     * 开关闪光灯
-     */
-    private boolean flashLgihtStatus = false;
-
-    public void toggleFlashLight() {
-        AVVideoCtrl videoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
-        if (null == videoCtrl) {
-            return;
-        }
-
-        final Object cam = videoCtrl.getCamera();
-        if ((cam == null) || (!(cam instanceof Camera))) {
-            return;
-        }
-        final Camera.Parameters camParam = ((Camera) cam).getParameters();
-        if (null == camParam) {
-            return;
-        }
-
-        Object camHandler = videoCtrl.getCameraHandler();
-        if ((camHandler == null) || (!(camHandler instanceof Handler))) {
-            return;
-        }
-
-        //对摄像头的操作放在摄像头线程
-        if (flashLgihtStatus == false) {
-            ((Handler) camHandler).post(new Runnable() {
-                public void run() {
-                    try {
-                        camParam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                        ((Camera) cam).setParameters(camParam);
-                        flashLgihtStatus = true;
-                    } catch (RuntimeException e) {
-                        SxbLog.d("setParameters", "RuntimeException");
-                    }
-                }
-            });
-        } else {
-            ((Handler) camHandler).post(new Runnable() {
-                public void run() {
-                    try {
-                        camParam.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                        ((Camera) cam).setParameters(camParam);
-                        flashLgihtStatus = false;
-                    } catch (RuntimeException e) {
-                        SxbLog.d("setParameters", "RuntimeException");
-                    }
-
-                }
-            });
-        }
-    }
-
-
-    public void sendC2CMessage(final int cmd, String Param, final String sendId) {
-        JSONObject inviteCmd = new JSONObject();
-        try {
-            inviteCmd.put(Constants.CMD_KEY, cmd);
-            inviteCmd.put(Constants.CMD_PARAM, Param);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String cmds = inviteCmd.toString();
-        SxbLog.i(TAG, "send cmd : " + cmd + "|" + cmds);
-        TIMMessage msg = new TIMMessage();
-        TIMCustomElem elem = new TIMCustomElem();
-        elem.setData(cmds.getBytes());
-        elem.setDesc("");
-        msg.addElement(elem);
-        mC2CConversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, sendId);
-        mC2CConversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
-            @Override
-            public void onError(int i, String s) {
-                SxbLog.e(TAG, "enter error" + i + ": " + s);
-            }
-
-            @Override
-            public void onSuccess(TIMMessage timMessage) {
-                SxbLog.i(TAG, "send praise succ !");
-            }
-        });
-    }
-
-
-    private TIMAvManager.RoomInfo roomInfo;
-    private long streamChannelID;
-
-    public void pushAction(ILivePushOption option) {
-        int roomid = (int) ILiveSDK.getInstance().getAVContext().getRoom().getRoomId();
-        SxbLog.i(TAG, "Push roomid: " + roomid);
-        ILiveRoomManager.getInstance().startPushStream(option, new ILiveCallBack<TIMAvManager.StreamRes>() {
-            @Override
-            public void onSuccess(TIMAvManager.StreamRes data) {
-                SxbLog.i(TAG, "push stream success ");
-                List<TIMAvManager.LiveUrl> liveUrls = data.getUrls();
-                streamChannelID = data.getChnlId();
-                mLiveView.pushStreamSucc(data);
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "url error " + errCode + " : " + errMsg);
-                Toast.makeText(mContext, "start stream error,try again " + errCode + " : " + errMsg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void stopPushAction() {
-        SxbLog.d(TAG, "Push stop Id " + streamChannelID);
-        ILiveRoomManager.getInstance().stopPushStream(streamChannelID, new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                SxbLog.i(TAG, "stop push success ");
-                if (null != mLiveView) {
-                    mLiveView.stopStreamSucc();
-                }
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "stop  push error " + errCode + " : " + errMsg);
-                Toast.makeText(mContext, "stop stream error,try again " + errCode + " : " + errMsg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    public void startRecord(ILiveRecordOption option) {
-        ILiveRoomManager.getInstance().startRecordVideo(option, new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                SxbLog.i(TAG, "start record success ");
-                mLiveView.startRecordCallback(true);
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "start record error " + errCode + "  " + errMsg);
-                mLiveView.startRecordCallback(false);
-            }
-        });
-    }
-
-
-    public void stopRecord() {
-        ILiveRoomManager.getInstance().stopRecordVideo(new ILiveCallBack<List<String>>() {
-            @Override
-            public void onSuccess(List<String> data) {
-                SxbLog.e(TAG, "stop record success ");
-                mLiveView.stopRecordCallback(true, data);
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "stop record error " + errCode + " : " + errMsg);
-                mLiveView.stopRecordCallback(false, null);
-            }
-        });
-    }
-
-
-    @Override
-    public void onDestory() {
-        mLiveView = null;
-        mContext = null;
-    }
-
-
-    /**
-     * 改变角色和权限 最终会控制自己Camera和Mic
-     *
-     * @param leverChange true代表上麦 false 代表下麦
-     * @param auth_bits   权限字段
-     * @param role        角色字段
-     */
-    public void changeAuthandRole(final boolean leverChange, long auth_bits, final String role) {
-        ILiveRoomManager.getInstance().changeAuthAndRole(auth_bits, null, role, new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                ILiveLog.d(TAG, "ILVB-DBG|changeAuthandRole success:" + leverChange);
-                if (leverChange) {
-                    sendC2CMessage(Constants.AVIMCMD_MUlTI_JOIN, "", CurLiveInfo.getHostID());//发送回应消息
-                }
-                ILiveRoomManager.getInstance().enableCamera(ILiveConstants.FRONT_CAMERA, leverChange);
-                ILiveRoomManager.getInstance().enableMic(leverChange);
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                ILiveLog.d(TAG, "ILVB-DBG|changeAuthandRole failed:" + module + "|" + errCode + "|" + errMsg);
-            }
-        });
     }
 }
