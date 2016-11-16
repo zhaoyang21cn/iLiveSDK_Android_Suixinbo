@@ -34,10 +34,11 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 | String | 用户id,在直播过程中的唯一标识  |
 | String | 鉴权的密钥Sig 如果是独立登录方式，是业务方后台计算生成后下发的|
 | ILiveCallBack | 帐号登录回调接口。通知上线是否成功 |
-
+<br/>
 *示例
     
-```java     ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
+```java     
+ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     bLogin = true;
@@ -61,9 +62,9 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 | int | 房间id 房间唯一标识 建议由业务方后台统一分配  |
 | ILiveRoomOption | 房间配置项 可以设置角色 权限 主播ID 摄像头参数等 具体参考类ILiveRoomOption |
 | ILiveCallBack | 创建房间回调接口。通知创建房间是否成功 |
-      
+
 ```java            
-            //创建房间配置项
+  //创建房间配置项
             ILiveRoomOption hostOption = new ILiveRoomOption(null).
                     controlRole("Host")//角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
@@ -93,6 +94,7 @@ ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
 | int | 房间id 房间唯一标识 建议由业务方后台统一分配  |
 | ILiveRoomOption | 房间配置项 可以设置角色 权限 主播ID 摄像头参数等 具体参考类ILiveRoomOption |
 | ILiveCallBack | 加入房间回调接口。通知加入房间是否成功 |
+<br/>
 
 ```java  
 
