@@ -236,7 +236,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         if (view.getId() == R.id.create) { //创建房间
             int room = Integer.parseInt("" + roomNum.getText());
             //创建房间配置项
-            ILiveRoomOption hostOption = new ILiveRoomOption(null).
+            ILiveRoomOption hostOption = new ILiveRoomOption(ILiveLoginManager.getInstance().getMyUserId()).
                     controlRole("Host")//角色设置
                     .autoFocus(true)
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
