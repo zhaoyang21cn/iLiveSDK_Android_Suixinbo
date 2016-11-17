@@ -81,7 +81,8 @@ long|时间戳(1970年1月1日以来的秒数)
 @Override
 public void onNewIncomingCall(int callId, final int callType, final String fromUserId, 
                                           String strTips, String strCustom, long timeStamp){
-    if (0 == ILVCallManager.getInstance().acceptCall(mCurIncomingId, new ILVCallOption(fromUserId).setCallType(callType))) {
+    if (0 == ILVCallManager.getInstance().acceptCall(mCurIncomingId, 
+                        new ILVCallOption(fromUserId).setCallType(callType))) {
         // 接听成功
     }
 }
