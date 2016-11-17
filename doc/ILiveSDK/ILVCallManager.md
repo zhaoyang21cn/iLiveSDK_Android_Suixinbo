@@ -117,4 +117,24 @@ ILVCallManager.getInstance().addCallListener(new ILVCallListener() {
     }
 });
 ```
+            
+###设置渲染层
+> 渲染层级示例图 在界面层xml插入一个AVRootView,音视频数据最终是通过AVRootView渲染出来。AVRootView实际上不是一层View而是多层AVVideoView的叠加。
+> 用户可以自己通过bindIdAndView绑定用户到view
+![](../../raw/UiLayers.png)
+
+* 示例
+
+```java
+    <com.tencent.ilivesdk.view.AVRootView
+        android:id="@+id/av_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
+        
+        
+        avRootView = (AVRootView) findViewById(R.id.av_root_view);
+        ILVCallManager.getInstance().initAvView(avRootView);
+```  
+
 更多接口参考[API文档](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
