@@ -21,6 +21,21 @@ ILVCallManager.getInstance().init(new ILVCallConfig()
 ILVCallManager.getInstance().addIncomingListener(this);
 ```
 
+##设置来电回调
+添加来电回调，登录成功后，有来电会通过回调通知上层
+
+接口名|接口描述
+:--|:--:
+addIncomingListener|添加来电回调
+
+参数类型|说明
+:--|:--:
+ILVIncomingListener|来电回调
+
+```java
+ILVCallManager.getInstance().addIncomingListener(this);
+```
+
 ##发起呼叫
 发起通话时，直接调用makeCall，填入对方的id即可发起呼叫
 可以通过setCallType设置通话类型(*纯语音呼叫也是可以的哦*)
