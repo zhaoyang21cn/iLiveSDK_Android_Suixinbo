@@ -27,3 +27,14 @@ ERR_NOT_SUPPORT         |8023|请求不支持
 ERR_ALREADY_STATE       |8024|状态已到位(一般为重复调用引起)
 ERR_KICK_OUT            |8050|被踢下线
 ERR_EXPIRE              |8051|票据过期(需更新票据userSig)
+
+#### 视频通话错误码
+**主叫方和接听方错误码一致**
+常量定义|错误码|错误描述
+:--|--:|:--:
+ERR_CALL_SPONSOR_CANCEL     |1|呼叫方取消
+ERR_CALL_SPONSOR_TIMEOUT    |2|呼叫方超时
+ERR_CALL_RESPONDER_REFUSE   |3|接听方拒绝
+ERR_CALL_HANGUP             |4|挂断(通话建立后)
+ERR_CALL_RESPONDER_LINEBUSY |5|接听方占线
+ERR_CALL_DISCONNECT         |6|通话被服务器回收
