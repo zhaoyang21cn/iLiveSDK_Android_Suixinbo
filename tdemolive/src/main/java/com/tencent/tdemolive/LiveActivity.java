@@ -237,7 +237,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             int room = Integer.parseInt("" + roomNum.getText());
             //创建房间配置项
             ILiveRoomOption hostOption = new ILiveRoomOption(ILiveLoginManager.getInstance().getMyUserId()).
-                    controlRole("Host")//角色设置
+                    controlRole("LiveMaster")//角色设置
                     .autoFocus(true)
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
@@ -264,7 +264,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             //加入房间配置项
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
-                    .controlRole("NormalMember") //角色设置
+                    .controlRole("Guest") //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
                     .autoMic(false);//是否自动打开mic
