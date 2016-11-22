@@ -390,20 +390,25 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILiveLoginManager.getInstance().tlsLogin("" + myId.getText(), "" + myPwd.getText(), new ILiveCallBack<String>() {
                 @Override
                 public void onSuccess(String data) {
-                    ILiveLoginManager.getInstance().iLiveLogin("" + myId.getText(), data, new ILiveCallBack() {
-                        @Override
-                        public void onSuccess(Object data) {
-                            bLogin = true;
-                            Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
-                            myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
-                            loginView.setVisibility(View.INVISIBLE);
-                        }
+//                    ILiveLoginManager.getInstance().iLiveLogin("" + myId.getText(), data, new ILiveCallBack() {
+//                        @Override
+//                        public void onSuccess(Object data) {
+//                            bLogin = true;
+//                            Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
+//                            myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
+//                            loginView.setVisibility(View.INVISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onError(String module, int errCode, String errMsg) {
+//                            Toast.makeText(LiveActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
 
-                        @Override
-                        public void onError(String module, int errCode, String errMsg) {
-                            Toast.makeText(LiveActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    bLogin = true;
+                    Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
+                    myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
+                    loginView.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
