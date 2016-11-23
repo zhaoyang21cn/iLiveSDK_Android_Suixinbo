@@ -1,1 +1,1 @@
-include ':app', ':tdemovideocall', ':tdemolive', ':suixinbo'
+include ':app', ':tdemolive', ':suixinbo'
