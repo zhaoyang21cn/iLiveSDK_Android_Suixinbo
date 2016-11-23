@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.tencent.qcloud.suixinbo.views.LoginActivity;
 import com.tencent.tdemolive.LiveActivity;
-import com.tencent.tdemovideocall.ContactActivity;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,6 @@ public class MainMenu extends Activity {
         tvId = (TextView) findViewById(R.id.tv_id);
         lvMenu = (ListView) findViewById(R.id.lv_menu);
 
-        listDemo.add("VideoCall: 双人视频");
         listDemo.add("Live: 直播");
         listDemo.add("Suixinbo:新随心播");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
@@ -53,12 +51,9 @@ public class MainMenu extends Activity {
 
                 switch (position) {
                     case 0:
-                        intent.setClass(MainMenu.this, ContactActivity.class);
-                        break;
-                    case 1:
                         intent.setClass(MainMenu.this, LiveActivity.class);
                         break;
-                    case 2:
+                    case 1:
                         intent.setClass(MainMenu.this, LoginActivity.class);
                         break;
                 }
