@@ -411,7 +411,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             mRootView.swapVideoView(0, index);
                             backGroundId = mRootView.getViewByIndex(0).getIdentifier();
 //                            updateHostLeaveLayout();
-
+                            backGroundId = mRootView.getViewByIndex(0).getIdentifier();
                             if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
                                 if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
                                     mHostCtrView.setVisibility(View.VISIBLE);
