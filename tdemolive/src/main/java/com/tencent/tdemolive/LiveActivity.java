@@ -405,10 +405,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                         }
                     });
 
-                    bLogin = true;
-                    Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
-                    myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
-                    loginView.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
