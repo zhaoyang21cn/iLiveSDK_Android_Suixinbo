@@ -412,7 +412,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
                             updateHostLeaveLayout();
 
-                            backGroundId = mRootView.getViewByIndex(index).getIdentifier();
+                            backGroundId = mRootView.getViewByIndex(0).getIdentifier();
                             if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
                                 if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
                                     mHostCtrView.setVisibility(View.VISIBLE);
