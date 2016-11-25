@@ -5,61 +5,93 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
     <TextView
         android:id="@+id/flash_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_flash" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/switch_cam"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_switch_camera" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/beauty_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_beauty_drawable" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/white_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_white_drawable" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/mic_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_mic_open" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/fullscreen_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_fullscreen" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/send_good"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
         android:background="@drawable/icon_like" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
 </LinearLayout>

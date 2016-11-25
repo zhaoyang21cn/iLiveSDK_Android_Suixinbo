@@ -5,33 +5,48 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/message_input"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
         android:background="@drawable/icon_message"
         />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/clean_screen"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="102dp"
         android:background="@drawable/icon_nomal"
         />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/member_send_good"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="102dp"
         android:background="@drawable/icon_like"
         />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
 </LinearLayout>
