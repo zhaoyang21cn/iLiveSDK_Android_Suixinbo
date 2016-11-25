@@ -2,19 +2,15 @@ package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.tencent.TIMCallBack;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
-import com.tencent.TIMUser;
-import com.tencent.TIMUserStatusListener;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveConfig;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.livesdk.ILVLiveConfig;
+import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -22,11 +18,6 @@ import com.tencent.qcloud.suixinbo.utils.CrashHandler;
 import com.tencent.qcloud.suixinbo.utils.LogConstants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
-import tencent.tls.platform.TLSAccountHelper;
-import tencent.tls.platform.TLSErrInfo;
-import tencent.tls.platform.TLSLoginHelper;
-import tencent.tls.platform.TLSRefreshUserSigListener;
-import tencent.tls.platform.TLSUserInfo;
 
 
 /**

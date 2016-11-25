@@ -38,8 +38,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
-import com.tencent.av.sdk.AVView;
-import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveConstants;
+import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILivePushOption;
+import com.tencent.ilivesdk.core.ILiveRecordOption;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.view.AVRootView;
+import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.adapters.ChatMsgListAdapter;
 import com.tencent.qcloud.suixinbo.model.ChatEntity;
@@ -48,7 +54,6 @@ import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.OKhttpHelper;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
@@ -62,14 +67,6 @@ import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 import com.tencent.qcloud.suixinbo.views.customviews.InputTextMsgDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.MembersDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
-import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.ILiveConstants;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
-import com.tencent.ilivesdk.core.ILivePushOption;
-import com.tencent.ilivesdk.core.ILiveRecordOption;
-import com.tencent.ilivesdk.core.ILiveRoomManager;
-import com.tencent.ilivesdk.view.AVRootView;
-import com.tencent.ilivesdk.view.AVVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +77,7 @@ import java.util.TimerTask;
 /**
  * Live直播类
  */
-public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, LiveListView {
+public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener, ProfileView, LiveListView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
 
@@ -389,10 +386,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         tvMembers.setText("" + CurLiveInfo.getMembers());
         tvAdmires.setText("" + CurLiveInfo.getAdmires());
+
         //TODO 获取渲染层
         mRootView = (AVRootView)findViewById(R.id.av_root_view);
         //TODO 设置渲染层
         ILVLiveManager.getInstance().setAvVideoView(mRootView);
+
+
         mRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
         mRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         mRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
@@ -409,9 +409,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
                             mRootView.swapVideoView(0, index);
-
-                            updateHostLeaveLayout();
-
+                            backGroundId = mRootView.getViewByIndex(0).getIdentifier();
+//                            updateHostLeaveLayout();
                             backGroundId = mRootView.getViewByIndex(0).getIdentifier();
                             if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
                                 if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
@@ -548,7 +547,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
 
         } else {
-            mLiveHelper.perpareQuitRoom(true);
+            mLiveHelper.startExitRoom();
+//            mLiveHelper.perpareQuitRoom(true);
 //            mEnterRoomHelper.quiteLive();
         }
     }
@@ -565,7 +565,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             public void onClick(View v) {
                 //如果是直播，发消息
                 if (null != mLiveHelper) {
-                    mLiveHelper.perpareQuitRoom(true);
+//                    mLiveHelper.perpareQuitRoom(true);
+                    mLiveHelper.startExitRoom();
                     if (isPushed) {
                         mLiveHelper.stopPush();
                     }
@@ -580,30 +581,29 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 backDialog.cancel();
             }
         });
-//        backDialog.show();
     }
+//
+//    private void updateHostLeaveLayout() {
+//        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+//            return;
+//        } else {
+//            // 退出房间或主屏为主播且无主播画面显示主播已离开
+//            if (!bInAvRoom || (CurLiveInfo.getHostID().equals(backGroundId) && !mRenderUserList.contains(backGroundId))) {
+//                mHostLeaveLayout.setVisibility(View.VISIBLE);
+//            } else {
+//                mHostLeaveLayout.setVisibility(View.GONE);
+//            }
+//        }
+//    }
 
-    private void updateHostLeaveLayout() {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-            return;
-        } else {
-            // 退出房间或主屏为主播且无主播画面显示主播已离开
-            if (!bInAvRoom || (CurLiveInfo.getHostID().equals(backGroundId) && !mRenderUserList.contains(backGroundId))) {
-                mHostLeaveLayout.setVisibility(View.VISIBLE);
-            } else {
-                mHostLeaveLayout.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
-     * 被动退出直播
-     */
-    private void quiteLivePassively() {
-        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
-        mLiveHelper.perpareQuitRoom(false);
-//        mEnterRoomHelper.quiteLive();
-    }
+//    /**
+//     * 被动退出直播
+//     */
+//    private void quiteLivePassively() {
+//        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
+//        mLiveHelper.perpareQuitRoom(false);
+////        mEnterRoomHelper.quiteLive();
+//    }
 
     @Override
     public void readyToQuit() {
@@ -670,13 +670,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             }
         } else {
             //finish();
-            if (bDelayQuit) {
-                clearOldData();
-                mHostLeaveLayout.setVisibility(View.VISIBLE);
-            }else{
+//            if (bDelayQuit) {
+//                clearOldData();
+//                mHostLeaveLayout.setVisibility(View.VISIBLE);
+//            }else{
                 clearOldData();
                 finish();
-            }
+//            }
         }
         bInAvRoom = false;
     }
@@ -733,48 +733,47 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void hostLeave(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "leave for a while", Constants.HOST_LEAVE);
+        refreshTextListView("host", "leave for a while", Constants.HOST_LEAVE);
     }
 
     @Override
     public void hostBack(String id, String name) {
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
     }
-
-    /**
-     * 有成员退群
-     *
-     * @param list 成员ID 列表
-     */
-    @Override
-    public void memberQuiteLive(String[] list) {
-        if (list == null) return;
-        for (String id : list) {
-            SxbLog.i(TAG, "memberQuiteLive id " + id);
-            if (CurLiveInfo.getHostID().equals(id)) {
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
-                    quiteLivePassively();
-            }
-        }
-    }
-
-
-    /**
-     * 有成员入群
-     *
-     * @param list 成员ID 列表
-     */
-    @Override
-    public void memberJoinLive(final String[] list) {
-    }
-
-    @Override
-    public void alreadyInLive(String[] list) {
-        for (String id : list) {
-            mRootView.renderVideoView(true, id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
-        }
-
-    }
+//
+//    /**
+//     * 有成员退群
+//     *
+//     * @param list 成员ID 列表
+//     */
+//    @Override
+//    public void memberQuiteLive(String[] list) {
+//        if (list == null) return;
+//        for (String id : list) {
+//            SxbLog.i(TAG, "memberQuiteLive id " + id);
+//            if (CurLiveInfo.getHostID().equals(id)) {
+//                if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
+//                    quiteLivePassively();
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 有成员入群
+//     *
+//     * @param list 成员ID 列表
+//     */
+//    @Override
+//    public void memberJoinLive(final String[] list) {
+//    }
+//
+//    @Override
+//    public void alreadyInLive(String[] list) {
+//        for (String id : list) {
+//            mRootView.renderVideoView(true, id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+//        }
+//
+//    }
 
     /**
      * 红点动画
@@ -1377,6 +1376,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "accept invite"+
                     LogConstants.DIV + "host id " + CurLiveInfo.getHostID());
                 //上麦 ；TODO 上麦 上麦 上麦 ！！！！！；
+                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN,"",CurLiveInfo.getHostID());
                 mLiveHelper.upMemberVideo();
                 inviteDg.dismiss();
             }

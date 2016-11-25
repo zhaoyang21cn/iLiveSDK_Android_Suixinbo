@@ -1,7 +1,6 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,15 +18,14 @@ import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.ilivesdk.ILiveCallBack;
-import com.tencent.ilivesdk.ILiveMemStatusLisenter;
 import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.business.livebusiness.ILVCustomCmd;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
+import com.tencent.livesdk.ILVCustomCmd;
+import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
@@ -46,18 +44,17 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+
 /**
- * Created by xkazerzhang on 2016/11/15.
+ * 直播控制类
  */
-public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILiveRoomOption.onRoomDisconnectListener, Observer {
+public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisconnectListener, Observer {
     private final String TAG = "LiveHelper";
     private LiveView mLiveView;
     public Context mContext;
-
     private boolean bCameraOn = false;
     private boolean bMicOn = false;
     private boolean flashLgihtStatus = false;
-
     private long streamChannelID;
     private NotifyServerLiveEnd liveEndTask;
 
@@ -76,7 +73,6 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
     public LiveHelper(Context context, LiveView liveview) {
         mContext = context;
         mLiveView = liveview;
-
         MessageEvent.getInstance().addObserver(this);
     }
 
@@ -269,20 +265,6 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
     }
 
 
-    @Override
-    public boolean onEndpointsUpdateInfo(int eventid, String[] updateList) {
-        SxbLog.d(TAG, "ILVB-DBG|onEndpointsUpdateInfo. eventid = " + eventid + "/" + mLiveView);
-        if (null == mLiveView) {
-            return false;
-        }
-
-        switch (eventid) {
-            default:
-                break;
-        }
-
-        return false;
-    }
 
     @Override
     public void onRoomDisconnect(int errCode, String errMsg) {
@@ -395,11 +377,11 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
     private void notifyServerLiveEnd() {
         liveEndTask = new NotifyServerLiveEnd();
         liveEndTask.execute(MySelfInfo.getInstance().getId());
+
     }
 
     private void createRoom(){
         ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId())
-                .setRoomMemberStatusLisenter(this)
                 .roomDisconnectListener(this)
                 .controlRole("Host")
                 .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
@@ -427,7 +409,6 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
     private void joinRoom(){
         ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
                 .autoCamera(false)
-                .setRoomMemberStatusLisenter(this)
                 .roomDisconnectListener(this)
                 .controlRole("NormalMember")
                 .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
@@ -486,7 +467,7 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {
                     if (TIMGroupSystemElemType.TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE == ((TIMGroupSystemElem) elem).getSubtype()) {
-                        mLiveView.hostLeave(ILiveRoomManager.getInstance().getHostId(), null);
+                        mLiveView.hostLeave("host", null);
                     }
 
                 }
@@ -607,9 +588,9 @@ public class LiveHelper extends Presenter implements ILiveMemStatusLisenter, ILi
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
                     toggleMic();
                     break;
-                case Constants.AVIMCMD_Host_Leave:
-                    mLiveView.hostLeave(identifier, nickname);
-                    break;
+//                case Constants.AVIMCMD_Host_Leave:
+//                    mLiveView.hostLeave(identifier, nickname);
+//                    break;
                 case Constants.AVIMCMD_Host_Back:
                     mLiveView.hostBack(identifier, nickname);
                 default:

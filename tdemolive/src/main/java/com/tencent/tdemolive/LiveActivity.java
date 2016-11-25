@@ -18,16 +18,16 @@ import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
-import com.tencent.ilivesdk.business.livebusiness.ILVCustomCmd;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveConfig;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveConstants;
-import com.tencent.ilivesdk.business.livebusiness.ILVLiveManager;
-import com.tencent.ilivesdk.business.livebusiness.ILVText;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.ilivesdk.view.AVRootView;
+import com.tencent.livesdk.ILVCustomCmd;
+import com.tencent.livesdk.ILVLiveConfig;
+import com.tencent.livesdk.ILVLiveConstants;
+import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.livesdk.ILVText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +83,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         loginLive.setOnClickListener(this);
         registLive.setOnClickListener(this);
         checkPermission();
-
 
 
 
