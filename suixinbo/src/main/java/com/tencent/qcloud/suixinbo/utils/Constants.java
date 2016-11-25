@@ -95,7 +95,7 @@ public class Constants {
     public static final long NORMAL_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO;
 
 
-    public static final String HOST_ROLE = "Host";
-    public static final String VIDEO_MEMBER_ROLE = "VideoMember";
-    public static final String NORMAL_MEMBER_ROLE = "NormalMember";
+    public static final String HOST_ROLE = "LiveMaster";
+    public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
+    public static final String NORMAL_MEMBER_ROLE = "Guest";
 }
