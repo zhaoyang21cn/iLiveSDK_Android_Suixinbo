@@ -5,29 +5,44 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/close_member_video"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="35dp"
         android:background="@drawable/icon_exit_live" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/camera_controll"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="85dp"
         android:background="@drawable/camera_switch" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/mic_controll"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="85dp"
         android:background="@drawable/mic_switch" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 </LinearLayout>
