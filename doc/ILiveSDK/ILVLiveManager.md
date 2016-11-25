@@ -65,8 +65,8 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 
 ```java            
   //创建房间配置项
-            ILiveRoomOption hostOption = new ILiveRoomOption(null).
-                    controlRole("Host")//角色设置
+            ILiveRoomOption hostOption = new ILiveRoomOption(null)
+                    .controlRole(Constants.HOST_ROLE)//角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
@@ -103,7 +103,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
            //加入房间配置项
             ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
-                    .controlRole("NormalMember") //角色设置
+                    .controlRole(Constants.NORMAL_MEMBER_ROLE) //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO |              AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
                     .autoMic(false);//是否自动打开mic
