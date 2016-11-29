@@ -4,7 +4,7 @@
 - 优化日志(统一输出到/tencent/imsdklogs/包名)
 
 ###V0.4.1 (2016-11-23)
-- 分离ILiveSDK的Core与business层(ILiveSDK=>ILiveSDK + [CallSDK](https://github.com/zhaoyang21cn/CallSDK_Android_Demo) + LiveSDK(https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos/blob/master/doc/ILiveSDK/ILVLiveManager.md))
+- 分离ILiveSDK的Core与business层(ILiveSDK=>ILiveSDK + [CallSDK](https://github.com/zhaoyang21cn/CallSDK_Android_Demo) + [LiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos/blob/master/doc/ILiveSDK/ILVLiveManager.md))
 
 ###V0.4.1 (2016-11-22)
 - 修复切换后置摄像头相关获取cameraId不准确问题
