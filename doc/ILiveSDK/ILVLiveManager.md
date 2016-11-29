@@ -1,4 +1,19 @@
 #iLiveSDK直播基础接口简介
+## 概述
+
+LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)，实现直播业务功能封装，方便开发者快速搭建自己的直播服务平台
+![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/ilivesdk_construction.png)
+
+
+
+## 集成
+LiveSDK在Android Studio上开发。 导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明]
+
+```
+compile 'com.tencent.livesdk:livesdk:1.0.0'
+```
+
+
 ##简单直播流程示例
 
 ![](../../raw/process.png)
