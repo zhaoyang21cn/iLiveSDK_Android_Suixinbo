@@ -634,7 +634,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 editor.apply();
             } else {
                 //发消息通知上线
-                mLiveHelper.sendGroupCmd(Constants.AVIMCMD_EnterLive, "");
+                mLiveHelper.sendGroupCmd(Constants.AVIMCMD_ENTERLIVE, "");
             }
             if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
                 if (bFirstRender) {
@@ -1041,7 +1041,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else if (i == R.id.member_send_good) {// 添加飘星动画
             mHeartLayout.addFavor();
             if (checkInterval()) {
-                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_Praise, "", CurLiveInfo.getHostID());
+                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_PRAISE, "", CurLiveInfo.getHostID());
                 CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
                 tvAdmires.setText("" + CurLiveInfo.getAdmires());
             } else {

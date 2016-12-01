@@ -120,7 +120,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
     public void perpareQuitRoom(boolean bPurpose) {
         if (bPurpose) {
-            sendGroupCmd(Constants.AVIMCMD_ExitLive, "");
+            sendGroupCmd(Constants.AVIMCMD_EXITLIVE, "");
         }
         mLiveView.readyToQuit();
     }
@@ -555,14 +555,14 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     mLiveView.cancelInviteView(identifier);
                     Toast.makeText(mContext, identifier + " refuse !", Toast.LENGTH_SHORT).show();
                     break;
-                case Constants.AVIMCMD_Praise:
+                case Constants.AVIMCMD_PRAISE:
                     mLiveView.refreshThumbUp();
                     break;
-                case Constants.AVIMCMD_EnterLive:
+                case Constants.AVIMCMD_ENTERLIVE:
                     if (mLiveView != null)
                         mLiveView.memberJoin(identifier, nickname);
                     break;
-                case Constants.AVIMCMD_ExitLive:
+                case Constants.AVIMCMD_EXITLIVE:
                     //mLiveView.refreshText("quite live", sendId);
                     if (mLiveView != null)
                         mLiveView.memberQuit(identifier, nickname);
@@ -588,10 +588,10 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
                     toggleMic();
                     break;
-//                case Constants.AVIMCMD_Host_Leave:
+//                case Constants.AVIMCMD_HOST_LEAVE:
 //                    mLiveView.hostLeave(identifier, nickname);
 //                    break;
-                case Constants.AVIMCMD_Host_Back:
+                case Constants.AVIMCMD_HOST_BACK:
                     mLiveView.hostBack(identifier, nickname);
                 default:
                     break;
