@@ -19,6 +19,16 @@ public class MySelfInfo {
     private String CosSig;
     private static boolean isCreateRoom = false;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private String token;
+
     private boolean bLiveAnimator;  // 渐隐动画
     private SxbLog.SxbLogLevel logLevel;           // 日志等级
 
@@ -111,6 +121,7 @@ public class MySelfInfo {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_ID, id);
         editor.putString(Constants.USER_SIG, userSig);
+        editor.putString(Constants.USER_TOKEN, token);
         editor.putString(Constants.USER_NICK, nickName);
         editor.putString(Constants.USER_AVATAR, avatar);
         editor.putString(Constants.USER_SIGN, sign);
@@ -131,6 +142,7 @@ public class MySelfInfo {
         SharedPreferences sharedata = context.getSharedPreferences(Constants.USER_INFO, 0);
         id = sharedata.getString(Constants.USER_ID, null);
         userSig = sharedata.getString(Constants.USER_SIG, null);
+        token = sharedata.getString(Constants.USER_TOKEN,null);
         myRoomNum = sharedata.getInt(Constants.USER_ROOM_NUM, -1);
         nickName = sharedata.getString(Constants.USER_NICK, null);
         avatar = sharedata.getString(Constants.USER_AVATAR, null);

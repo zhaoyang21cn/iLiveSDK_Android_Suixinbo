@@ -15,6 +15,8 @@ public class Constants {
 
     public static final String USER_SIG = "user_sig";
 
+    public static final String USER_TOKEN = "user_token";
+
     public static final String USER_NICK = "user_nick";
 
     public static final String USER_SIGN = "user_sign";
@@ -36,8 +38,8 @@ public class Constants {
     //public static final int ACCOUNT_TYPE = 884;
 
     // ILiveSDK 随心播
-    public static final int SDK_APPID = 1400019301;
-    public static final int ACCOUNT_TYPE = 8871;
+    public static final int SDK_APPID = 1400019352;
+    public static final int ACCOUNT_TYPE = 8970;
 
     public static final String ID_STATUS = "id_status";
 

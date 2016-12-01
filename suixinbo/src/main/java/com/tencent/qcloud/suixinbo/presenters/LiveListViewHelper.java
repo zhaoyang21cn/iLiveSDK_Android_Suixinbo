@@ -47,7 +47,7 @@ public class LiveListViewHelper extends Presenter {
         @Override
         protected ArrayList<LiveInfoJson> doInBackground(Integer... params) {
             SxbLog.d(TAG, LogConstants.ACTION_VIEWER_ENTER_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "request room list");
-            return OKhttpHelper.getInstance().getLiveList(params[0], params[1]);
+            return UserServerHelper.getInstance().getLiveList(params[0], params[1]);
         }
 
         @Override
