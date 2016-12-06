@@ -4,6 +4,11 @@
 
 ![](../../raw/rightProcess.png)
 
+- 具体包括了8个步骤    
+
+
+
+>
 12-06 15:24:06.741 19555-19555/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884 1初始化步骤     
 12-06 15:24:06.746 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view  2设置渲染层       
 12-06 15:24:06.746 19555-19555/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views  2设置渲染层     
@@ -14,7 +19,7 @@
 12-06 15:24:20.401 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure｜onNewMessage->size:1
 12-06 15:24:20.666 19555-19555/com.tencent.ilivedemo W/ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0      4AV房间OK   
 12-06 15:24:20.751 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onSurfaceCreated
-12-06 15:24:20.751 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera 5打开摄像头
+12-06 15:24:20.751 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera 5打开摄像头   
 12-06 15:24:20.776 19555-19555/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845
 12-06 15:24:20.881 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onEndpointsUpdateInfo myself id has camera will     6 server回调用户上线     
 12-06 15:24:20.881 19555-19555/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845 7渲染      
@@ -23,6 +28,6 @@
 
 
 
-##主播端发起一个直播LOG如下
+##观众端加入一个直播LOG如下
 
 ![](../../raw/joinRoomProcess.png)
