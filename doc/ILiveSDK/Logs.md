@@ -1,6 +1,6 @@
 #关键路径的LOG 
 <br/>
-*在ILiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到直播的关键路径*
+*在ILiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到创建房间加入房间的关键路径*
 <br/>
 
 ##创建一个房间  流程正确LOG如下
