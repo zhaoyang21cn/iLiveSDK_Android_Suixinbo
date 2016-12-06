@@ -11,7 +11,7 @@
 
 
 
->
+```C
 12-06 15:24:06.741 19555-19555/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884 1初始化步骤     
 12-06 15:24:06.746 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view  2设置渲染层       
 12-06 15:24:06.746 19555-19555/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views  2设置渲染层     
@@ -27,7 +27,7 @@
 12-06 15:24:20.881 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onEndpointsUpdateInfo myself id has camera will     6 server回调用户上线     
 12-06 15:24:20.881 19555-19555/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845 7渲染      
 12-06 15:24:21.151 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true 8摄像头上报成功回调
-
+```
 
 
 
@@ -39,8 +39,7 @@
 
 
 
->
-
+```C
 12-06 16:18:30.911 4017-4017/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884 // 1初始化   
 12-06 16:18:30.916 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view // 2设置渲染层   
 12-06 16:18:30.941 4017-4017/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views2设置渲染层   
@@ -53,3 +52,4 @@
 12-06 16:18:56.816 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure｜onNewMessage->size:1    
 12-06 16:18:56.851 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Endpoint | requestRemoteVideo id [willguo]  5获取server 成员上线回调      
 12-06 16:18:56.886 4017-4017/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,1080,1845  6渲染界面   
+```
