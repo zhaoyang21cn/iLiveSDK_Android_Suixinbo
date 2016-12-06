@@ -31,3 +31,22 @@
 ##观众端加入一个直播  流程正确LOG如下
 
 ![](../../raw/joinRoomProcess.png)
+
+- 具体包括了6个步骤    
+
+
+
+>
+
+12-06 16:18:30.911 4017-4017/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884 // 1初始化   
+12-06 16:18:30.916 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view // 2设置渲染层   
+12-06 16:18:30.941 4017-4017/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views2设置渲染层   
+12-06 16:18:43.271 4017-4017/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will // 3iLive登录    
+12-06 16:18:43.681 4017-4017/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success 3iLive登录  
+12-06 16:18:56.176 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|joinRoom->id: 6352 isIMsupport: true 4加入房间   
+12-06 16:18:56.236 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|joinLiveRoom joinIMChatRoom callback succ 4直播聊天室加入成功      
+12-06 16:18:56.531 4017-4017/com.tencent.ilivedemo W/ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0 4AV房间加入成功   
+12-06 16:18:56.711 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onSurfaceCreated   
+12-06 16:18:56.816 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure｜onNewMessage->size:1    
+12-06 16:18:56.851 4017-4017/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Endpoint | requestRemoteVideo id [willguo]  5获取server 成员上线回调      
+12-06 16:18:56.886 4017-4017/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,1080,1845  6渲染界面   
