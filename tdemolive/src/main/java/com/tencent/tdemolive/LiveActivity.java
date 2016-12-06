@@ -61,7 +61,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         loginView =  (FrameLayout)findViewById(R.id.login_fragment);
 
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
-        ILVLiveManager.getInstance().setAvVideoView(avRootView);
+
 
         logoutBtn = (Button) findViewById(R.id.btn_logout);
         roomNum = (EditText) findViewById(R.id.room_num);
@@ -85,9 +85,11 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         checkPermission();
 
 
-
+        Log.i(TAG, "onCreate: initSdk ");
         //初始化SDK
         ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400001692, 884);
+
+        ILVLiveManager.getInstance().setAvVideoView(avRootView);
         // 关闭IM群组
         ILVLiveConfig liveConfig = new ILVLiveConfig();
 

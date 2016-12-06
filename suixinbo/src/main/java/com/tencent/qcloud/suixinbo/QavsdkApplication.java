@@ -3,7 +3,6 @@ package com.tencent.qcloud.suixinbo;
 import android.app.Application;
 import android.content.Context;
 
-import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.tencent.qcloud.suixinbo.utils.SxbLogImpl;
 
 
@@ -24,7 +23,7 @@ public class QavsdkApplication extends Application {
         SxbLogImpl.init(getApplicationContext());
 
         //初始化APP
-        InitBusinessHelper.initApp(context);
+
 
 
 //        LeakCanary.install(this);

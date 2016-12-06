@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LoginView;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
@@ -33,6 +34,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        InitBusinessHelper.initApp(getApplicationContext());
         SxbLog.i(TAG, "LoginActivity onCreate");
         mLoginHeloper = new LoginHelper(this, this);
         checkPermission();
