@@ -17,8 +17,8 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.0.2'
 
             
 ##DEMO
-有三个示例  <br />
-1视频聊天 ：双人通话场景的简单示例，类微信视频聊天。       
+有两个示例 <br />
+1简单直播 ：直播主线流程示例      
 2新随心播 ：基于ILiveSDK接口重构的随心播   
 
 ##API文档
