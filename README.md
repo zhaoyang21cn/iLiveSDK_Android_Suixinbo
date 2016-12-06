@@ -22,7 +22,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.0.2'
 2新随心播 ：基于ILiveSDK接口重构的随心播   
 
 ##API文档
-[API文档](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+[API文档(1.0.2)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
 
 ##错误码
 [错误码表](/doc/ILiveSDK/error.md)
