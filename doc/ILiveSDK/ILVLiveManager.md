@@ -1,4 +1,4 @@
-#iLiveSDK直播基础接口简介
+#LiveSDK直播基础接口简介
 ## 概述
 
 LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)，实现直播业务功能封装，方便开发者快速搭建自己的直播服务平台
@@ -160,3 +160,6 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 ```  
         
 [信令及上麦参见](./ILVLiveSenior.md)        
+
+##API文档
+[API文档1.0.0](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
