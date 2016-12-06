@@ -1,6 +1,6 @@
 #主线流程LOG对照
 
-##主播端发起一个直播LOG如下
+##主播端发起一个直播  流程正确LOG如下
 
 ![](../../raw/rightProcess.png)
 
@@ -28,6 +28,6 @@
 
 
 
-##观众端加入一个直播LOG如下
+##观众端加入一个直播  流程正确LOG如下
 
 ![](../../raw/joinRoomProcess.png)
