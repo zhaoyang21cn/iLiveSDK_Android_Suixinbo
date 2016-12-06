@@ -18,7 +18,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.0.2'
             
 ##DEMO
 有两个示例 <br />
-1简单直播 ：直播主线流程示例            
+1简单直播 ：直播主线流程示例  <br />
 2新随心播 ：基于ILiveSDK接口重构的随心播   
 
 ##API文档
