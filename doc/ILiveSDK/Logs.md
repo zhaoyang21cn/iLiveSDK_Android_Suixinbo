@@ -1,4 +1,7 @@
-#正确流程的LOG 
+#关键路径的LOG 
+<br/>
+*在iLiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到直播的关键路径*
+<br/>
 
 ##主播端发起一个直播  流程正确LOG如下
 
