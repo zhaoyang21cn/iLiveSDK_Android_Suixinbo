@@ -2,7 +2,7 @@
 
 ##主播端发起一个直播LOG如下
 
-
+![](../../raw/rightProcess.png)
 
 12-06 15:24:06.741 19555-19555/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884 1初始化步骤     
 12-06 15:24:06.746 19555-19555/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view  2设置渲染层       
@@ -24,3 +24,5 @@
 
 
 ##主播端发起一个直播LOG如下
+
+![](../../raw/joinRoomProcess.png)
