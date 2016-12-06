@@ -165,5 +165,5 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 [API文档1.0.0](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
 
 
-
-[主线LOG对比](./Logs.md)   
+##对比主线LOG
+[LOG](./Logs.md)   
