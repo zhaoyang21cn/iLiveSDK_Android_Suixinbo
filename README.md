@@ -43,5 +43,6 @@ android{
 如果您还在使用eclipse进行Android的开发，请参考这里[eclipse集成方案](/doc/ILiveSDK/eclipse_readme.md)。    
 Android Studio在google支持度，编译便利性等多方面远超eclipse。我们强烈建议还在使用eclipse的用户尽快升级。
 
-
+##参见正确流程的LOG
+[正确流程LOG 主线流程不通请自行对比](/doc/ILiveSDK/Logs.md)
 
