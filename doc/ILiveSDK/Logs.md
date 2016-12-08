@@ -7,9 +7,7 @@
 
 ![](../../raw/rightProcess.png)
 
-- 具体包括了8个步骤 解释如下    
-
-
+- 具体包括了10个步骤 解释如下    
 
 ```C
 1. 初始化步骤
@@ -52,7 +50,7 @@ ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true
 
 ![](../../raw/joinRoomProcess.png)
 
-- 具体包括了6个步骤 解释如下 
+- 具体包括了8个步骤 解释如下 
 
 
 
