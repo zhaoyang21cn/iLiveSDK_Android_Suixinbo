@@ -1,7 +1,10 @@
 ##Release Note
+###V1.0.3 (2016-12-07)
+- 添加事件上报
+- 添加[关键日志](./Logs.md)输出
 
 ###V1.0.2 (2016-12-02)
-- 修复重复登录(或注快速登录)导致异常
+- 修复重复登录(或快速登录)导致异常
 - 修复录制回调重复调用
 - 在ILiveSDK中添加TIManager的获取
 
@@ -10,6 +13,8 @@
 
 ###V1.0.0 (2016-11-23)
 - 分离ILiveSDK的Core与business层(ILiveSDK=>ILiveSDK + [CallSDK](https://github.com/zhaoyang21cn/CallSDK_Android_Demo) + [LiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos/blob/master/doc/ILiveSDK/ILVLiveManager.md))
+
+---
 
 ###V0.4.1 (2016-11-22)
 - 修复切换后置摄像头相关获取cameraId不准确问题
