@@ -12,33 +12,38 @@
 
 
 ```C
-/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884    
-<1>初始化步骤     
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view    
-<2>设置渲染层       
-/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views    
-<2>设置渲染层     
-/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will     
-<3>iLive登录   
-/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success    
-<3>iLive登录   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|start create room:6357 enter with im:true|video:true   
-<4>创建房间 
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|createRoom->im room ok:6357     
-<4>直播聊天室OK       
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure｜onNewMessage->size:1
-/com.tencent.ilivedemo W/ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0      
-<4>AV房间OK   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onSurfaceCreated
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera     
-<5>打开摄像头   
-/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onEndpointsUpdateInfo myself id has camera will     
-<6>server回调用户上线     
-/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845       
-<7>渲染      
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true     
-<8>摄像头上报成功回调
+1. 初始化步骤
+ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884    
+
+2. 设置渲染层       
+ILVBRoom: Key_Procedure|ILVB-Room|init root view    
+AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views
+    
+3. iLive登录   
+ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will     
+ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success    
+
+4. 创建房间   
+ILVBRoom: Key_Procedure|ILVB-Room|start create room:6357 enter with im:true|video:true   
+
+5. 直播聊天室创建完毕
+ILVBRoom: Key_Procedure|createRoom->im room ok:6357     
+
+6. AV房间创建完毕
+ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0      
+
+7. 打开摄像头
+ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera     
+
+8. server回调用户上线
+ILVBRoom: Key_Procedure|ILVB-Room|onEndpointsUpdateInfo myself id has camera will     
+
+9. 渲染
+AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845       
+
+10. 摄像头上报成功回调    
+ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true     
+
 ```
 
 
@@ -52,26 +57,31 @@
 
 
 ```C
-/com.tencent.ilivedemo I/ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884   
-1 初始化   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|init root view   
-2 设置渲染层   
-/com.tencent.ilivedemo I/AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views   
-2设置渲染层   
-/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will     
-3iLive登录    
-/com.tencent.ilivedemo I/ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success       
-3iLive登录  
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|joinRoom->id: 6352 isIMsupport: true       
-4加入房间   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|joinLiveRoom joinIMChatRoom callback succ    
-4直播聊天室加入成功      
-/com.tencent.ilivedemo W/ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0        
-4AV房间加入成功   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Room|onSurfaceCreated   
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure｜onNewMessage->size:1    
-/com.tencent.ilivedemo I/ILVBRoom: Key_Procedure|ILVB-Endpoint | requestRemoteVideo id [willguo]     
-5获取server 成员上线回调      
-/com.tencent.ilivedemo I/AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,1080,1845      
-6渲染界面   
+1. 初始化 
+
+ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884   
+  
+2. 设置渲染层
+ILVBRoom: Key_Procedure|ILVB-Room|init root view      
+AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views   
+
+3. iLive登录
+ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will      
+ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success       
+
+4. 加入房间  
+ILVBRoom: Key_Procedure|joinRoom->id: 6352 isIMsupport: true       
+
+5. 直播聊天室加入成功    
+ILVBRoom: Key_Procedure|joinLiveRoom joinIMChatRoom callback succ    
+
+6. AV房间加入成功       
+ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0        
+
+7. 获取server 成员上线回调 
+ILVBRoom: Key_Procedure|ILVB-Endpoint | requestRemoteVideo id [willguo]     
+
+8. 渲染界面
+AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,1080,1845      
+
 ```
