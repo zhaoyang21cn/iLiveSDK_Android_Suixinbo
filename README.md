@@ -24,6 +24,9 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.0.4'
 ##API文档
 [API文档(1.0.3)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
 
+##异常事件
+[异常事件](/doc/ILiveSDK/exception.md)
+
 ##错误码
 [错误码表](/doc/ILiveSDK/error.md)
 
