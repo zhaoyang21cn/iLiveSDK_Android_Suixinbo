@@ -1,13 +1,15 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LoginView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LogoutView;
-import com.tencent.qcloud.suixinbo.utils.LogConstants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 /**
@@ -34,37 +36,55 @@ public class LoginHelper extends Presenter {
     }
 
 
-    /**
-     * 登录imsdk
-     *
-     * @param identify 用户id
-     * @param userSig  用户签名
-     */
-    public void imLogin(final String identify, String userSig) {
-        //TODO 新方式登录ILiveSDK
-        ILiveLoginManager.getInstance().iLiveLogin(identify, userSig, new ILiveCallBack() {
+    //登录模式登录
+    private StandardLoginTask loginTask;
+    class StandardLoginTask extends AsyncTask<String, Integer,UserServerHelper.ResquestResult > {
+
+        @Override
+        protected  UserServerHelper.ResquestResult  doInBackground(String... strings) {
+
+            return UserServerHelper.getInstance().loginId(strings[0], strings[1]);
+        }
+
+        @Override
+        protected void onPostExecute(UserServerHelper.ResquestResult  result) {
+            if(result != null &&result.getErrorCode()==0) {
+                MySelfInfo.getInstance().writeToCache(mContext);
+                //登录
+                iLiveLogin(MySelfInfo.getInstance().getId(),MySelfInfo.getInstance().getUserSig());
+
+            }else{
+                mLoginView.loginFail("Module_TLSSDK",result.getErrorCode(),result.getErrorInfo());
+            }
+
+        }
+    }
+
+
+
+    public void iLiveLogin(String id ,String sig){
+        //登录
+        ILiveLoginManager.getInstance().iLiveLogin(id, sig, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + identify + LogConstants.DIV + "request room id");
-//                getMyRoomNum();
                 if (mLoginView != null)
                     mLoginView.loginSucc();
             }
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + "tilvblogin failed:" + module + "|" + errCode + "|" + errMsg);
                 if (mLoginView != null)
-                    mLoginView.loginFail();
+                    mLoginView.loginFail(module,errCode,errMsg);
             }
         });
     }
 
 
+
     /**
      * 退出imsdk <p> 退出成功会调用退出AVSDK
      */
-    public void imLogout() {
+    public void iLiveLogout() {
         //TODO 新方式登出ILiveSDK
         ILiveLoginManager.getInstance().iLiveLogout(new ILiveCallBack() {
             @Override
@@ -83,100 +103,56 @@ public class LoginHelper extends Presenter {
     }
 
     /**
-     * 登录TLS账号系统
+     * 独立模式 登录
      */
-    public void tlsLogin(final String id, final String password) {
-//        ILiveLoginManager.getInstance().tlsLogin(id, password, new ILiveCallBack<String>() {
-//            @Override
-//            public void onSuccess(String userSig) {
-//                MySelfInfo.getInstance().setId(id);
-//                MySelfInfo.getInstance().setUserSig(userSig);
-//                imLogin(id, userSig);
-//            }
-//
-//            @Override
-//            public void onError(String module, int errCode, String errMsg) {
-//                Toast.makeText(mContext, "OnPwdLoginFail|" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                UserServerHelper.ResquestResult result = UserServerHelper.getInstance().loginId(id, password);
-                if (result != null && result.getErrorCode() == 0) {
-                    MySelfInfo.getInstance().setId(id);
-                    MySelfInfo.getInstance().setUserSig(UserServerHelper.getInstance().getSig());
-                    MySelfInfo.getInstance().writeToCache(mContext);
-//                    UserServerHelper.getInstance().logoutId(id);
-                    imLogin(id, MySelfInfo.getInstance().getUserSig());
-                }
-            }
-        }).start();
+    public void standardLogin(String id, String password) {
+        loginTask = new StandardLoginTask();
+        loginTask.execute(id,password);
 
     }
 
 
     /**
-     * 在TLS模块注册一个账号
+     * 独立模式 注册
      */
-    public void tlsRegister(final String id, final String psw) {
-
-//        ILiveLoginManager.getInstance().tlsRegister(id, psw, new ILiveCallBack() {
-//            @Override
-//            public void onSuccess(Object data) {
-//                Toast.makeText(mContext, id + " register a user succ !  ", Toast.LENGTH_SHORT).show();
-//                //继续登录流程
-//                tlsLogin(id, psw);
-//            }
-//
-//            @Override
-//            public void onError(String module, int errCode, String errMsg) {
-//                Toast.makeText(mContext, "tlsRegister->failed|"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
+    public void standardRegister(final String id, final String psw) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                UserServerHelper.getInstance().registerId(id, psw);
+                final UserServerHelper.ResquestResult result = UserServerHelper.getInstance().registerId(id, psw);
+                ((Activity) mContext).runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        if(result!=null && result.getErrorCode()==0){
+                            standardLogin(id,psw);
+                        }else if(result!=null){
+                            //
+                            Toast.makeText(mContext, "  " +result.getErrorCode() +" : "+result.getErrorInfo(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         }).start();
     }
 
 
     /**
-     * 登出
+     * 独立模式 登出
      * @param id
      */
-    public void tlsLogout(final String id){
+    public void standardLogout(final String id){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 UserServerHelper.ResquestResult result = UserServerHelper.getInstance().logoutId(id);
-                if (result != null && result.getErrorCode() == 0) {
-
+                if (result != null && (result.getErrorCode() == 0 || result.getErrorCode() == 10008) ) {
+                    MySelfInfo.getInstance().clearCache(mContext);
+                    iLiveLogout();
                 }
             }
         }).start();
     }
 
-    /**
-     * 向用户服务器获取自己房间号
-     */
-    private void getMyRoomNum() {
-        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    UserServerHelper.getInstance().getMyRoomId(mContext);
-                }
-            }).start();
-        } else {
-            SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "request room id"
-                    + LogConstants.DIV + LogConstants.STATUS.SUCCEED + LogConstants.DIV + "get room id from local " + MySelfInfo.getInstance().getMyRoomNum());
-        }
-    }
 
 
     @Override

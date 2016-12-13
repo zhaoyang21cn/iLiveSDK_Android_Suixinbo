@@ -51,10 +51,10 @@ import com.tencent.qcloud.suixinbo.adapters.ChatMsgListAdapter;
 import com.tencent.qcloud.suixinbo.model.ChatEntity;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.UserServerHelper;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -77,7 +77,7 @@ import java.util.TimerTask;
 /**
  * Live直播类
  */
-public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener, ProfileView, LiveListView {
+public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener, ProfileView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
 
@@ -113,6 +113,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private ImageView mRecordBall;
     private ImageView mQualityCircle;
     private TextView mQualityText;
+    private TextView roomId;
     private int thumbUp = 0;
     private long admireTime = 0;
     private int watchCount = 0;
@@ -120,7 +121,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private static boolean mWhite = true;
     private boolean bCleanMode = false;
     private boolean mProfile;
-    private boolean bFirstRender = true;
     private boolean bInAvRoom = false, bSlideUp = false, bDelayQuit = false;
 
     private String backGroundId;
@@ -132,6 +132,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private Dialog mDetailDialog;
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
+
 
 
     @Override
@@ -261,8 +262,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnCtrlVideo.setOnClickListener(this);
         BtnCtrlMic.setOnClickListener(this);
         BtnHungup.setOnClickListener(this);
-        TextView roomId = (TextView) findViewById(R.id.room_id);
-        roomId.setText(CurLiveInfo.getChatRoomId());
+        roomId = (TextView) findViewById(R.id.room_id);
+//        roomId.setText(CurLiveInfo.getRoomNum());
 
         //for 测试用
         TextView paramVideo = (TextView) findViewById(R.id.param_video);
@@ -445,13 +446,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         //主播心跳
                         mHearBeatTimer = new Timer(true);
                         mHeartBeatTask = new HeartBeatTask();
-                        mHearBeatTimer.schedule(mHeartBeatTask, 1000, 3 * 1000);
+                        mHearBeatTimer.schedule(mHeartBeatTask, 100, 5 * 1000); //5秒重复上报心跳 拉取房间列表
 
                         //直播时间
                         mVideoTimer = new Timer(true);
                         mVideoTimerTask = new VideoTimerTask();
                         mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
-                        bFirstRender = false;
                     }
                 });
             }
@@ -480,7 +480,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         public void run() {
             String host = CurLiveInfo.getHostID();
             SxbLog.i(TAG, "HeartBeatTask " + host);
-            UserServerHelper.getInstance().sendHeartBeat(host, CurLiveInfo.getMembers(), CurLiveInfo.getAdmires(), 0);
+            UserServerHelper.getInstance().heartBeater(1);
+//            UserServerHelper.getInstance().getMemberList(); //定期拉一把房间成员
+            mLiveHelper.pullMemberList();
         }
     }
 
@@ -620,11 +622,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     public void enterRoomComplete(int id_status, boolean isSucc) {
         Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
-        //mEnterRoomHelper.initAvUILayer(avView);
         bInAvRoom = true;
         bDelayQuit = true;
-
+        roomId.setText(""+CurLiveInfo.getRoomNum());
         if (isSucc == true) {
+            mLiveHelper.pullMemberList();
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 //开启摄像头渲染画面
@@ -636,22 +638,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 //发消息通知上线
                 mLiveHelper.sendGroupCmd(Constants.AVIMCMD_ENTERLIVE, "");
             }
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-                if (bFirstRender) {
-                    //主播心跳
-                    mHearBeatTimer = new Timer(true);
-                    mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 3 * 1000);
 
-                    //直播时间
-                    mVideoTimer = new Timer(true);
-                    mVideoTimerTask = new VideoTimerTask();
-                    mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
-                    bFirstRender = false;
-                }
-            }
+
+
         }
     }
+
+
+
 
 
     @Override
@@ -667,16 +661,19 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mDetailAdmires.setText("" + CurLiveInfo.getAdmires());
                 mDetailWatchCount.setText("" + watchCount);
                 mDetailDialog.show();
+                //发送
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(),1);//通知server 我下线了
+                    }
+                }.start();
+
             }
         } else {
-            //finish();
-//            if (bDelayQuit) {
-//                clearOldData();
-//                mHostLeaveLayout.setVisibility(View.VISIBLE);
-//            }else{
                 clearOldData();
                 finish();
-//            }
         }
         bInAvRoom = false;
     }
@@ -739,6 +736,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     @Override
     public void hostBack(String id, String name) {
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
+    }
+
+    @Override
+    public void refreshMember(ArrayList<MemberID> memlist) {
+        tvMembers.setText("" + memlist.size());
     }
 //
 //    /**
@@ -1776,47 +1778,51 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             bSlideUp = false;
         }
     }*/
+//
+//    @Override
+//    public void showFirstPage(ArrayList<LiveInfoJson> livelist) {
+//        int index = 0, oldPos = 0;
+//        for (; index<livelist.size(); index++){
+//            if (livelist.get(index).getAvRoomId() == CurLiveInfo.getRoomNum()){
+//                oldPos = index;
+//                index ++;
+//                break;
+//            }
+//        }
+//        if (bSlideUp){
+//            index -= 2;
+//        }
+//        LiveInfoJson info = livelist.get((index+livelist.size())%livelist.size());
+//
+//        if (null != info){
+//            MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+//            MySelfInfo.getInstance().setJoinRoomWay(false);
+//            CurLiveInfo.setHostID(info.getHost().getUid());
+//            CurLiveInfo.setHostName(info.getHost().getUsername());
+//            CurLiveInfo.setHostAvator(info.getHost().getAvatar());
+//            CurLiveInfo.setRoomNum(info.getAvRoomId());
+//            CurLiveInfo.setMembers(info.getWatchCount() + 1); // 添加自己
+//            CurLiveInfo.setAdmires(info.getAdmireCount());
+//            CurLiveInfo.setAddress(info.getLbs().getAddress());
+//
+//            backGroundId = CurLiveInfo.getHostID();
+//
+//            showHeadIcon(mHeadIcon, CurLiveInfo.getHostAvator());
+//            if (!TextUtils.isEmpty(CurLiveInfo.getHostName())) {
+//                mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostName(), 10));
+//            }else{
+//                mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
+//            }
+//            tvMembers.setText("" + CurLiveInfo.getMembers());
+//            tvAdmires.setText("" + CurLiveInfo.getAdmires());
+//
+//            //进入房间流程
+//            mLiveHelper.startEnterRoom();
+//        }
+//    }
 
-    @Override
-    public void showFirstPage(ArrayList<LiveInfoJson> livelist) {
-        int index = 0, oldPos = 0;
-        for (; index<livelist.size(); index++){
-            if (livelist.get(index).getAvRoomId() == CurLiveInfo.getRoomNum()){
-                oldPos = index;
-                index ++;
-                break;
-            }
-        }
-        if (bSlideUp){
-            index -= 2;
-        }
-        LiveInfoJson info = livelist.get((index+livelist.size())%livelist.size());
-        SxbLog.v(TAG, "ILVB-DBG|showFirstPage->index:"+index+"/"+oldPos+"|room:"+info.getHost().getUid()+"/"+CurLiveInfo.getHostID());
-
-        if (null != info){
-            MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-            MySelfInfo.getInstance().setJoinRoomWay(false);
-            CurLiveInfo.setHostID(info.getHost().getUid());
-            CurLiveInfo.setHostName(info.getHost().getUsername());
-            CurLiveInfo.setHostAvator(info.getHost().getAvatar());
-            CurLiveInfo.setRoomNum(info.getAvRoomId());
-            CurLiveInfo.setMembers(info.getWatchCount() + 1); // 添加自己
-            CurLiveInfo.setAdmires(info.getAdmireCount());
-            CurLiveInfo.setAddress(info.getLbs().getAddress());
-
-            backGroundId = CurLiveInfo.getHostID();
-
-            showHeadIcon(mHeadIcon, CurLiveInfo.getHostAvator());
-            if (!TextUtils.isEmpty(CurLiveInfo.getHostName())) {
-                mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostName(), 10));
-            }else{
-                mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
-            }
-            tvMembers.setText("" + CurLiveInfo.getMembers());
-            tvAdmires.setText("" + CurLiveInfo.getAdmires());
-
-            //进入房间流程
-            mLiveHelper.startEnterRoom();
-        }
-    }
+//    @Override
+//    public void showRoomList(ArrayList<RoomInfoJson> roomlist) {
+//
+//    }
 }

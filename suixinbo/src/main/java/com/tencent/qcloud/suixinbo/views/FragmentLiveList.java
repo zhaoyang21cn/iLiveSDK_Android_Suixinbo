@@ -13,13 +13,13 @@ import android.widget.ListView;
 
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.adapters.LiveShowAdapter;
+import com.tencent.qcloud.suixinbo.adapters.RoomShowAdapter;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.LiveListViewHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
-import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.util.ArrayList;
 
@@ -30,8 +30,10 @@ import java.util.ArrayList;
 public class FragmentLiveList extends Fragment implements View.OnClickListener, LiveListView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "FragmentLiveList";
     private ListView mLiveList;
-    private ArrayList<LiveInfoJson> liveList = new ArrayList<LiveInfoJson>();
+//    private ArrayList<LiveInfoJson> liveList = new ArrayList<LiveInfoJson>();
+    private ArrayList<RoomInfoJson> roomList = new ArrayList<RoomInfoJson>();
     private LiveShowAdapter adapter;
+    private RoomShowAdapter roomShowAdapter;
     private LiveListViewHelper mLiveListViewHelper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -48,48 +50,43 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light),getResources().getColor(android.R.color.holo_red_light));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        adapter = new LiveShowAdapter(getActivity(), R.layout.item_liveshow, liveList);
-        mLiveList.setAdapter(adapter);
-
+        roomShowAdapter =new RoomShowAdapter(getActivity(), R.layout.item_liveshow, roomList);
+        mLiveList.setAdapter(roomShowAdapter);
         mLiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                LiveInfoJson item = liveList.get(i);
+                RoomInfoJson item = roomList.get(i);
                 //如果是自己
-                if (item.getHost().getUid().equals(MySelfInfo.getInstance().getId())) {
+                if (item.getHostId().equals(MySelfInfo.getInstance().getId())) {
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
                     intent.putExtra(Constants.ID_STATUS, Constants.HOST);
                     MySelfInfo.getInstance().setIdStatus(Constants.HOST);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
-                    CurLiveInfo.setHostID(item.getHost().getUid());
-                    CurLiveInfo.setHostName(item.getHost().getUsername());
-                    CurLiveInfo.setHostAvator(item.getHost().getAvatar());
-                    CurLiveInfo.setRoomNum(item.getAvRoomId());
-                    CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-                    CurLiveInfo.setAdmires(item.getAdmireCount());
-                    CurLiveInfo.setAddress(item.getLbs().getAddress());
+                    CurLiveInfo.setHostID(item.getHostId());
+                    CurLiveInfo.setHostName("");
+                    CurLiveInfo.setHostAvator("");
+                    CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
+                    CurLiveInfo.setMembers(0); // 添加自己
+                    CurLiveInfo.setAdmires(0);
+//                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }else{
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
                     intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
                     MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
-                    CurLiveInfo.setHostID(item.getHost().getUid());
-                    CurLiveInfo.setHostName(item.getHost().getUsername());
-                    CurLiveInfo.setHostAvator(item.getHost().getAvatar());
-                    CurLiveInfo.setRoomNum(item.getAvRoomId());
-                    CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-                    CurLiveInfo.setAdmires(item.getAdmireCount());
-                    CurLiveInfo.setAddress(item.getLbs().getAddress());
+                    CurLiveInfo.setHostID(item.getHostId());
+                    CurLiveInfo.setHostName("");
+                    CurLiveInfo.setHostAvator("");
+                    CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
+                    CurLiveInfo.setMembers(1); // 添加自己
+                    CurLiveInfo.setAdmires(1);
+//                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }
-
-                SxbLog.i(TAG, "PerformanceTest  join Live     " + SxbLog.getTime());
             }
         });
-
         return view;
     }
 
@@ -114,18 +111,18 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
     }
 
-
     @Override
-    public void showFirstPage(ArrayList<LiveInfoJson> result) {
+    public void showRoomList(ArrayList<RoomInfoJson> roomlist) {
         mSwipeRefreshLayout.setRefreshing(false);
-        liveList.clear();
-        if (null != result) {
-            for (LiveInfoJson item : result) {
-                liveList.add(item);
+        roomList.clear();
+        if (null != roomlist) {
+            for (RoomInfoJson item : roomlist) {
+                roomList.add(item);
             }
         }
-        adapter.notifyDataSetChanged();
+        roomShowAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onRefresh() {

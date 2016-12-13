@@ -138,7 +138,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             enterEditProfile();
 
         } else if (i == R.id.logout) {
-            mLoginHeloper.imLogout();
+            mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
 
         } else if (i == R.id.version) {
             showSDKVersion();

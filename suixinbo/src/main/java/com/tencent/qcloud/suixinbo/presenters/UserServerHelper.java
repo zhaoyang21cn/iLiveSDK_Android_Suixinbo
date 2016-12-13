@@ -6,9 +6,14 @@ import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
+import com.tencent.ilivesdk.core.ILiveLog;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -43,6 +48,11 @@ public class UserServerHelper {
     public static final String REPORT_ROOM_INFO ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportroom";
     public static final String HEART_BEAT ="http://182.254.234.225/sxb/index.php?svc=live&cmd=heartbeat";
     public static final String STOP_ILIVE ="http://182.254.234.225/sxb/index.php?svc=live&cmd=exitroom";
+    public static final String GET_ROOMLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=roomlist";
+    public static final String REPORT_ME ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportmemid";
+    public static final String GET_MEMLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=roomidlist";
+    public static final String REPORT_RECORD ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportrecord";
+    public static final String GET_REOCORDLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=recordlist";
 
 
 
@@ -149,7 +159,7 @@ public class UserServerHelper {
     /**
      * 登录ID （独立方式）
      */
-    public ResquestResult loginId(String id, String password) {
+    public ResquestResult  loginId(String id, String password) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("id", id);
@@ -166,8 +176,10 @@ public class UserServerHelper {
 
                 Sig = data.getString("userSig");
                 token = data.getString("token");
-                MySelfInfo.getInstance().setSign(Sig);
+                MySelfInfo.getInstance().setId(id);
+                MySelfInfo.getInstance().setUserSig(Sig);
                 MySelfInfo.getInstance().setToken(token);
+
             }
             return new ResquestResult(code, errorInfo);
         } catch (JSONException e) {
@@ -224,6 +236,7 @@ public class UserServerHelper {
                 JSONObject data = response.getJSONObject("data");
                 int avRoom = data.getInt("roomnum");
                 MySelfInfo.getInstance().setMyRoomNum(avRoom);
+                CurLiveInfo.setRoomNum(avRoom);
                 String groupID = data.getString("groupid");
             }
             return new ResquestResult(code, errorInfo);
@@ -240,7 +253,7 @@ public class UserServerHelper {
     /**
      * 上报房间信息
      */
-    public ResquestResult reportRoomInfo(String inputJson) {
+    public ResquestResult reporNewtRoomInfo(String inputJson) {
         try {
 
             String res = post(REPORT_ROOM_INFO, inputJson);
@@ -261,12 +274,12 @@ public class UserServerHelper {
     /**
      * 心跳上报
      */
-    public ResquestResult heartBeater(String role) {
+    public ResquestResult heartBeater (int role) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("role", role);
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
-            jasonPacket.put("roomid", MySelfInfo.getInstance().getMyRoomNum());
+            jasonPacket.put("roomnum", MySelfInfo.getInstance().getMyRoomNum());
             String json = jasonPacket.toString();
             String res = post(HEART_BEAT, json);
             JSONTokener jsonParser = new JSONTokener(res);
@@ -286,19 +299,28 @@ public class UserServerHelper {
     /**
      * 获取房间列表
      */
-    public ResquestResult getRoomList(String role) {
+    public ArrayList<RoomInfoJson>  getRoomList() {
         try {
             JSONObject jasonPacket = new JSONObject();
-            jasonPacket.put("role", role);
-            jasonPacket.put("type", MySelfInfo.getInstance().getToken());
-            jasonPacket.put("roomid", MySelfInfo.getInstance().getMyRoomNum());
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("type", "live");
+            jasonPacket.put("index", 0);
+            jasonPacket.put("size", 20);
+            jasonPacket.put("appid", Constants.SDK_APPID);
             String json = jasonPacket.toString();
-            String res = post(HEART_BEAT, json);
+            String res = post(GET_ROOMLIST, json);
             JSONTokener jsonParser = new JSONTokener(res);
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            if(code ==0){
+                JSONObject data = response.getJSONObject("data");
+                JSONArray record = data.getJSONArray("rooms");
+                Type listType = new TypeToken<ArrayList<RoomInfoJson>>() {}.getType();
+                ArrayList<RoomInfoJson> result = new Gson().fromJson(record.toString(), listType);
+                Log.i(TAG, "getRoomList: "+result);
+                return result;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -316,9 +338,9 @@ public class UserServerHelper {
     public ResquestResult notifyCloseLive() {
         try {
             JSONObject jasonPacket = new JSONObject();
-            jasonPacket.put("type", "live");
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
             jasonPacket.put("roomnum", MySelfInfo.getInstance().getMyRoomNum());
+            jasonPacket.put("type", "live");
             String json = jasonPacket.toString();
             String res = post(STOP_ILIVE, json);
             JSONTokener jsonParser = new JSONTokener(res);
@@ -335,8 +357,125 @@ public class UserServerHelper {
     }
 
 
+    /**
+     * 上报成员
+     */
+    public ResquestResult reportMe(int role,int action) {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("roomnum", CurLiveInfo.getRoomNum());
+            jasonPacket.put("id", MySelfInfo.getInstance().getId());
+            jasonPacket.put("role", role);
+            jasonPacket.put("operate", action);
+
+            String json = jasonPacket.toString();
+            String res = post(REPORT_ME, json);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            return new ResquestResult(code, errorInfo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
+    /**
+     * 获取房间内成员
+     */
+    public ArrayList<MemberID> getMemberList() {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("roomnum", CurLiveInfo.getRoomNum());
+            jasonPacket.put("index",0);
+            jasonPacket.put("size", 40);
+
+            String json = jasonPacket.toString();
+            String res = post(GET_MEMLIST, json);
+               JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            if(code ==0){
+                JSONObject data = response.getJSONObject("data");
+                JSONArray record = data.getJSONArray("idlist");
+                Type listType = new TypeToken<ArrayList<MemberID>>() {}.getType();
+                ArrayList<MemberID> result = new Gson().fromJson(record.toString(), listType);
+                ILiveLog.i(TAG,"size"+result.size());
+                return result;
+            }
+            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+//
+//    /**
+//     * 上报录制视频URL
+//     */
+//    public ResquestResult reportRecord(String videoid,String videoUrl,int type,String cover) {
+//        try {
+//            JSONObject jasonPacket = new JSONObject();
+//            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+//            jasonPacket.put("videoid", videoid);
+//            jasonPacket.put("playurl",videoUrl);
+//            jasonPacket.put("type", type);
+//            jasonPacket.put("cover",cover);
+//
+//            String json = jasonPacket.toString();
+//            String res = post(REPORT_RECORD, json);
+//            JSONTokener jsonParser = new JSONTokener(res);
+//            JSONObject response = (JSONObject) jsonParser.nextValue();
+//            int code = response.getInt("errorCode");
+//            String errorInfo = response.getString("errorInfo");
+//            return new ResquestResult(code, errorInfo);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//
+//
+//
+//
+//    /**
+//     * 获取点播列表
+//     */
+//    public ResquestResult getRecordList() {
+//        try {
+//            JSONObject jasonPacket = new JSONObject();
+//            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+//            jasonPacket.put("type", 0);
+//            jasonPacket.put("index",0);
+//            jasonPacket.put("size", 10);
+//            String json = jasonPacket.toString();
+//            String res = post(GET_REOCORDLIST, json);
+//            JSONTokener jsonParser = new JSONTokener(res);
+//            JSONObject response = (JSONObject) jsonParser.nextValue();
+//            int code = response.getInt("errorCode");
+//            String errorInfo = response.getString("errorInfo");
+//            return new ResquestResult(code, errorInfo);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
 
 
@@ -507,7 +646,7 @@ public class UserServerHelper {
             req.put("pageSize", pagesize);
             req.put("appid", Constants.SDK_APPID);
             String response = UserServerHelper.getInstance().post(GET_LIVELIST, req.toString());
-
+            getRoomList();
             SxbLog.i(TAG, "getLiveList " + response.toString());
             JSONTokener jsonParser = new JSONTokener(response);
             JSONObject reg_response = (JSONObject) jsonParser.nextValue();
@@ -515,10 +654,10 @@ public class UserServerHelper {
             if (ret == 0) {
                 JSONObject data = reg_response.getJSONObject("data");
                 JSONArray record = data.getJSONArray("recordList");
-                Type listType = new TypeToken<ArrayList<LiveInfoJson>>() {
-                }.getType();
+                Type listType = new TypeToken<ArrayList<LiveInfoJson>>() {}.getType();
                 ArrayList<LiveInfoJson> result = new Gson().fromJson(record.toString(), listType);
                 return result;
+
             }
 
         } catch (JSONException e) {

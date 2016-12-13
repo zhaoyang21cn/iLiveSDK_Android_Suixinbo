@@ -63,7 +63,8 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="10dp"
-            android:text="1231231" />
+            android:textColor="@color/white"
+            android:text="" />
 
 
         <LinearLayout
@@ -198,13 +199,6 @@
         android:layout_marginBottom="20dp" />
 
 
-    <include
-        android:id="@+id/invite_views"
-        layout="@layout/invite_views"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
-
-
     <TextView
         android:id="@+id/normal_btn"
         android:layout_width="wrap_content"
@@ -235,4 +229,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <include
+            android:id="@+id/invite_views"
+            layout="@layout/invite_views"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 </RelativeLayout>

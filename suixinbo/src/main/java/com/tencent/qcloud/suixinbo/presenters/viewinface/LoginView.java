@@ -8,5 +8,5 @@ public interface LoginView extends MvpView{
 
     void loginSucc();
 
-    void loginFail();
+    void loginFail(String module, int errCode, String errMsg);
 }

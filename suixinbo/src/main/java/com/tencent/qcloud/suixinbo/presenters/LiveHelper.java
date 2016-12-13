@@ -29,7 +29,7 @@ import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -41,6 +41,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -57,19 +58,27 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     private boolean bMicOn = false;
     private boolean flashLgihtStatus = false;
     private long streamChannelID;
-    private NotifyServerLiveEnd liveEndTask;
     private ApplyCreateRoom createRoomProcess;
 
 
-    class NotifyServerLiveEnd extends AsyncTask<String, Integer, LiveInfoJson> {
+    //获取
+    private GetMemberListTask mGetMemListTask;
+
+    class GetMemberListTask extends AsyncTask<String, Integer, ArrayList<MemberID>> {
 
         @Override
-        protected LiveInfoJson doInBackground(String... strings) {
-            return UserServerHelper.getInstance().notifyServerLiveStop(strings[0]);
+        protected ArrayList<MemberID> doInBackground(String... strings) {
+            //1上报成员
+            UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(), 0);
+            //2 拉取成员列表
+            return UserServerHelper.getInstance().getMemberList();
         }
 
         @Override
-        protected void onPostExecute(LiveInfoJson result) {
+        protected void onPostExecute(ArrayList<MemberID> result) {
+            if (mLiveView != null)
+                mLiveView.refreshMember(result);
+
         }
     }
 
@@ -96,27 +105,32 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     /**
      * 申请房间
      */
-    private void createRoomProcess() {
-        createRoomProcess = new ApplyCreateRoom();
+    private void startCreateRoom() {
+        createRoomProcess = new ApplyCreateRoom(); //申请房间
         createRoomProcess.execute();
 
     }
 
 
     /**
+     * 申请房间
+     */
+    public void pullMemberList() {
+        mGetMemListTask = new GetMemberListTask(); //申请房间
+        mGetMemListTask.execute();
+
+    }
+
+    /**
      * 上报房间
      */
     private void NotifyServerLiveTask() {
-//        liveEndTask = new NotifyServerLiveEnd();
-//        liveEndTask.execute(MySelfInfo.getInstance().getId());
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 UserServerHelper.getInstance().notifyCloseLive();
             }
         }).start();
-
 
     }
 
@@ -139,12 +153,12 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
      */
     public void startEnterRoom() {
         if (MySelfInfo.getInstance().isCreateRoom() == true) {
-//            createRoom();
-            createRoomProcess();
+            startCreateRoom();
         } else {
             joinRoom();
         }
     }
+
 
     public void startExitRoom() {
         ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
@@ -331,44 +345,43 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         parseIMMessage(list);
     }
 
+
     /**
      * 上报房间信息
      */
-    private void notifyServerCreateRoom() {
+    public void notifyNewRoomInfo() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 JSONObject liveInfo = null;
                 try {
                     liveInfo = new JSONObject();
-                    if (TextUtils.isEmpty(CurLiveInfo.getTitle())) {
-                        liveInfo.put("title", mContext.getString(R.string.text_live_default_title));
-                    } else {
-                        liveInfo.put("title", CurLiveInfo.getTitle());
-                    }
-                    liveInfo.put("cover", CurLiveInfo.getCoverurl());
-                    liveInfo.put("chatRoomId", CurLiveInfo.getChatRoomId());
-                    liveInfo.put("avRoomId", CurLiveInfo.getRoomNum());
-                    JSONObject hostinfo = new JSONObject();
-                    hostinfo.put("uid", MySelfInfo.getInstance().getId());
-                    hostinfo.put("avatar", MySelfInfo.getInstance().getAvatar());
-                    hostinfo.put("username", MySelfInfo.getInstance().getNickName());
+                    liveInfo.put("token", MySelfInfo.getInstance().getToken());
 
-                    liveInfo.put("host", hostinfo);
+                    JSONObject room = new JSONObject();
+                    if (TextUtils.isEmpty(CurLiveInfo.getTitle())) {
+                        room.put("title", mContext.getString(R.string.text_live_default_title));
+                    } else {
+                        room.put("title", CurLiveInfo.getTitle());
+                    }
+                    room.put("roomnum", MySelfInfo.getInstance().getMyRoomNum());
+                    room.put("type", "live");
+                    room.put("groupid", "" + CurLiveInfo.getRoomNum());
+                    room.put("cover", CurLiveInfo.getCoverurl());
+                    room.put("appid", Constants.SDK_APPID);
+                    liveInfo.put("room", room);
+
                     JSONObject lbs = new JSONObject();
                     lbs.put("longitude", CurLiveInfo.getLong1());
                     lbs.put("latitude", CurLiveInfo.getLat1());
                     lbs.put("address", CurLiveInfo.getAddress());
                     liveInfo.put("lbs", lbs);
-                    liveInfo.put("appid", Constants.SDK_APPID);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 if (liveInfo != null) {
-                    SxbLog.standardEnterRoomLog(TAG, "upload room info to serve", "", "room id " + CurLiveInfo.getRoomNum());
-                    UserServerHelper.getInstance().notifyServerNewLiveInfo(liveInfo);
+                    SxbLog.standardEnterRoomLog(TAG, "upload room info to serve", "", "room id " + liveInfo.toString());
+                    UserServerHelper.getInstance().reporNewtRoomInfo(liveInfo.toString());
                 }
 
             }
@@ -437,7 +450,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 bCameraOn = true;
                 bMicOn = true;
                 mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
-                notifyServerCreateRoom();
+                notifyNewRoomInfo();
             }
 
             @Override
@@ -450,32 +463,6 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         });
     }
 
-
-    private void createRoombyId(int avRoom) {
-        ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId())
-                .roomDisconnectListener(this)
-                .controlRole(Constants.HOST_ROLE)
-                .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
-                .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
-        ILVLiveManager.getInstance().createRoom(avRoom, hostOption, new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                ILiveLog.d(TAG, "ILVB-SXB|startEnterRoom->create room sucess");
-                bCameraOn = true;
-                bMicOn = true;
-                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
-                notifyServerCreateRoom();
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                ILiveLog.d(TAG, "ILVB-SXB|startEnterRoom->create room failed:" + module + "|" + errCode + "|" + errMsg);
-                if (null != mLiveView) {
-                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
-                }
-            }
-        });
-    }
 
     private void joinRoom() {
         ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
