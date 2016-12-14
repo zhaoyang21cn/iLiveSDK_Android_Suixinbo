@@ -95,11 +95,11 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
         }
         holder.tvMembers.setText("");
         holder.tvAdmires.setText("");
-        if (!TextUtils.isEmpty(data.getLbs().getAddress())) {
-            holder.tvLbs.setText(UIUtils.getLimitString(data.getLbs().getAddress(), 9));
-        }else{
-            holder.tvLbs.setText(getContext().getString(R.string.live_unknown));
-        }
+//        if (!TextUtils.isEmpty(data.getLbs().getAddress())) {
+//            holder.tvLbs.setText(UIUtils.getLimitString(data.getLbs().getAddress(), 9));
+//        }else{
+//            holder.tvLbs.setText(getContext().getString(R.string.live_unknown));
+//        }
 
         return convertView;
     }
