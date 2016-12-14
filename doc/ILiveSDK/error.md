@@ -4,7 +4,7 @@
 模块名称常量|模块名称取值|错误码
 :--|:--|:--:
 Module_ILIVESDK|ILiveSDK|见下表
-Module_AVSDK|AVSDK|[查看](https://www.qcloud.com/doc/product/268/3223)
+Module_AVSDK|AVSDK|[查看](./avsdkErr.md)
 Module_IMSDK|IMSDK|[查看](https://www.qcloud.com/doc/product/269/1671)
 Module_TLSSDK|TLSSDK|[查看](http://bbs.qcloud.com/thread-8309-1-1.html)
 
