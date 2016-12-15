@@ -615,11 +615,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     if (mLiveView != null)
                         mLiveView.memberJoin(identifier, nickname);
                     break;
-                case Constants.AVIMCMD_EXITLIVE:
-                    //mLiveView.refreshText("quite live", sendId);
-                    if (mLiveView != null)
-                        mLiveView.memberQuit(identifier, nickname);
-                    break;
+
                 case Constants.AVIMCMD_MULTI_CANCEL_INTERACT://主播关闭摄像头命令
                     //如果是自己关闭Camera和Mic
                     String closeId = json.getString(Constants.CMD_PARAM);
@@ -641,9 +637,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
                     toggleMic();
                     break;
-//                case Constants.AVIMCMD_HOST_LEAVE:
-//                    mLiveView.hostLeave(identifier, nickname);
-//                    break;
+    //                case Constants.AVIMCMD_HOST_LEAVE:
+    //                    mLiveView.hostLeave(identifier, nickname);
+    //                    break;
                 case Constants.AVIMCMD_HOST_BACK:
                     mLiveView.hostBack(identifier, nickname);
                 default:

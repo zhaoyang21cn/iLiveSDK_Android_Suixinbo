@@ -28,6 +28,8 @@ public class RoomInfoJson {
         private String type;
         private String groupid;
         private String cover;
+        private int thumbup;
+        private int memsize;
 
         public String getTitle() {
             return title;
@@ -49,6 +51,17 @@ public class RoomInfoJson {
             return cover;
         }
 
+
+        public int getThumbup() {
+            return thumbup;
+        }
+
+        public int getMemsize() {
+            return memsize;
+        }
+
+
+
         @Override
         public String toString() {
             return "HOST{" +
@@ -57,6 +70,8 @@ public class RoomInfoJson {
                     ", type='" + type + '\'' +
                     ", groupid='" + groupid + '\'' +
                     ", cover='" + cover + '\'' +
+                    ", thumbup='" + thumbup + '\'' +
+                    ", memsize='" + memsize + '\'' +
                     '}';
         }
     }

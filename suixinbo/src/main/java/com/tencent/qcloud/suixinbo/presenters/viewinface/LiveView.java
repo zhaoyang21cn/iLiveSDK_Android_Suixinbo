@@ -33,10 +33,6 @@ public interface LiveView extends MvpView {
 
     void memberJoin(String id, String name);
 
-    void memberQuit(String id, String name);
-
-    void readyToQuit();
-
     void hideInviteDialog();
 
     void pushStreamSucc(TIMAvManager.StreamRes streamRes);

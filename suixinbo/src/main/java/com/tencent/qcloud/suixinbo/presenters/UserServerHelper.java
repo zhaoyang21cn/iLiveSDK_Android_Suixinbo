@@ -1,21 +1,16 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.utils.Constants;
-import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +18,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -280,6 +274,7 @@ public class UserServerHelper {
             jasonPacket.put("role", role);
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
             jasonPacket.put("roomnum", MySelfInfo.getInstance().getMyRoomNum());
+            jasonPacket.put("thumbup",CurLiveInfo.getAdmires());
             String json = jasonPacket.toString();
             String res = post(HEART_BEAT, json);
             JSONTokener jsonParser = new JSONTokener(res);
@@ -372,6 +367,7 @@ public class UserServerHelper {
 
             String json = jasonPacket.toString();
             String res = post(REPORT_ME, json);
+            ILiveLog.i(TAG,"reportMe "+role+" action " + action);
             JSONTokener jsonParser = new JSONTokener(res);
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
@@ -498,202 +494,6 @@ public class UserServerHelper {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * 同步Server 新创建房间信息
-     */
-    public int notifyServerNewLiveInfo(JSONObject reg) {
-
-        try {
-
-            String res = post(NEW_ROOM_INFO, reg.toString());
-            SxbLog.i(TAG, "notifyServer live start  liveinfo: " + res);
-            JSONTokener jsonParser = new JSONTokener(res);
-            JSONObject response = (JSONObject) jsonParser.nextValue();
-
-            int code = response.getInt("errorCode");
-            if (code == 0) {
-                return code;
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-
-    /**
-     * 同步Server 关闭房间信息
-     */
-    public LiveInfoJson notifyServerLiveStop(String id) {
-        try {
-            JSONObject stopLive = new JSONObject();
-            stopLive.put("uid", id);
-            stopLive.put("watchCount", 1000);
-            stopLive.put("admireCount", 0);
-            stopLive.put("timeSpan", 200);
-            String json = stopLive.toString();
-            String res = post(STOP_ROOM, json);
-            SxbLog.i(TAG, "notifyServer live stop  liveinfo: " + res);
-            JSONTokener jsonParser = new JSONTokener(res);
-            JSONObject response = (JSONObject) jsonParser.nextValue();
-
-            int code = response.getInt("errorCode");
-            if (code == 0) {
-                JSONObject data = response.getJSONObject("data");
-                JSONObject record = data.getJSONObject("record");
-                String recordS = record.toString();
-                Gson gson = new GsonBuilder().create();
-                LiveInfoJson result = gson.fromJson(recordS, LiveInfoJson.class);
-                return result;
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    /**
-     * 获取自己的房间
-     */
-    public void getMyRoomId(final Context context) {
-        try {
-            JSONObject myId = new JSONObject();
-            myId.put("uid", MySelfInfo.getInstance().getId());
-            String response = UserServerHelper.getInstance().post(GET_MYROOMID, myId.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                JSONObject data = reg_response.getJSONObject("data");
-                int id = data.getInt("avRoomId");
-                MySelfInfo.getInstance().setMyRoomNum(id);
-                MySelfInfo.getInstance().writeToCache(context.getApplicationContext());
-            } else {
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 获取直播列表
-     *
-     * @param page     页数
-     * @param pagesize 每页个数
-     * @return 返回直播列表
-     */
-    public ArrayList<LiveInfoJson> getLiveList(int page, int pagesize) {
-        try {
-            JSONObject req = new JSONObject();
-            req.put("pageIndex", page);
-            req.put("pageSize", pagesize);
-            req.put("appid", Constants.SDK_APPID);
-            String response = UserServerHelper.getInstance().post(GET_LIVELIST, req.toString());
-            getRoomList();
-            SxbLog.i(TAG, "getLiveList " + response.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                JSONObject data = reg_response.getJSONObject("data");
-                JSONArray record = data.getJSONArray("recordList");
-                Type listType = new TypeToken<ArrayList<LiveInfoJson>>() {}.getType();
-                ArrayList<LiveInfoJson> result = new Gson().fromJson(record.toString(), listType);
-                return result;
-
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
-
-    public void sendHeartBeat(String userid, int watchCount, int admireCount, int timeSpan) {
-        try {
-            JSONObject req = new JSONObject();
-            req.put("uid", userid);
-            req.put("watchCount", watchCount);
-            req.put("admireCount", admireCount);
-            req.put("timeSpan", timeSpan);
-            String response = UserServerHelper.getInstance().post(SEND_HEARTBEAT, req.toString());
-
-            SxbLog.i(TAG, "sendHeartBeat " + response.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                SxbLog.i(TAG, "sendHeartBeat is Ok");
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getCosSig() {
         try {
             String response = UserServerHelper.getInstance().post(GET_COS_SIG, "");
@@ -714,24 +514,5 @@ public class UserServerHelper {
         return null;
     }
 
-
-    /**
-     * 密码加密
-     */
-    public static String encryptBASE64(String str) {
-        if (str == null || str.length() == 0) {
-            return null;
-        }
-        try {
-            byte[] encode = str.getBytes("UTF-8");
-            // base64 加密
-            return new String(Base64.encode(encode, 0, encode.length, Base64.DEFAULT), "UTF-8");
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
 }

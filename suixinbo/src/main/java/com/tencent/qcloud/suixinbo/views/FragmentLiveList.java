@@ -67,8 +67,8 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                     CurLiveInfo.setHostName("");
                     CurLiveInfo.setHostAvator("");
                     CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
-                    CurLiveInfo.setMembers(0); // 添加自己
-                    CurLiveInfo.setAdmires(0);
+                    CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
+                    CurLiveInfo.setAdmires(item.getInfo().getThumbup());
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }else{
@@ -80,8 +80,8 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                     CurLiveInfo.setHostName("");
                     CurLiveInfo.setHostAvator("");
                     CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
-                    CurLiveInfo.setMembers(1); // 添加自己
-                    CurLiveInfo.setAdmires(1);
+                    CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
+                    CurLiveInfo.setAdmires(item.getInfo().getThumbup());
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }

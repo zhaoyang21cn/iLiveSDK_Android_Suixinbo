@@ -263,7 +263,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnCtrlMic.setOnClickListener(this);
         BtnHungup.setOnClickListener(this);
         roomId = (TextView) findViewById(R.id.room_id);
-//        roomId.setText(CurLiveInfo.getRoomNum());
 
         //for 测试用
         TextView paramVideo = (TextView) findViewById(R.id.param_video);
@@ -550,8 +549,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else {
             mLiveHelper.startExitRoom();
-//            mLiveHelper.perpareQuitRoom(true);
-//            mEnterRoomHelper.quiteLive();
+
         }
     }
 
@@ -567,7 +565,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onClick(View v) {
                 //如果是直播，发消息
                 if (null != mLiveHelper) {
-//                    mLiveHelper.perpareQuitRoom(true);
                     mLiveHelper.startExitRoom();
                     if (isPushed) {
                         mLiveHelper.stopPush();
@@ -584,33 +581,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
         });
     }
-//
-//    private void updateHostLeaveLayout() {
-//        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-//            return;
-//        } else {
-//            // 退出房间或主屏为主播且无主播画面显示主播已离开
-//            if (!bInAvRoom || (CurLiveInfo.getHostID().equals(backGroundId) && !mRenderUserList.contains(backGroundId))) {
-//                mHostLeaveLayout.setVisibility(View.VISIBLE);
-//            } else {
-//                mHostLeaveLayout.setVisibility(View.GONE);
-//            }
-//        }
-//    }
 
-//    /**
-//     * 被动退出直播
-//     */
-//    private void quiteLivePassively() {
-//        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
-//        mLiveHelper.perpareQuitRoom(false);
-////        mEnterRoomHelper.quiteLive();
-//    }
-
-    @Override
-    public void readyToQuit() {
-        mLiveHelper.startExitRoom();
-    }
 
     /**
      * 完成进出房间流程
@@ -620,6 +591,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
+
         Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
         bInAvRoom = true;
@@ -650,6 +622,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(),1);//通知server 我下线了
+            }
+        }.start();
+
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             if ((getBaseContext() != null) && (null != mDetailDialog) && (mDetailDialog.isShowing() == false)) {
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_QUIT_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "quite room callback"
@@ -661,20 +641,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mDetailAdmires.setText("" + CurLiveInfo.getAdmires());
                 mDetailWatchCount.setText("" + watchCount);
                 mDetailDialog.show();
-                //发送
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(),1);//通知server 我下线了
-                    }
-                }.start();
+
 
             }
         } else {
                 clearOldData();
                 finish();
         }
+
+        //发送
+
         bInAvRoom = false;
     }
 
@@ -714,19 +690,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         watchCount++;
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
 
-        CurLiveInfo.setMembers(CurLiveInfo.getMembers() + 1);
-        tvMembers.setText("" + CurLiveInfo.getMembers());
     }
 
-    @Override
-    public void memberQuit(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "quite live", Constants.MEMBER_EXIT);
 
-        if (CurLiveInfo.getMembers() > 1) {
-            CurLiveInfo.setMembers(CurLiveInfo.getMembers() - 1);
-            tvMembers.setText("" + CurLiveInfo.getMembers());
-        }
-    }
 
     @Override
     public void hostLeave(String id, String name) {
@@ -742,40 +708,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     public void refreshMember(ArrayList<MemberID> memlist) {
         tvMembers.setText("" + memlist.size());
     }
-//
-//    /**
-//     * 有成员退群
-//     *
-//     * @param list 成员ID 列表
-//     */
-//    @Override
-//    public void memberQuiteLive(String[] list) {
-//        if (list == null) return;
-//        for (String id : list) {
-//            SxbLog.i(TAG, "memberQuiteLive id " + id);
-//            if (CurLiveInfo.getHostID().equals(id)) {
-//                if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
-//                    quiteLivePassively();
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 有成员入群
-//     *
-//     * @param list 成员ID 列表
-//     */
-//    @Override
-//    public void memberJoinLive(final String[] list) {
-//    }
-//
-//    @Override
-//    public void alreadyInLive(String[] list) {
-//        for (String id : list) {
-//            mRootView.renderVideoView(true, id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
-//        }
-//
-//    }
+
 
     /**
      * 红点动画
@@ -1043,7 +976,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else if (i == R.id.member_send_good) {// 添加飘星动画
             mHeartLayout.addFavor();
             if (checkInterval()) {
-                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_PRAISE, "", CurLiveInfo.getHostID());
+                mLiveHelper.sendGroupCmd(Constants.AVIMCMD_PRAISE, "");
                 CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
                 tvAdmires.setText("" + CurLiveInfo.getAdmires());
             } else {

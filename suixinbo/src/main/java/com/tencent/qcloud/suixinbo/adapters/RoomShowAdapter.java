@@ -93,8 +93,8 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
         }else{
             holder.tvHost.setText("@" + UIUtils.getLimitString(data.getHostId(), 10));
         }
-        holder.tvMembers.setText("");
-        holder.tvAdmires.setText("");
+        holder.tvMembers.setText(""+data.getInfo().getMemsize());
+        holder.tvAdmires.setText(""+data.getInfo().getThumbup());
 //        if (!TextUtils.isEmpty(data.getLbs().getAddress())) {
 //            holder.tvLbs.setText(UIUtils.getLimitString(data.getLbs().getAddress(), 9));
 //        }else{
