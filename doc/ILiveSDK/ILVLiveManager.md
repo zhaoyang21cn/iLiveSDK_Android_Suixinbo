@@ -85,16 +85,18 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
-            //创建房间
-            ILiveRoomManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
+           //创建房间
+            ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-                    Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg,   Toast.LENGTH_SHORT).show();
                 }
             });
 ```
