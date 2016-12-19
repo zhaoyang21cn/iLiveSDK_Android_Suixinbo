@@ -1,4 +1,4 @@
-# ILiveSDK
+# iLiveSDK
 ILiveSDK 提供了账号登录，音视频互动，文本互动等基础功能，顺利的话一天之内即可集成音视频能力。
 
 支持以下场景     
@@ -7,8 +7,8 @@ ILiveSDK 提供了账号登录，音视频互动，文本互动等基础功能�
 >* [视频聊天类]
      类似微信视频通话功能呢,支持多人同时上麦(最多4路)。[具体参考CallSDK](https://github.com/zhaoyang21cn/CallSDK)
 
-##ILiveSDK导入
-ILiveSDK在Android Studio上开发。
+##iLiveSDK导入
+iLiveSDK在Android Studio上开发。
 导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明](/doc/ILiveSDK/release note.md)
 
 
@@ -23,7 +23,7 @@ compile 'com.tencent.callsdk:callsdk:1.0.3'
 2新随心播 ：基于ILiveSDK接口重构的随心播   
 
 ##API文档
-[API文档(1.0.3)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+[API文档(1.0.5)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
 
 ##异常事件
 [异常事件](/doc/ILiveSDK/exception.md)
