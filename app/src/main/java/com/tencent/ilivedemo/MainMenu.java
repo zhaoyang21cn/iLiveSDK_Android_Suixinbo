@@ -39,7 +39,7 @@ public class MainMenu extends Activity {
         tvId = (TextView) findViewById(R.id.tv_id);
         lvMenu = (ListView) findViewById(R.id.lv_menu);
 
-        listDemo.add("Live: 直播");
+        listDemo.add("Live: 简单直播");
         listDemo.add("Suixinbo:新随心播");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 listDemo);
