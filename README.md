@@ -12,10 +12,10 @@ iLiveSDK在Android Studio上开发。
 导入只需要在gradle里增加两行（后面是版本号）,查看[版本更新说明](/doc/ILiveSDK/release note.md)
 
 
-直播业务（依赖核心层）     
-compile 'com.tencent.livesdk:livesdk:1.0.2'      
-核心业务
-compile 'com.tencent.ilivesdk:ilivesdk:1.0.5'   
+直播业务（依赖核心层）<br/>           
+compile 'com.tencent.livesdk:livesdk:1.0.2' <br/>             
+核心业务 <br/>         
+compile 'com.tencent.ilivesdk:ilivesdk:1.0.5' <br/>  
 
 ##DEMO
 有两个示例 <br />
