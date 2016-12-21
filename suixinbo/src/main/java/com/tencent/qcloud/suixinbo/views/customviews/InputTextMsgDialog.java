@@ -1,6 +1,5 @@
 package com.tencent.qcloud.suixinbo.views.customviews;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Rect;
@@ -14,11 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.TIMElem;
 import com.tencent.TIMMessage;
 import com.tencent.TIMTextElem;
+import com.tencent.TIMUserProfile;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.qcloud.suixinbo.R;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.LiveActivity;
 
@@ -36,7 +38,7 @@ public class InputTextMsgDialog extends Dialog {
     private EditText messageTextView;
     private static final String TAG = InputTextMsgDialog.class.getSimpleName();
     private Context mContext;
-    private Activity mVideoPlayActivity;
+    private LiveActivity mVideoPlayActivity;
     private InputMethodManager imm;
     private RelativeLayout rlDlg;
     private int mLastDiff = 0;
@@ -159,6 +161,26 @@ public class InputTextMsgDialog extends Dialog {
         ILiveRoomManager.getInstance().sendGroupMessage(Nmsg, new ILiveCallBack<TIMMessage>() {
             @Override
             public void onSuccess(TIMMessage data) {
+                //发送成回显示消息内容
+                for (int j = 0; j < data.getElementCount(); j++) {
+                    TIMElem elem = (TIMElem) data.getElement(0);
+                    TIMTextElem textElem = (TIMTextElem) elem;
+                    if (data.isSelf()) {
+                        if (mVideoPlayActivity != null)
+                            mVideoPlayActivity.refreshText(textElem.getText(), MySelfInfo.getInstance().getNickName());
+//                        handleTextMessage(elem, MySelfInfo.getInstance().getNickName());
+                    } else {
+                        TIMUserProfile sendUser = data.getSenderProfile();
+                        String name;
+                        if (sendUser != null) {
+                            name = sendUser.getNickName();
+                        } else {
+                            name = data.getSender();
+                        }
+                        if (mVideoPlayActivity != null)
+                            mVideoPlayActivity.refreshText(textElem.getText(), name);
+                    }
+                }
                 SxbLog.d(TAG, "sendGroupMessage->success");
             }
 

@@ -1041,7 +1041,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else if (i == R.id.member_send_good) {// 添加飘星动画
             mHeartLayout.addFavor();
             if (checkInterval()) {
-                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_PRAISE, "", CurLiveInfo.getHostID());
+                mLiveHelper.sendGroupCmd(Constants.AVIMCMD_PRAISE, "");
                 CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
                 tvAdmires.setText("" + CurLiveInfo.getAdmires());
             } else {
@@ -1819,4 +1819,21 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mLiveHelper.startEnterRoom();
         }
     }
+
+
+//    public void forSevenVersion(){
+//        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+//        params.format = PixelFormat.RGBA_8888;
+//        params.gravity = Gravity.LEFT | Gravity.TOP;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            if(Build.VERSION.SDK_INT > 24){
+//                params.type = WindowManager.LayoutParams.TYPE_PHONE;
+//            }else{
+//                params.type = WindowManager.LayoutParams.TYPE_TOAST;
+//            }
+//        } else {
+//            params.type = WindowManager.LayoutParams.TYPE_PHONE;
+//        }
+//        addContentView(,params);
+//    }
 }
