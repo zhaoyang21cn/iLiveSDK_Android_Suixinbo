@@ -9,13 +9,13 @@ iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能�
 
 ##iLiveSDK导入
 iLiveSDK在Android Studio上开发。
-导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明](/doc/ILiveSDK/release note.md)
+导入只需要在gradle里增加两行（后面是版本号）,查看[版本更新说明](/doc/ILiveSDK/release note.md)
 
 
-直播业务加载       
-compile 'com.tencent.livesdk:livesdk:1.0.1'      
-电话业务加载     
-compile 'com.tencent.callsdk:callsdk:1.0.3'       
+直播业务功能       
+compile 'com.tencent.livesdk:livesdk:1.0.2'      
+核心功能     
+compile 'com.tencent.ilivesdk:ilivesdk:1.0.5'      
             
 ##DEMO
 有两个示例 <br />
