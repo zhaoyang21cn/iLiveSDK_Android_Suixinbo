@@ -17,6 +17,7 @@ compile 'com.tencent.livesdk:livesdk:1.0.2'
 核心功能     
 compile 'com.tencent.ilivesdk:ilivesdk:1.0.5'      
             
+
 ##DEMO
 有两个示例 <br />
 1简单直播 ：直播主线流程示例  <br />
