@@ -1,6 +1,6 @@
 ##Release Note
 ###V1.0.6 (2016-12-21)
-- PC多路流(摄像头，屏幕分享)支持，影响AVRootView中接口findUserViewIndex,closeUserView,bindIdAndView,getUserAvVideoView
+- PC多路流(摄像头，屏幕分享)支持，影响AVRootView中接口findUserViewIndex,closeUserView,bindIdAndView,getUserAvVideoView[需传视频类型，如AVView.VIDEO_SRC_TYPE_CAMERA]
 - 优化视频请求流程
 
 ###V1.0.5 (2016-12-19)
