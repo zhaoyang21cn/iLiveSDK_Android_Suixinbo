@@ -71,7 +71,7 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
         if (!TextUtils.isEmpty(data.getInfo().getTitle())){
             SxbLog.d(TAG, "load cover: " + data.getInfo().getCover());
             RequestManager req = Glide.with(mActivity);
-//            req.load(data.getInfo().getCover()).into(holder.ivCover); //获取网络图片
+            req.load(data.getInfo().getCover()).into(holder.ivCover); //获取网络图片
             holder.ivCover.setImageResource(R.drawable.cover_background);
         }else{
             holder.ivCover.setImageResource(R.drawable.cover_background);

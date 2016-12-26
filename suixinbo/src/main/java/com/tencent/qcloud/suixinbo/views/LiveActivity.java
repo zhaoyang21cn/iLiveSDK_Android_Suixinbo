@@ -297,7 +297,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             inviteView2.setOnClickListener(this);
             inviteView3.setOnClickListener(this);
 
-
+            tvAdmires.setVisibility(View.VISIBLE);
             pushBtn = (TextView) findViewById(R.id.push_btn);
             pushBtn.setVisibility(View.VISIBLE);
             pushBtn.setOnClickListener(this);
@@ -366,7 +366,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             List<String> ids = new ArrayList<>();
             ids.add(CurLiveInfo.getHostID());
             showHeadIcon(mHeadIcon, CurLiveInfo.getHostAvator());
-            mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostName(), 10));
+            mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
 
             mHostLayout = (LinearLayout) findViewById(R.id.head_up_layout);
             mHostLayout.setOnClickListener(this);
@@ -601,6 +601,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mLiveHelper.pullMemberList();
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
+                mHostNameTv.setText(MySelfInfo.getInstance().getId());
                 //开启摄像头渲染画面
                 SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();

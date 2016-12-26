@@ -10,9 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.livesdk.ILVLiveConfig;
+import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
+import com.tencent.qcloud.suixinbo.presenters.MessageEvent;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LoginView;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
@@ -45,6 +48,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             SxbLog.i(TAG, "LoginActivity onCreate");
             mLoginHeloper.iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         }
+
+        // 初始化直播模块
+        ILVLiveConfig liveConfig = new ILVLiveConfig();
+        liveConfig.messageListener(MessageEvent.getInstance());
+        ILVLiveManager.getInstance().init(liveConfig);
     }
 
     @Override
@@ -75,7 +83,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 Toast.makeText(LoginActivity.this, "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            standardLogin(mUserName.getText().toString(),mPassWord.getText().toString());
             mLoginHeloper.standardLogin(mUserName.getText().toString(), mPassWord.getText().toString());
         }
     }

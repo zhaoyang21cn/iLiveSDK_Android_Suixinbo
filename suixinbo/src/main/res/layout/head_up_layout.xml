@@ -55,9 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            android:text="willguo"
+            android:text=""
             android:textColor="@color/colorTextWhite"
             />
 
@@ -85,6 +83,7 @@
                 android:layout_marginLeft="5dp"
                 android:drawableLeft="@drawable/icon_hearts"
                 android:drawablePadding="5dp"
+                android:visibility="invisible"
                 android:text="7979"
                 android:textColor="@color/colorTextWhite" />
         </LinearLayout>
