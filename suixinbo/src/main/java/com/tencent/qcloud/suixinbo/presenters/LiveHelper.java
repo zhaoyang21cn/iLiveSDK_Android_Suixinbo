@@ -17,6 +17,7 @@ import com.tencent.TIMTextElem;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
+import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLog;
@@ -340,7 +341,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void upMemberVideo(){
-        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_AUTH, Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 SxbLog.d(TAG, "upToVideoMember->success");
@@ -356,7 +357,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void downMemberVideo(){
-        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 bMicOn = false;
@@ -575,7 +576,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                         downMemberVideo();
                     }
                     //其他人关闭小窗口
-                    ILiveRoomManager.getInstance().getRoomView().closeUserView(closeId, true);
+                    ILiveRoomManager.getInstance().getRoomView().closeUserView(closeId, AVView.VIDEO_SRC_TYPE_CAMERA,true);
                     mLiveView.hideInviteDialog();
                     mLiveView.refreshUI(closeId);
                     break;

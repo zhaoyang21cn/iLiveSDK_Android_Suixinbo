@@ -5,12 +5,13 @@ import android.content.Context;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMValueCallBack;
+import com.tencent.av.sdk.AVView;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.qcloud.suixinbo.model.MemberInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.MembersDialogView;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
-import com.tencent.ilivesdk.core.ILiveRoomManager;
-import com.tencent.ilivesdk.view.AVVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class GetMemberListHelper extends Presenter {
             MemberInfo member = new MemberInfo();
             member.setUserId(item.getUser());
             //if (QavsdkControl.getInstance().containIdView(item.getUser())) {
-            AVVideoView avVideoView = ILiveRoomManager.getInstance().getRoomView().getUserAvVideoView(item.getUser());
+            AVVideoView avVideoView = ILiveRoomManager.getInstance().getRoomView().getUserAvVideoView(item.getUser(), AVView.VIDEO_SRC_TYPE_CAMERA);
             if (null != avVideoView && avVideoView.isRendering()){
                 member.setIsOnVideoChat(true);
             }

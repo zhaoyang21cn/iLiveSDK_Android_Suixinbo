@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiveActivity extends Activity implements View.OnClickListener {
-    Button createBtn, joinbtn, backBtn, sendBtn, inviteBtn, closeMemBtn;
+    Button createBtn, joinbtn, switchBtn,backBtn, sendBtn, inviteBtn, closeMemBtn;
     AVRootView avRootView;
     Button logoutBtn,loginLive,registLive;
     EditText roomNum, roomNumJoin, textInput, memId, hostIdInput,myId,myPwd;
@@ -41,6 +41,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     FrameLayout loginView;
     private static final String TAG = LiveActivity.class.getSimpleName();
     private final int REQUEST_PHONE_PERMISSIONS = 0;
+    private int mCurCameraId;
 
     private boolean bLogin = false, bEnterRoom = false;
 
@@ -52,6 +53,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         createBtn = (Button) findViewById(R.id.create);
         joinbtn = (Button) findViewById(R.id.join);
         backBtn = (Button) findViewById(R.id.back);
+        switchBtn =  (Button) findViewById(R.id.switchRoom);
         sendBtn = (Button) findViewById(R.id.text_send);
         inviteBtn = (Button) findViewById(R.id.invite);
         closeMemBtn = (Button) findViewById(R.id.close_mem);
@@ -82,12 +84,13 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         closeMemBtn.setOnClickListener(this);
         loginLive.setOnClickListener(this);
         registLive.setOnClickListener(this);
+        switchBtn.setOnClickListener(this);
         checkPermission();
 
 
         Log.i(TAG, "onCreate: initSdk ");
         //初始化SDK
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400001692, 884);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400013700, 7285);
 
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
         // 关闭IM群组
@@ -105,7 +108,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE:
                         Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
                         ILiveLog.d(TAG, "ILVB-LiveApp|received ");
-                        ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+                        ILVLiveManager.getInstance().upToVideoMember("LiveGuest",new ILiveCallBack() {  //上麦角色
                             @Override
                             public void onSuccess(Object data) {
 
@@ -121,7 +124,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                         break;
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE:
-                        ILVLiveManager.getInstance().downToNorMember(ILVLiveConstants.NORMAL_MEMBER_AUTH, ILVLiveConstants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+                        ILVLiveManager.getInstance().downToNorMember("Guest", new ILiveCallBack() {
                             @Override
                             public void onSuccess(Object data) {
 
@@ -243,6 +246,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
+            mCurCameraId = ILiveConstants.FRONT_CAMERA;
+
             //创建房间
             ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
@@ -342,10 +347,14 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-
+                    Log.i(TAG, "onError: "+errMsg);
                 }
 
             });
+
+
+//            mCurCameraId = (ILiveConstants.FRONT_CAMERA==mCurCameraId) ? ILiveConstants.BACK_CAMERA : ILiveConstants.FRONT_CAMERA;
+//            ILiveRoomManager.getInstance().switchCamera(mCurCameraId);
 
 
         }
@@ -385,6 +394,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(LiveActivity.this, "register failed : "+errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
+
+
         }
 
         if(view.getId()==R.id.login_live){
@@ -410,9 +421,39 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-
+                    Toast.makeText(LiveActivity.this, module + "|login fail " + errCode + " " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        if(view.getId()==R.id.switchRoom){
+            Log.i(TAG, "onClick: switchRoom ");
+            int room = Integer.parseInt("" + roomNumJoin.getText());
+            String hostId = "" + hostIdInput.getText();
+            //加入房间配置项
+            ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
+                    .autoCamera(false) //是否自动打开摄像头
+                    .controlRole("Guest") //角色设置
+                    .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
+                    .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO) //是否开始半自动接收
+                    .autoMic(false);//是否自动打开mic
+            //加入房间
+            ILVLiveManager.getInstance().switchRoom(room, memberOption, new ILiveCallBack() {
+                @Override
+                public void onSuccess(Object data) {
+                    bEnterRoom = true;
+//                    Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
+//                    Toast.makeText(LiveActivity.this, module + "|switchRoom fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
         }
     }
 

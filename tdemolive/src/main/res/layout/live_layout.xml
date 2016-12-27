@@ -1,170 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
 
     <com.tencent.ilivesdk.view.AVRootView
-        android:id="@+id/av_root_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" />
+            android:id="@+id/av_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/my_login_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/btn_blue"
-            android:textSize="22sp" />
+                android:id="@+id/my_login_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/btn_blue"
+                android:textSize="22sp"/>
 
         <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="0dp"
-            android:text="logout"
-            android:textColor="@color/white" />
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="0dp"
+                android:text="logout"
+                android:textColor="@color/white"/>
     </FrameLayout>
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/room_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:hint="roomid(int)"
-            android:inputType="number"
-            android:textColor="@color/btn_blue"
-            android:textColorHint="@color/colorGray3" />
+                android:id="@+id/room_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:hint="roomid(int)"
+                android:inputType="number"
+                android:textColor="@color/btn_blue"
+                android:textColorHint="@color/colorGray3"/>
 
         <Button
-            android:id="@+id/create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/room_num"
-            android:text="createRoom"
-            android:textColor="@color/white" />
+                android:id="@+id/create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/room_num"
+                android:text="createRoom"
+                android:textColor="@color/white"/>
 
         <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="backRoom"
-            android:textColor="@color/white"
-            android:visibility="invisible" />
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="backRoom"
+                android:textColor="@color/white"
+                android:visibility="invisible"/>
 
     </RelativeLayout>
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/room_num_join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="roomid(int)"
-            android:inputType="number"
-            android:textColor="@color/btn_blue"
-            android:textColorHint="@color/colorGray3" />
+                android:id="@+id/room_num_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="roomid(int)"
+                android:inputType="number"
+                android:textColor="@color/btn_blue"
+                android:textColorHint="@color/colorGray3"/>
 
 
         <EditText
-            android:id="@+id/host_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="hostId"
-            android:textColor="@color/btn_blue"
-            android:textColorHint="@color/colorGray3" />
+                android:id="@+id/host_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="hostId"
+                android:textColor="@color/btn_blue"
+                android:textColorHint="@color/colorGray3"/>
 
         <Button
-            android:id="@+id/join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="joinRoom"
-            android:textColor="@color/white" />
+                android:id="@+id/join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="joinRoom"
+                android:textColor="@color/white"/>
+
+        <Button
+                android:id="@+id/switchRoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="switch"
+                android:textColor="@color/white"/>
 
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/text_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
-            android:hint="text msg"
-            android:textColor="@color/btn_blue"
-            android:textColorHint="@color/colorGray3" />
+                android:id="@+id/text_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="text msg"
+                android:textColor="@color/btn_blue"
+                android:textColorHint="@color/colorGray3"/>
 
         <Button
-            android:id="@+id/text_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="send"
-            android:textColor="@color/white" />
+                android:id="@+id/text_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="send"
+                android:textColor="@color/white"/>
 
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:orientation="horizontal"
-        android:visibility="visible">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
         <EditText
-            android:id="@+id/mem_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
-            android:hint="mem id"
-            android:textColor="@color/btn_blue"
-            android:textColorHint="@color/colorGray3" />
+                android:id="@+id/mem_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:hint="mem id"
+                android:textColor="@color/btn_blue"
+                android:textColorHint="@color/colorGray3"/>
 
         <Button
-            android:id="@+id/invite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="invite"
-            android:textColor="@color/white" />
+                android:id="@+id/invite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="invite"
+                android:textColor="@color/white"/>
 
         <Button
-            android:id="@+id/close_mem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="closeMem"
-            android:textColor="@color/white" />
+                android:id="@+id/close_mem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="closeMem"
+                android:textColor="@color/white"/>
 
         <!--<Button-->
         <!--android:id="@+id/thumbUp"-->
@@ -177,61 +184,61 @@
 
 
     <FrameLayout
-        android:id="@+id/login_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="visible">
+            android:id="@+id/login_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="visible">
 
         <TextView
-            android:id="@+id/tips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="简单直播 (ID不能是纯数字,纯中文)" />
+                android:id="@+id/tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:text="简单直播 (ID不能是纯数字,纯中文)"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="100dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="100dp">
 
             <EditText
-                android:id="@+id/my_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="your id    "
-                android:textColor="@color/black"
-                android:textColorHint="@color/colorGray1" />
+                    android:id="@+id/my_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="your id    "
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/colorGray1"/>
 
             <EditText
-                android:id="@+id/my_pwd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:hint="your pwd  "
-                android:textColor="@color/black"
-                android:textColorHint="@color/colorGray1" />
+                    android:id="@+id/my_pwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:hint="your pwd  "
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/colorGray1"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="140dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="140dp">
 
             <Button
-                android:id="@+id/login_live"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="login" />
+                    android:id="@+id/login_live"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="login"/>
 
             <Button
-                android:id="@+id/register_live"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="register" />
+                    android:id="@+id/register_live"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="register"/>
         </LinearLayout>
     </FrameLayout>
 

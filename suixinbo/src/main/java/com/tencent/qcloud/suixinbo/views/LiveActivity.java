@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
+import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILivePushOption;
@@ -949,7 +950,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mLiveHelper.downMemberVideo();
         }
         mLiveHelper.sendGroupCmd(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, id);
-        mRootView.closeUserView(id, true);
+        mRootView.closeUserView(id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
         backToNormalCtrlView();
     }
 
