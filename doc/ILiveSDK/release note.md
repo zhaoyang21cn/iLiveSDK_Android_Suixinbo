@@ -1,7 +1,7 @@
 ##Release Note
 
 ###V1.1.0 (2016-12-27)
-- 更新到AVSDK 1.8.4.4
+- 更新到AVSDK 1.8.4.4 beta
 - 优化注销流程，修复被踢资源未回收问题
 - 在ILiveRoomManager添加切换房间接口switchRoom
 - 在ILiveRoomManager添加切换角色接口changeRole，废弃~~changeAuthAndRole~~
