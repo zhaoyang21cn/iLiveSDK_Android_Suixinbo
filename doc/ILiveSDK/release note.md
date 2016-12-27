@@ -1,7 +1,34 @@
 ##Release Note
 
+###V1.1.0 (2016-12-27)
+- 更新到AVSDK 1.8.4.4 beta
+- 优化注销流程，修复被踢资源未回收问题
+- 在ILiveRoomManager添加切换房间接口switchRoom
+- 在ILiveRoomManager添加切换角色接口changeRole，废弃~~changeAuthAndRole~~
+
+---
+
+###V1.0.6 (2016-12-21)
+- PC多路流(摄像头，屏幕分享)支持，影响AVRootView中接口findUserViewIndex,closeUserView,bindIdAndView,getUserAvVideoView[需传视频类型，如AVView.VIDEO_SRC_TYPE_CAMERA]
+- 优化视频请求流程
+
+###V1.0.5 (2016-12-19)
+- 修复状态未更新问题
+- 更新音视频模块
+- 添加arm-v7a支持
+
+---
+
+###V1.0.4 (2016-12-09)
+- 优化进房间后音频服务及摄像头回调相关流程
+- 优化美颜/美白接口，保证相互独立
+
+###V1.0.3 (2016-12-07)
+- 添加事件上报
+- 添加[关键日志](./Logs.md)输出
+
 ###V1.0.2 (2016-12-02)
-- 修复重复登录(或注快速登录)导致异常
+- 修复重复登录(或快速登录)导致异常
 - 修复录制回调重复调用
 - 在ILiveSDK中添加TIManager的获取
 
@@ -10,6 +37,8 @@
 
 ###V1.0.0 (2016-11-23)
 - 分离ILiveSDK的Core与business层(ILiveSDK=>ILiveSDK + [CallSDK](https://github.com/zhaoyang21cn/CallSDK_Android_Demo) + [LiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos/blob/master/doc/ILiveSDK/ILVLiveManager.md))
+
+---
 
 ###V0.4.1 (2016-11-22)
 - 修复切换后置摄像头相关获取cameraId不准确问题

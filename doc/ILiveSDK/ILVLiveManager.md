@@ -1,4 +1,4 @@
-#iLiveSDK直播基础接口简介
+#LiveSDK直播基础接口简介
 ## 概述
 
 LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)，实现直播业务功能封装，方便开发者快速搭建自己的直播服务平台
@@ -7,10 +7,10 @@ LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)�
 
 
 ## 集成
-LiveSDK在Android Studio上开发。 导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明]
+LiveSDK在Android Studio上开发。 导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明](./live_release.md)
 
 ```
-compile 'com.tencent.livesdk:livesdk:1.0.0'
+compile 'com.tencent.livesdk:livesdk:1.0.1'
 ```
 
 
@@ -85,16 +85,18 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
                     .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);//是否开始半自动接收
-            //创建房间
-            ILiveRoomManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
+           //创建房间
+            ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
+                    logoutBtn.setVisibility(View.INVISIBLE);
+                    backBtn.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-                    Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LiveActivity.this, module + "|create fail " + errMsg + " " + errMsg,   Toast.LENGTH_SHORT).show();
                 }
             });
 ```
@@ -160,3 +162,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 ```  
         
 [信令及上麦参见](./ILVLiveSenior.md)        
+
+##API文档
+[API文档1.0.1](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
+

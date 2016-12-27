@@ -49,6 +49,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-//    compile 'com.tencent.ilivesdk:ilivesdk:0.4.1'
-    compile 'com.tencent.livesdk:livesdk:1.0.0'
+    compile 'com.tencent.ilivesdk:ilivesdk:1.0.5'
+    compile 'com.tencent.livesdk:livesdk:1.0.2'
 }
