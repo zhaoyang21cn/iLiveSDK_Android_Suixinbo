@@ -1,0 +1,6 @@
+[submodule "iLiveSDK"]
+	path = iLiveSDK
+	url = http://git.code.oa.com/openAndroid/iLiveSDK.git
+[submodule "LiveSDK"]
+	path = LiveSDK
+	url = http://git.code.oa.com/openAndroid/LiveSDK.git
