@@ -19,8 +19,7 @@ compile 'com.tencent.livesdk:livesdk:1.0.1'
 ![](../../raw/process.png)
 
 
-###1 ILiveSDK初始化
-
+###1 初始化 
 | 接口名|  接口描述  |
 |---------|---------|
 | **initSDK** | iLiveSDK的部分类的预初始化，是所有行为的第一步，告知身份appId|
@@ -35,7 +34,11 @@ compile 'com.tencent.livesdk:livesdk:1.0.1'
 *示例
   
 ```java 
+//iLiveSDK初始化
 ILiveSDK.getInstance().initSdk(getApplicationContext(), appid, accoutype);
+//初始化直播场景
+ILVLiveConfig liveConfig = new ILVLiveConfig();
+ILVLiveManager.getInstance().init(liveConfig);
 ```  
 
 
