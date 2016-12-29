@@ -624,7 +624,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                         downMemberVideo();
                     }
                     //其他人关闭小窗口
-                    ILiveRoomManager.getInstance().getRoomView().closeUserView(closeId, true);
+//                    ILiveRoomManager.getInstance().getRoomView().closeUserView(closeId, true);
                     mLiveView.hideInviteDialog();
                     mLiveView.refreshUI(closeId);
                     break;
