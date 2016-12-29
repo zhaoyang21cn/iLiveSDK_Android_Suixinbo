@@ -35,18 +35,18 @@ import okhttp3.Response;
 public class UserServerHelper {
     private static final String TAG = UserServerHelper.class.getSimpleName();
     private static UserServerHelper instance = null;
-    public static final String REGISTER = "http://182.254.234.225/sxb/index.php?svc=account&cmd=regist";
-    public static final String LOGIN = "http://182.254.234.225/sxb/index.php?svc=account&cmd=login";
-    public static final String LOGOUT = "http://182.254.234.225/sxb/index.php?svc=account&cmd=logout";
-    public static final String APPLY_CREATE_ROOM ="http://182.254.234.225/sxb/index.php?svc=live&cmd=create";
-    public static final String REPORT_ROOM_INFO ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportroom";
-    public static final String HEART_BEAT ="http://182.254.234.225/sxb/index.php?svc=live&cmd=heartbeat";
-    public static final String STOP_ILIVE ="http://182.254.234.225/sxb/index.php?svc=live&cmd=exitroom";
-    public static final String GET_ROOMLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=roomlist";
-    public static final String REPORT_ME ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportmemid";
-    public static final String GET_MEMLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=roomidlist";
-    public static final String REPORT_RECORD ="http://182.254.234.225/sxb/index.php?svc=live&cmd=reportrecord";
-    public static final String GET_REOCORDLIST ="http://182.254.234.225/sxb/index.php?svc=live&cmd=recordlist";
+    public static final String REGISTER = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=regist";
+    public static final String LOGIN = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=login";
+    public static final String LOGOUT = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=logout";
+    public static final String APPLY_CREATE_ROOM ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=create";
+    public static final String REPORT_ROOM_INFO ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportroom";
+    public static final String HEART_BEAT ="https://sxb.qcloud.com/index.php?svc=live&cmd=heartbeat";
+    public static final String STOP_ILIVE ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=exitroom";
+    public static final String GET_ROOMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomlist";
+    public static final String REPORT_ME ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportmemid";
+    public static final String GET_MEMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomidlist";
+    public static final String REPORT_RECORD ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportrecord";
+    public static final String GET_REOCORDLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=recordlist";
 
 
 
@@ -55,7 +55,7 @@ public class UserServerHelper {
     public static final String STOP_ROOM = "http://182.254.234.225/sxb/index.php?svc=live&cmd=end";
     public static final String GET_LIVELIST = "http://182.254.234.225/sxb/index.php?svc=live&cmd=list";
     public static final String SEND_HEARTBEAT = "http://182.254.234.225/sxb/index.php?svc=live&cmd=host_heartbeat";
-    public static final String GET_COS_SIG = "http://182.254.234.225/sxb/index.php?svc=cos&cmd=get_sign";
+    public static final String GET_COS_SIG = "https://sxb.qcloud.com/sxb/index.php?svc=cos&cmd=get_sign";
 
 
     private String token = ""; //后续使用唯一标示
