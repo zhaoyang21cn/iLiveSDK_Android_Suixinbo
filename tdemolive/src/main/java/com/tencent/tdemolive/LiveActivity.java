@@ -103,7 +103,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE:
                         Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
                         ILiveLog.d(TAG, "ILVB-LiveApp|received ");
-                        ILVLiveManager.getInstance().upToVideoMember(ILVLiveConstants.VIDEO_MEMBER_AUTH, ILVLiveConstants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+                        ILVLiveManager.getInstance().upToVideoMember( "LiveGuest", new ILiveCallBack() {
                             @Override
                             public void onSuccess(Object data) {
 
@@ -119,7 +119,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                         break;
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE:
-                        ILVLiveManager.getInstance().downToNorMember(ILVLiveConstants.NORMAL_MEMBER_AUTH, ILVLiveConstants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+                        ILVLiveManager.getInstance().downToNorMember("Guest", new ILiveCallBack() {
                             @Override
                             public void onSuccess(Object data) {
 
