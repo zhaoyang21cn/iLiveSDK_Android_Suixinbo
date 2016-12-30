@@ -369,6 +369,8 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     room.put("groupid", "" + CurLiveInfo.getRoomNum());
                     room.put("cover", CurLiveInfo.getCoverurl());
                     room.put("appid", Constants.SDK_APPID);
+                    room.put("device",1);
+                    room.put("videotype", 1);
                     liveInfo.put("room", room);
 
                     JSONObject lbs = new JSONObject();
