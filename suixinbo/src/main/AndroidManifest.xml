@@ -70,6 +70,9 @@
         <activity android:name=".views.SetActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".views.ActivityReplay"
+            android:screenOrientation="portrait"
+            />
 
 
         <!--&lt;!&ndash;TLS Qal 一些服务 &ndash;&gt;-->

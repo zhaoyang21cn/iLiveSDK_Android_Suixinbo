@@ -34,7 +34,7 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
     private LayoutInflater layoutInflater;
     private ProfileInfoHelper infoHelper;
     private LoginHelper mLoginHelper;
-    private final Class fragmentArray[] = {FragmentLiveList.class, FragmentPublish.class, FragmentProfile.class};
+    private final Class fragmentArray[] = {FragmentList.class, FragmentPublish.class, FragmentProfile.class};
     private int mImageViewArray[] = {R.drawable.tab_live, R.drawable.icon_publish, R.drawable.tab_profile};
     private String mTextviewArray[] = {"live", "publish", "profile"};
     private static final String TAG = HomeActivity.class.getSimpleName();
