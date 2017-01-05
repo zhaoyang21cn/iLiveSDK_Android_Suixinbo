@@ -70,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGray6"
                     android:text="Live_title"
+                    android:maxLines="1"
                     android:textSize="@dimen/h10" />
 
                 <TextView
@@ -79,6 +80,7 @@
                     android:textColor="@color/colorTextG3"
                     android:layout_marginLeft="15dp"
                     android:text="\@host_name"
+                    android:maxLines="1"
                     android:textSize="@dimen/h6"/>
             </LinearLayout>
 
