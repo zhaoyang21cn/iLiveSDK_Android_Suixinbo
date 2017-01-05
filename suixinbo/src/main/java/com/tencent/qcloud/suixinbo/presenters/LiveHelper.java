@@ -93,7 +93,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
         @Override
         protected void onPostExecute(UserServerHelper.ResquestResult result) {
-            if (result.getErrorCode() == 0) {
+            if (result!=null && result.getErrorCode() == 0) {
                 createRoom();
             } else {
                 Log.i(TAG, "ApplyCreateRoom onPostExecute: " + result.getErrorInfo());
