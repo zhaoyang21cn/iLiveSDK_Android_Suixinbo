@@ -370,7 +370,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     room.put("cover", CurLiveInfo.getCoverurl());
                     room.put("appid", Constants.SDK_APPID);
                     room.put("device",1);
-                    room.put("videotype", 1);
+                    room.put("videotype", 0);
                     liveInfo.put("room", room);
 
                     JSONObject lbs = new JSONObject();
@@ -407,7 +407,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void upMemberVideo() {
-        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_AUTH, Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 SxbLog.d(TAG, "upToVideoMember->success");
@@ -423,7 +423,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void downMemberVideo() {
-        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 bMicOn = false;

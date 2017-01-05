@@ -47,7 +47,8 @@ public class UserServerHelper {
     public static final String GET_MEMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomidlist";
     public static final String REPORT_RECORD ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportrecord";
     public static final String GET_REOCORDLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=recordlist";
-
+    public static final String GET_PLAYERLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=livestreamlist";
+    public static final String GET_ROOM_PLAYURL ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=getroomplayurl";
 
 
     public static final String GET_MYROOMID = "http://182.254.234.225/sxb/index.php?svc=user_av_room&cmd=get";
@@ -92,14 +93,6 @@ public class UserServerHelper {
         return instance;
     }
 
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getSig() {
-        return Sig;
-    }
 
 
     public static final MediaType JSON
@@ -307,7 +300,6 @@ public class UserServerHelper {
             JSONTokener jsonParser = new JSONTokener(res);
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
-            String errorInfo = response.getString("errorInfo");
             if(code ==0){
                 JSONObject data = response.getJSONObject("data");
                 JSONArray record = data.getJSONArray("rooms");
@@ -473,6 +465,58 @@ public class UserServerHelper {
 //        return null;
 //    }
 
+
+
+    /**
+     * 心跳上报
+     */
+    public ResquestResult getPlayUrlList (int page,int size) {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("index", page);
+            jasonPacket.put("size",size);
+            String json = jasonPacket.toString();
+            String res = post(GET_PLAYERLIST, json);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            return new ResquestResult(code, errorInfo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    /**
+     * 心跳上报
+     */
+    public ResquestResult getRoomPlayUrl (int room) {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("roomnum", room);
+            String json = jasonPacket.toString();
+            String res = post(GET_ROOM_PLAYURL, json);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            if (code == 0) {
+                JSONObject data = response.getJSONObject("data");
+                String address = data.getString("address");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 

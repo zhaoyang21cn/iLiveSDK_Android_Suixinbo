@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
+import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILivePushOption;
@@ -592,7 +593,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
 
-        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
         bInAvRoom = true;
         bDelayQuit = true;
@@ -885,7 +886,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mLiveHelper.downMemberVideo();
         }
         mLiveHelper.sendGroupCmd(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, id);
-        mRootView.closeUserView(id, true);
+        mRootView.closeUserView(id, AVView.VIDEO_SRC_TYPE_CAMERA,true);
         backToNormalCtrlView();
     }
 
@@ -1099,6 +1100,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.param_video) {
             showTips = !showTips;
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    UserServerHelper.getInstance().getRoomPlayUrl(MySelfInfo.getInstance().getMyRoomNum());//通知server 我下线了
+                    UserServerHelper.getInstance().getPlayUrlList(0,10);
+                }
+            }.start();
 
         } else if (i == R.id.push_btn) {
             pushStream();
