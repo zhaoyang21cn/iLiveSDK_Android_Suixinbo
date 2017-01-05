@@ -40,7 +40,7 @@ public class UserServerHelper {
     public static final String LOGOUT = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=logout";
     public static final String APPLY_CREATE_ROOM ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=create";
     public static final String REPORT_ROOM_INFO ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportroom";
-    public static final String HEART_BEAT ="https://sxb.qcloud.com/index.php?svc=live&cmd=heartbeat";
+    public static final String HEART_BEAT =" https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=heartbeat";
     public static final String STOP_ILIVE ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=exitroom";
     public static final String GET_ROOMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomlist";
     public static final String REPORT_ME ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportmemid";
