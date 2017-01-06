@@ -701,6 +701,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void refreshMember(ArrayList<MemberID> memlist) {
+        if(tvMembers!=null)
         tvMembers.setText("" + memlist.size());
     }
 
