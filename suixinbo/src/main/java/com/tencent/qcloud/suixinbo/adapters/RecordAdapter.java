@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.tencent.bugly.imsdk.crashreport.CrashReport;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.RecordInfo;
@@ -28,6 +29,7 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
         TextView tvName;
         TextView tvHost;
         TextView tvTime;
+        TextView tvUrl;
     }
 
     public RecordAdapter(Activity activity, int resource, ArrayList<RecordInfo> objects) {
@@ -50,6 +52,7 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
             holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
             holder.tvHost = (TextView) convertView.findViewById(R.id.tv_host);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            holder.tvUrl = (TextView) convertView.findViewById(R.id.tv_url);
 
             convertView.setTag(holder);
         }
@@ -66,6 +69,7 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
         holder.tvName.setText(data.getStrName());
         holder.tvHost.setText( data.getStrUser());
         holder.tvTime.setText(data.getStrCreateTime());
+        holder.tvUrl.setText(data.getPlayUrl());
 
         return convertView;
     }
