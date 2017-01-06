@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -536,7 +535,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         if (bInAvRoom) {
             bDelayQuit = false;
             quiteLiveByPurpose();
-        }else{
+        } else {
             clearOldData();
             finish();
         }
@@ -589,20 +588,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 完成进出房间流程
-     *
-     * @param id_status
-     * @param isSucc
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
 
 //        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
-        mRootView.getViewByIndex(0).setRotate(true);
-        mRootView.getViewByIndex(0).setDiffDirectionRenderMode(AVVideoView.ILiveRenderMode.BLACK_TO_FILL);
+//        mRootView.getViewByIndex(0).setRotate(false);
+//        mRootView.getViewByIndex(0).setDiffDirectionRenderMode(AVVideoView.ILiveRenderMode.BLACK_TO_FILL);
         bInAvRoom = true;
         bDelayQuit = true;
-        roomId.setText(""+CurLiveInfo.getRoomNum());
+        roomId.setText("" + CurLiveInfo.getRoomNum());
         if (isSucc == true) {
             mLiveHelper.pullMemberList();
             //IM初始化
@@ -619,21 +615,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
 
 
-
         }
     }
 
 
-
-
-
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
-                UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(),1);//通知server 我下线了
+                UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(), 1);//通知server 我下线了
             }
         }.start();
 
@@ -652,8 +644,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
             }
         } else {
-                clearOldData();
-                finish();
+            clearOldData();
+            finish();
         }
 
         //发送
@@ -686,9 +678,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 成员状态变更
-     *
-     * @param id
-     * @param name
      */
     @Override
     public void memberJoin(String id, String name) {
@@ -698,7 +687,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
 
     }
-
 
 
     @Override
@@ -821,9 +809,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 判断是否邀请过同一个人
-     *
-     * @param id
-     * @return
      */
     private boolean hasInvited(String id) {
         if (id.equals(inviteView1.getTag())) {
@@ -887,11 +872,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else {
             //TODO 主动下麦 下麦；
             SxbLog.d(TAG, LogConstants.ACTION_VIEWER_UNSHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start unShow" +
-                LogConstants.DIV + "id " + id);
+                    LogConstants.DIV + "id " + id);
             mLiveHelper.downMemberVideo();
         }
         mLiveHelper.sendGroupCmd(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, id);
-        mRootView.closeUserView(id, AVView.VIDEO_SRC_TYPE_CAMERA,true);
+        mRootView.closeUserView(id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
         backToNormalCtrlView();
     }
 
@@ -991,25 +976,25 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
 
         } else if (i == R.id.flash_btn) {
-            switch (ILiveRoomManager.getInstance().getActiveCameraId()){
-            case ILiveConstants.FRONT_CAMERA:
-                Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
-                break;
-            case ILiveConstants.BACK_CAMERA:
-                mLiveHelper.toggleFlashLight();
-                break;
-            default:
-                Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
-                break;
+            switch (ILiveRoomManager.getInstance().getActiveCameraId()) {
+                case ILiveConstants.FRONT_CAMERA:
+                    Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
+                    break;
+                case ILiveConstants.BACK_CAMERA:
+                    mLiveHelper.toggleFlashLight();
+                    break;
+                default:
+                    Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
+                    break;
             }
         } else if (i == R.id.switch_cam) {
-            switch (ILiveRoomManager.getInstance().getCurCameraId()){
-            case ILiveConstants.FRONT_CAMERA:
-                ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
-                break;
-            case ILiveConstants.BACK_CAMERA:
-                ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
-                break;
+            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
+                case ILiveConstants.FRONT_CAMERA:
+                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
+                    break;
+                case ILiveConstants.BACK_CAMERA:
+                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
+                    break;
             }
         } else if (i == R.id.mic_btn) {
             if (mLiveHelper.isMicOn()) {
@@ -1105,12 +1090,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.param_video) {
             showTips = !showTips;
-            new Thread(){
+            new Thread() {
                 @Override
                 public void run() {
                     super.run();
                     UserServerHelper.getInstance().getRoomPlayUrl(MySelfInfo.getInstance().getMyRoomNum());//通知server 我下线了
-                    UserServerHelper.getInstance().getPlayUrlList(0,10);
+                    UserServerHelper.getInstance().getPlayUrlList(0, 10);
                 }
             }.start();
 
@@ -1147,16 +1132,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             String[] tips = strTips.split(",");
                             int loss_rate_recv = 0, loss_rate_send = 0, loss_rate_recv_udt = 0, loss_rate_send_udt = 0;
                             for (String tip : tips) {
-                                if (tip.contains("loss_rate_recv")){
+                                if (tip.contains("loss_rate_recv")) {
                                     loss_rate_recv = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_send")){
+                                if (tip.contains("loss_rate_send")) {
                                     loss_rate_send = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_recv_udt")){
+                                if (tip.contains("loss_rate_recv_udt")) {
                                     loss_rate_recv_udt = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_send_udt")){
+                                if (tip.contains("loss_rate_send_udt")) {
                                     loss_rate_send_udt = getQuality(tip);
                                 }
                             }
@@ -1165,52 +1150,37 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                 tvTipsMsg.setText(strTips);
                             }
 
-                            if (loss_rate_recv > 4000 || loss_rate_send > 4000 || loss_rate_recv_udt > 2000 || loss_rate_send_udt > 500)
-                            {
+                            if (loss_rate_recv > 4000 || loss_rate_send > 4000 || loss_rate_recv_udt > 2000 || loss_rate_send_udt > 500) {
                                 mQualityCircle.setImageResource(R.drawable.circle_red);
                             }
                             //黄色示警
-                            else if (loss_rate_recv > 2000 || loss_rate_send > 2000 || loss_rate_recv_udt > 1000 || loss_rate_send_udt > 300)
-                            {
+                            else if (loss_rate_recv > 2000 || loss_rate_send > 2000 || loss_rate_recv_udt > 1000 || loss_rate_send_udt > 300) {
                                 mQualityCircle.setImageResource(R.drawable.circle_yellow);
-                            }else{
+                            } else {
                                 mQualityCircle.setImageResource(R.drawable.circle_green);
                             }
 
                             //网络质量(暂时用丢包率表示)
                             int status = 0;
                             // 如果下行为0，证明有可能是主播端，没有下行视频，那么要看上行视频
-                            if (loss_rate_recv == 0)
-                            {
-                                if (loss_rate_send > 4000)
-                                {
+                            if (loss_rate_recv == 0) {
+                                if (loss_rate_send > 4000) {
                                     status = 3;//红色警告
-                                }
-                                else if (loss_rate_send > 2000)
-                                {
+                                } else if (loss_rate_send > 2000) {
                                     status = 2;//黄色警告
+                                } else {
+                                    status = 1;//正常
                                 }
-                                else
-                                {
+                            } else {
+                                if (loss_rate_recv > 4000) {
+                                    status = 3;//红色警告
+                                } else if (loss_rate_recv > 2000) {
+                                    status = 2;//黄色警告
+                                } else {
                                     status = 1;//正常
                                 }
                             }
-                            else
-                            {
-                                if (loss_rate_recv > 4000)
-                                {
-                                    status = 3;//红色警告
-                                }
-                                else if (loss_rate_recv > 2000)
-                                {
-                                    status = 2;//黄色警告
-                                }
-                                else
-                                {
-                                    status = 1;//正常
-                                }
-                            }
-                            switch (status){
+                            switch (status) {
                                 case 1:
                                     mQualityText.setText("network good");
                                     break;
@@ -1239,7 +1209,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         for (int i = 0; i < str.length(); ++i) {
             char c = str.charAt(i);
             if (c >= '0' && c <= '9') {
-                res = res*10 + (c-'0');
+                res = res * 10 + (c - '0');
             }
         }
         return res;
@@ -1323,10 +1293,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onClick(View view) {
 //                mVideoMemberCtrlView.setVisibility(View.VISIBLE);
 //                mNomalMemberCtrView.setVisibility(View.INVISIBLE);
-                SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "accept invite"+
-                    LogConstants.DIV + "host id " + CurLiveInfo.getHostID());
+                SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "accept invite" +
+                        LogConstants.DIV + "host id " + CurLiveInfo.getHostID());
                 //上麦 ；TODO 上麦 上麦 上麦 ！！！！！；
-                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN,"",CurLiveInfo.getHostID());
+                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN, "", CurLiveInfo.getHostID());
                 mLiveHelper.upMemberVideo();
                 inviteDg.dismiss();
             }
@@ -1512,8 +1482,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 推流成功
-     *
-     * @param streamRes
      */
     @Override
     public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
@@ -1537,9 +1505,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 将地址黏贴到黏贴版
-     *
-     * @param url
-     * @param url2
      */
     private void ClipToBoard(final String url, final String url2) {
         SxbLog.i(TAG, "ClipToBoard url " + url);
@@ -1608,7 +1573,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start record"
                         + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
                 filename = filenameEditText.getText().toString();
-                option.fileName("sxb_"+ ILiveLoginManager.getInstance().getMyUserId()+"_"+filename);
+                option.fileName("sxb_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + filename);
 
                 option.classId(123);
                 mLiveHelper.startRecord(option);
@@ -1671,7 +1636,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     // 清除老房间数据
-    private void clearOldData(){
+    private void clearOldData() {
         mArrayListChatEntity.clear();
         mBoolNeedRefresh = true;
         if (mBoolRefreshLock) {

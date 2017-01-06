@@ -639,9 +639,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
                     toggleMic();
                     break;
-    //                case Constants.AVIMCMD_HOST_LEAVE:
-    //                    mLiveView.hostLeave(identifier, nickname);
-    //                    break;
+                //                case Constants.AVIMCMD_HOST_LEAVE:
+                //                    mLiveView.hostLeave(identifier, nickname);
+                //                    break;
                 case Constants.AVIMCMD_HOST_BACK:
                     mLiveView.hostBack(identifier, nickname);
                 default:

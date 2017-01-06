@@ -106,7 +106,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(this, getString(R.string.publish_wait_uploading) + " " + uploadPercent + "%", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(this, LiveActivity.class);
-                intent.putExtra(Constants.ID_STATUS, Constants.HOST);
                 MySelfInfo.getInstance().setIdStatus(Constants.HOST);
                 MySelfInfo.getInstance().setJoinRoomWay(true);
                 CurLiveInfo.setTitle(tvTitle.getText().toString());
