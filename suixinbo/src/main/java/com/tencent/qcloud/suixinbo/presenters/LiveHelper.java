@@ -407,6 +407,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void upMemberVideo() {
+        if (!ILiveRoomManager.getInstance().isEnterRoom()){
+            SxbLog.e(TAG, "upMemberVideo->with not in room");
+        }
         ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
@@ -423,6 +426,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void downMemberVideo() {
+        if (!ILiveRoomManager.getInstance().isEnterRoom()){
+            SxbLog.e(TAG, "downMemberVideo->with not in room");
+        }
         ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
