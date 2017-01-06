@@ -60,20 +60,18 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                 //如果是自己
                 if (item.getHostId().equals(MySelfInfo.getInstance().getId())) {
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
-                    intent.putExtra(Constants.ID_STATUS, Constants.HOST);
                     MySelfInfo.getInstance().setIdStatus(Constants.HOST);
-                    MySelfInfo.getInstance().setJoinRoomWay(false);
+                    MySelfInfo.getInstance().setJoinRoomWay(true);
                     CurLiveInfo.setHostID(item.getHostId());
-                    CurLiveInfo.setHostName("");
+                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getId());
                     CurLiveInfo.setHostAvator("");
-                    CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
+                    CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
                     CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
                     CurLiveInfo.setAdmires(item.getInfo().getThumbup());
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }else{
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
-                    intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
                     MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
                     CurLiveInfo.setHostID(item.getHostId());
