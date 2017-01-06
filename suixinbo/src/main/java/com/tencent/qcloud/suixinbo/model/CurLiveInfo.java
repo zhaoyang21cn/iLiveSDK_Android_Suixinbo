@@ -13,6 +13,8 @@ public class CurLiveInfo {
     private static String address = "";
     private static String coverurl = "";
 
+    private static RecordInfo mRecordInfo;
+
     public static int roomNum;
 
     public static String hostID;
@@ -129,5 +131,13 @@ public class CurLiveInfo {
 
     public static String getChatRoomId() {
         return "" + roomNum;
+    }
+
+    public static RecordInfo getRecordInfo() {
+        return mRecordInfo;
+    }
+
+    public static void setRecordInfo(RecordInfo RecordInfo) {
+        mRecordInfo = RecordInfo;
     }
 }

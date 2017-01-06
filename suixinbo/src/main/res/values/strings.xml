@@ -142,4 +142,6 @@
     <string name="ping_NJ">南京</string>
     <string name="ping_HZ">杭州</string>
     <string name="ping_GZ">广州</string>
+    <string name="str_record">录制</string>
+    <string name="str_loading_record">正在努力获取录制视频列表。。。</string>
 </resources>

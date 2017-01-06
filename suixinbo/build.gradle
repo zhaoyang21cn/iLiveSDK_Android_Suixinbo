@@ -52,4 +52,5 @@ dependencies {
 //    compile 'com.tencent.ilivesdk:ilivesdk:0.4.1'
     compile 'com.tencent.livesdk:livesdk:1.0.3'
     compile 'com.tencent.ilivesdk:ilivesdk:1.1.0.1'
+    compile 'com.tencent.rtmpsdk:rtmpsdk:1.0.1'
 }

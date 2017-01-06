@@ -16,7 +16,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:text="名称"
+            android:text="录制名称"
             android:textSize="@dimen/text_size"
             android:textColor="@color/black"/>
 
@@ -30,7 +30,7 @@
             android:layout_marginLeft="15dp"
          />
 
-        <TextView
+<!--        <TextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -137,7 +137,7 @@
             android:layout_alignBottom="@id/text6"
             android:layout_toRightOf="@id/text6"
             android:layout_marginLeft="15dp"
-            />
+            />-->
     </RelativeLayout>
 
     <View
