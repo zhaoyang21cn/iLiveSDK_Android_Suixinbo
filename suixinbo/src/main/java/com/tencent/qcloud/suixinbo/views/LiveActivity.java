@@ -135,7 +135,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private ArrayList<String> mRenderUserList = new ArrayList<>();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,7 +243,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mHostCtrView = (LinearLayout) findViewById(R.id.host_bottom_layout);
         mNomalMemberCtrView = (LinearLayout) findViewById(R.id.member_bottom_layout);
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);
-        mHostLeaveLayout = (LinearLayout)findViewById(R.id.ll_host_leave);
+        mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);
         mVideoChat = (TextView) findViewById(R.id.video_interact);
         mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);
         mVideoTime = (TextView) findViewById(R.id.broadcasting_time);
@@ -254,7 +253,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvMembers = (TextView) findViewById(R.id.member_counts);
         tvAdmires = (TextView) findViewById(R.id.heart_counts);
         mQualityText = (TextView) findViewById(R.id.quality_text);
-        speedBtn = (TextView)findViewById(R.id.speed_test_btn);
+        speedBtn = (TextView) findViewById(R.id.speed_test_btn);
         speedBtn.setOnClickListener(this);
         mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
@@ -389,7 +388,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvAdmires.setText("" + CurLiveInfo.getAdmires());
 
         //TODO 获取渲染层
-        mRootView = (AVRootView)findViewById(R.id.av_root_view);
+        mRootView = (AVRootView) findViewById(R.id.av_root_view);
         //TODO 设置渲染层
         ILVLiveManager.getInstance().setAvVideoView(mRootView);
 
@@ -403,10 +402,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
             @Override
             public void onSubViewCreated() {
-                for (int i=1; i< ILiveConstants.MAX_AV_VIDEO_NUM; i++){
+                for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
                     final int index = i;
                     AVVideoView avVideoView = mRootView.getViewByIndex(index);
-                    avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener(){
+                    avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
                             mRootView.swapVideoView(0, index);
@@ -701,8 +700,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void refreshMember(ArrayList<MemberID> memlist) {
-        if(tvMembers!=null)
-        tvMembers.setText("" + memlist.size());
+        if (memlist != null && tvMembers != null)
+            tvMembers.setText("" + memlist.size());
     }
 
 
