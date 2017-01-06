@@ -456,6 +456,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 });
             }
         });
+
+
     }
 
 
@@ -595,6 +597,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
 //        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
+        mRootView.getViewByIndex(0).setRotate(true);
+        mRootView.getViewByIndex(0).setDiffDirectionRenderMode(AVVideoView.ILiveRenderMode.BLACK_TO_FILL);
         bInAvRoom = true;
         bDelayQuit = true;
         roomId.setText(""+CurLiveInfo.getRoomNum());
