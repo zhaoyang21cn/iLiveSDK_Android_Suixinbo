@@ -161,8 +161,9 @@ public class ChatMsgListAdapter extends BaseAdapter implements AbsListView.OnScr
         } else {
             // 根据名称计算颜色
             holder.textItem.setBackgroundResource(R.drawable.img_chat_white);
-            spanString.setSpan(new ForegroundColorSpan(calcNameColor(item.getSenderName())),
-                    0, item.getSenderName().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            if (!item.getSenderName().isEmpty())
+                spanString.setSpan(new ForegroundColorSpan(calcNameColor(item.getSenderName())),
+                        0, item.getSenderName().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             holder.sendContext.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
         }
         holder.sendContext.setText(spanString);
@@ -180,8 +181,6 @@ public class ChatMsgListAdapter extends BaseAdapter implements AbsListView.OnScr
 
     /**
      * 停止View属性动画
-     *
-     * @param itemView
      */
     private void stopViewAnimator(View itemView) {
         AnimatorSet aniSet = (AnimatorSet) itemView.getTag(R.id.tag_second);
@@ -210,9 +209,6 @@ public class ChatMsgListAdapter extends BaseAdapter implements AbsListView.OnScr
 
     /**
      * 播放渐消动画
-     *
-     * @param pos
-     * @param view
      */
     public void playDisappearAnimator(int pos, View view) {
         int firstVisable = mListView.getFirstVisiblePosition();
@@ -225,10 +221,6 @@ public class ChatMsgListAdapter extends BaseAdapter implements AbsListView.OnScr
 
     /**
      * 继续播放渐消动画
-     *
-     * @param itemView
-     * @param position
-     * @param item
      */
     private void continueAnimator(View itemView, int position, final ChatEntity item) {
         int animatorIdx = listMessage.size() - 1 - position;
