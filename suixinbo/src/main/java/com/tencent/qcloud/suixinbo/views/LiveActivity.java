@@ -41,6 +41,7 @@ import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
@@ -1581,35 +1582,20 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private Dialog recordDialog;
     private String filename = "";
-    private String tags = "";
-    private String classId = "";
     private boolean mRecord = false;
-    private EditText filenameEditText, tagEditText, classEditText;
-    private CheckBox trancodeCheckBox, screenshotCheckBox, watermarkCheckBox;
+    private EditText filenameEditText;
 
     private void initRecordDialog() {
         recordDialog = new Dialog(this, R.style.dialog);
         recordDialog.setContentView(R.layout.record_param);
 
         filenameEditText = (EditText) recordDialog.findViewById(R.id.record_filename);
-        tagEditText = (EditText) recordDialog.findViewById(R.id.record_tag);
-        classEditText = (EditText) recordDialog.findViewById(R.id.record_class);
-        trancodeCheckBox = (CheckBox) recordDialog.findViewById(R.id.record_tran_code);
-        screenshotCheckBox = (CheckBox) recordDialog.findViewById(R.id.record_screen_shot);
-        watermarkCheckBox = (CheckBox) recordDialog.findViewById(R.id.record_water_mark);
 
         if (filename.length() > 0) {
             filenameEditText.setText(filename);
         }
         filenameEditText.setText("" + CurLiveInfo.getRoomNum());
 
-        if (tags.length() > 0) {
-            tagEditText.setText(tags);
-        }
-
-        if (classId.length() > 0) {
-            classEditText.setText(classId);
-        }
         Button recordOk = (Button) recordDialog.findViewById(R.id.btn_record_ok);
         recordOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1618,19 +1604,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start record"
                         + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
                 filename = filenameEditText.getText().toString();
-                option.fileName(filename);
+                option.fileName("sxb_"+ ILiveLoginManager.getInstance().getMyUserId()+"_"+filename);
 
-                tags = tagEditText.getText().toString();
-                classId = classEditText.getText().toString();
-                Log.d(TAG, "onClick classId " + classId);
-                if (classId.equals("")) {
-                    Toast.makeText(getApplicationContext(), "classID can not be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                option.classId(Integer.parseInt(classId))
-                    .transCode(trancodeCheckBox.isChecked())
-                    .screenShot(screenshotCheckBox.isChecked())
-                    .waterMark(watermarkCheckBox.isChecked());
+                option.classId(123);
                 mLiveHelper.startRecord(option);
                 recordDialog.dismiss();
             }
