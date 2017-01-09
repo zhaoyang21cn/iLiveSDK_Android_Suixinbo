@@ -16,7 +16,6 @@ import com.tencent.qcloud.suixinbo.presenters.RecListViewHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.RecListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by xkazerzhang on 2016/12/22.
@@ -44,26 +43,26 @@ public class FragmentRecordList extends Fragment implements SwipeRefreshLayout.O
         return view;
     }
 
-    private void freshRecordList(){
+    private void freshRecordList() {
         showWaitDlalog(getString(R.string.str_loading_record));
         recHelper.refresh();
     }
 
-    private void showWaitDlalog(String strMsg){
+    private void showWaitDlalog(String strMsg) {
         if (null == mWaitDialog) {
             mWaitDialog = new AlertDialog.Builder(getActivity())
                     .setMessage(strMsg)
                     .create();
             mWaitDialog.setCanceledOnTouchOutside(false);
             mWaitDialog.show();
-        }else{
+        } else {
             mWaitDialog.setMessage(strMsg);
             mWaitDialog.show();
         }
     }
 
-    private void dimissWaitDialog(){
-        if (null != mWaitDialog){
+    private void dimissWaitDialog() {
+        if (null != mWaitDialog) {
             mWaitDialog.dismiss();
             mWaitDialog = null;
         }
@@ -79,6 +78,7 @@ public class FragmentRecordList extends Fragment implements SwipeRefreshLayout.O
         dimissWaitDialog();
         mSwipeRefreshLayout.setRefreshing(false);
         adapterRecord = new RecordAdapter(getActivity(), R.layout.item_record, list);
-        mLiveList.setAdapter(adapterRecord);
+        if (list != null)
+            mLiveList.setAdapter(adapterRecord);
     }
 }
