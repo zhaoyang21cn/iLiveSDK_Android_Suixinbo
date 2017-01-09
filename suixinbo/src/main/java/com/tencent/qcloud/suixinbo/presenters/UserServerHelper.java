@@ -9,6 +9,7 @@ import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.model.RecordInfo;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
@@ -20,6 +21,7 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -466,6 +468,42 @@ public class UserServerHelper {
 //    }
 
 
+
+    /**
+     * 拉取录制列表
+     */
+    public ArrayList<RecordInfo> getRecordList (int page,int size) {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+			jasonPacket.put("type", 0);
+            jasonPacket.put("index", page);
+            jasonPacket.put("size",size);
+            String json = jasonPacket.toString();
+            Log.v(TAG, "getRecordList->request: "+json);
+            String res = post(GET_REOCORDLIST, json);
+            Log.v(TAG, "getRecordList->ret: "+res);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            if(code ==0){
+                JSONObject data = response.getJSONObject("data");
+                JSONArray record = data.getJSONArray("videos");
+                ArrayList<RecordInfo> recList = new ArrayList<>();
+                for (int i=0; i<record.length(); i++){
+                    recList.add(new RecordInfo(record.getJSONObject(i)));
+                }
+                ILiveLog.i(TAG,"size"+recList.size());
+                return recList;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 心跳上报
