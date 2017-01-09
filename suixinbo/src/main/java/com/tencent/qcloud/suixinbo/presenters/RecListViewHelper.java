@@ -40,7 +40,7 @@ public class RecListViewHelper {
     public void refresh(){
         if (null == mTask){
             mTask = new GetRecordList();
-            mTask.execute(0, 10);
+            mTask.execute(0, 15);
         }
     }
 }
