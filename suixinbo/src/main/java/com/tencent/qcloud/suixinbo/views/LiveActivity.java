@@ -298,18 +298,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             inviteView3.setOnClickListener(this);
 
             tvAdmires.setVisibility(View.VISIBLE);
-            pushBtn = (TextView) findViewById(R.id.push_btn);
-            pushBtn.setVisibility(View.VISIBLE);
-            pushBtn.setOnClickListener(this);
-
-            recordBtn = (TextView) findViewById(R.id.record_btn);
-            recordBtn.setVisibility(View.VISIBLE);
-            recordBtn.setOnClickListener(this);
+//            pushBtn = (TextView) findViewById(R.id.push_btn);
+//            pushBtn.setVisibility(View.VISIBLE);
+//            pushBtn.setOnClickListener(this);
+//
+//            recordBtn = (TextView) findViewById(R.id.record_btn);
+//            recordBtn.setVisibility(View.VISIBLE);
+//            recordBtn.setOnClickListener(this);
 
             initBackDialog();
             initDetailDailog();
-            initPushDialog();
-            initRecordDialog();
+//            initPushDialog();
+//            initRecordDialog();
 
 
             mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
@@ -375,6 +375,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnNormal = (TextView) findViewById(R.id.normal_btn);
         BtnNormal.setOnClickListener(this);
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
+
+        pushBtn = (TextView) findViewById(R.id.push_btn);
+        pushBtn.setVisibility(View.VISIBLE);
+        pushBtn.setOnClickListener(this);
+
+        recordBtn = (TextView) findViewById(R.id.record_btn);
+        recordBtn.setVisibility(View.VISIBLE);
+        recordBtn.setOnClickListener(this);
+        initPushDialog();
+        initRecordDialog();
 
         BtnBack = (TextView) findViewById(R.id.btn_back);
         BtnBack.setOnClickListener(this);

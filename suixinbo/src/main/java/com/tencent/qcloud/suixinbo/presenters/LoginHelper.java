@@ -38,31 +38,33 @@ public class LoginHelper extends Presenter {
 
     //登录模式登录
     private StandardLoginTask loginTask;
-    class StandardLoginTask extends AsyncTask<String, Integer,UserServerHelper.ResquestResult > {
+
+    class StandardLoginTask extends AsyncTask<String, Integer, UserServerHelper.ResquestResult> {
 
         @Override
-        protected  UserServerHelper.ResquestResult  doInBackground(String... strings) {
+        protected UserServerHelper.ResquestResult doInBackground(String... strings) {
 
             return UserServerHelper.getInstance().loginId(strings[0], strings[1]);
         }
 
         @Override
-        protected void onPostExecute(UserServerHelper.ResquestResult  result) {
-            if(result != null &&result.getErrorCode()==0) {
-                MySelfInfo.getInstance().writeToCache(mContext);
-                //登录
-                iLiveLogin(MySelfInfo.getInstance().getId(),MySelfInfo.getInstance().getUserSig());
+        protected void onPostExecute(UserServerHelper.ResquestResult result) {
 
-            }else{
-                mLoginView.loginFail("Module_TLSSDK",result.getErrorCode(),result.getErrorInfo());
+            if (result != null) {
+                if (result.getErrorCode() == 0) {
+                    MySelfInfo.getInstance().writeToCache(mContext);
+                    //登录
+                    iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
+                } else {
+                    mLoginView.loginFail("Module_TLSSDK", result.getErrorCode(), result.getErrorInfo());
+                }
             }
 
         }
     }
 
 
-
-    public void iLiveLogin(String id ,String sig){
+    public void iLiveLogin(String id, String sig) {
         //登录
         ILiveLoginManager.getInstance().iLiveLogin(id, sig, new ILiveCallBack() {
             @Override
@@ -74,11 +76,10 @@ public class LoginHelper extends Presenter {
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 if (mLoginView != null)
-                    mLoginView.loginFail(module,errCode,errMsg);
+                    mLoginView.loginFail(module, errCode, errMsg);
             }
         });
     }
-
 
 
     /**
@@ -107,7 +108,7 @@ public class LoginHelper extends Presenter {
      */
     public void standardLogin(String id, String password) {
         loginTask = new StandardLoginTask();
-        loginTask.execute(id,password);
+        loginTask.execute(id, password);
 
     }
 
@@ -123,11 +124,11 @@ public class LoginHelper extends Presenter {
                 ((Activity) mContext).runOnUiThread(new Runnable() {
                     public void run() {
 
-                        if(result!=null && result.getErrorCode()==0){
-                            standardLogin(id,psw);
-                        }else if(result!=null){
+                        if (result != null && result.getErrorCode() == 0) {
+                            standardLogin(id, psw);
+                        } else if (result != null) {
                             //
-                            Toast.makeText(mContext, "  " +result.getErrorCode() +" : "+result.getErrorInfo(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "  " + result.getErrorCode() + " : " + result.getErrorInfo(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -138,20 +139,18 @@ public class LoginHelper extends Presenter {
 
     /**
      * 独立模式 登出
-     * @param id
      */
-    public void standardLogout(final String id){
+    public void standardLogout(final String id) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 UserServerHelper.ResquestResult result = UserServerHelper.getInstance().logoutId(id);
-                if (result != null && (result.getErrorCode() == 0 || result.getErrorCode() == 10008) ) {
+                if (result != null && (result.getErrorCode() == 0 || result.getErrorCode() == 10008)) {
                     iLiveLogout();
                 }
             }
         }).start();
     }
-
 
 
     @Override
