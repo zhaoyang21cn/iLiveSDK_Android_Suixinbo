@@ -146,10 +146,10 @@ public class LoginHelper extends Presenter {
             public void run() {
                 UserServerHelper.ResquestResult result = UserServerHelper.getInstance().logoutId(id);
                 if (result != null && (result.getErrorCode() == 0 || result.getErrorCode() == 10008)) {
-                    iLiveLogout();
                 }
             }
         }).start();
+        iLiveLogout();
     }
 
 
