@@ -298,18 +298,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             inviteView3.setOnClickListener(this);
 
             tvAdmires.setVisibility(View.VISIBLE);
-//            pushBtn = (TextView) findViewById(R.id.push_btn);
-//            pushBtn.setVisibility(View.VISIBLE);
-//            pushBtn.setOnClickListener(this);
-//
-//            recordBtn = (TextView) findViewById(R.id.record_btn);
-//            recordBtn.setVisibility(View.VISIBLE);
-//            recordBtn.setOnClickListener(this);
 
             initBackDialog();
             initDetailDailog();
-//            initPushDialog();
-//            initRecordDialog();
 
 
             mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
@@ -1032,8 +1023,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.camera_controll) {
             Toast.makeText(LiveActivity.this, "切换" + backGroundId + "camrea 状态", Toast.LENGTH_SHORT).show();
-            if (ILiveRoomManager.getInstance().getHostId().equals(MySelfInfo.getInstance().getId())) {//自己关闭自己
-                mLiveHelper.toggleCamera();
+            Log.i(TAG, "onClick: hostid " + ILiveRoomManager.getInstance().getHostId() + " myself " + MySelfInfo.getInstance().getId());
+            if (MySelfInfo.getInstance().getId().equals(backGroundId)) {//自己关闭自己
+                mLiveHelper.switchCamera();
             } else {
                 mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MULTI_HOST_CONTROLL_CAMERA, backGroundId, backGroundId);
             }

@@ -19,6 +19,7 @@ import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILivePushOption;
@@ -93,7 +94,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
         @Override
         protected void onPostExecute(UserServerHelper.ResquestResult result) {
-            if (result!=null && result.getErrorCode() == 0) {
+            if (result != null && result.getErrorCode() == 0) {
                 createRoom();
             } else {
                 Log.i(TAG, "ApplyCreateRoom onPostExecute: " + result.getErrorInfo());
@@ -369,7 +370,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     room.put("groupid", "" + CurLiveInfo.getRoomNum());
                     room.put("cover", CurLiveInfo.getCoverurl());
                     room.put("appid", Constants.SDK_APPID);
-                    room.put("device",1);
+                    room.put("device", 1);
                     room.put("videotype", 0);
                     liveInfo.put("room", room);
 
@@ -407,7 +408,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void upMemberVideo() {
-        if (!ILiveRoomManager.getInstance().isEnterRoom()){
+        if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "upMemberVideo->with not in room");
         }
         ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
@@ -426,7 +427,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void downMemberVideo() {
-        if (!ILiveRoomManager.getInstance().isEnterRoom()){
+        if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "downMemberVideo->with not in room");
         }
         ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
@@ -640,7 +641,8 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                     mLiveView.hideInviteDialog();
                     break;
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_CAMERA:
-                    toggleCamera();
+//                    toggleCamera();
+                    switchCamera();
                     break;
                 case Constants.AVIMCMD_MULTI_HOST_CONTROLL_MIC:
                     toggleMic();
@@ -659,5 +661,15 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         } catch (JSONException ex) {
             // 异常处理代码
         }
+    }
+
+    public void switchCamera() {
+        if (ILiveRoomManager.getInstance().getCurCameraId() == ILiveConstants.NONE_CAMERA) return;
+        if (ILiveRoomManager.getInstance().getCurCameraId() == ILiveConstants.FRONT_CAMERA) {
+            ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
+        } else {
+            ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
+        }
+
     }
 }
