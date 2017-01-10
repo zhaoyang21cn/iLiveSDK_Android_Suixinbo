@@ -35,9 +35,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
+import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
@@ -46,6 +48,8 @@ import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.livesdk.ILVCustomCmd;
+import com.tencent.livesdk.ILVLiveConstants;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.adapters.ChatMsgListAdapter;
@@ -443,15 +447,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mRootView.getViewByIndex(0).setRecvFirstFrameListener(new AVVideoView.RecvFirstFrameListener() {
                     @Override
                     public void onFirstFrameRecved(int width, int height, int angle, String identifier) {
-                        //主播心跳
-                        mHearBeatTimer = new Timer(true);
-                        mHeartBeatTask = new HeartBeatTask();
-                        mHearBeatTimer.schedule(mHeartBeatTask, 100, 5 * 1000); //5秒重复上报心跳 拉取房间列表
 
-                        //直播时间
-                        mVideoTimer = new Timer(true);
-                        mVideoTimerTask = new VideoTimerTask();
-                        mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
                     }
                 });
             }
@@ -482,8 +478,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         public void run() {
             String host = CurLiveInfo.getHostID();
             SxbLog.i(TAG, "HeartBeatTask " + host);
-            UserServerHelper.getInstance().heartBeater(1);
-//            UserServerHelper.getInstance().getMemberList(); //定期拉一把房间成员
+            if (MySelfInfo.getInstance().getId().equals(CurLiveInfo.getHostID()))
+                UserServerHelper.getInstance().heartBeater(1);
+            else
+                UserServerHelper.getInstance().heartBeater(0);
             mLiveHelper.pullMemberList();
         }
     }
@@ -566,13 +564,27 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //如果是直播，发消息
-                if (null != mLiveHelper) {
-                    mLiveHelper.startExitRoom();
-                    if (isPushed) {
-                        mLiveHelper.stopPush();
+                ILVCustomCmd cmd = new ILVCustomCmd();
+                cmd.setCmd(Constants.AVIMCMD_EXITLIVE);
+                cmd.setType(ILVLiveConstants.GROUP_TYPE);
+                ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
+                    @Override
+                    public void onSuccess(TIMMessage data) {
+                        //如果是直播，发消息
+                        if (null != mLiveHelper) {
+                            mLiveHelper.startExitRoom();
+                            if (isPushed) {
+                                mLiveHelper.stopPush();
+                            }
+                        }
                     }
-                }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+
+                    }
+
+                });
                 backDialog.dismiss();
             }
         });
@@ -600,7 +612,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         bDelayQuit = true;
         roomId.setText("" + CurLiveInfo.getRoomNum());
         if (isSucc == true) {
-            mLiveHelper.pullMemberList();
+            //主播心跳
+            mHearBeatTimer = new Timer(true);
+            mHeartBeatTask = new HeartBeatTask();
+            mHearBeatTimer.schedule(mHeartBeatTask, 100, 5 * 1000); //5秒重复上报心跳 拉取房间列表
+
+            //直播时间
+            mVideoTimer = new Timer(true);
+            mVideoTimerTask = new VideoTimerTask();
+            mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 mHostNameTv.setText(MySelfInfo.getInstance().getId());
