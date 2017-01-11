@@ -1462,7 +1462,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         final RadioGroup radgroup = (RadioGroup) mPushDialog.findViewById(R.id.push_type);
 
 
-        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_video);
+        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_ok);
         recordOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1485,7 +1485,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
 
 
-        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_audio);
+        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_cancel);
         recordCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
