@@ -378,6 +378,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         recordBtn = (TextView) findViewById(R.id.record_btn);
         recordBtn.setVisibility(View.VISIBLE);
         recordBtn.setOnClickListener(this);
+
         initPushDialog();
         initRecordDialog();
 
@@ -1465,22 +1466,19 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onClick(View view) {
                 ILivePushOption option = new ILivePushOption();
-                if (pushfileNameInput.getText().toString().equals("")) {
+                if (pushfileNameInput.getText().toString().equals("")) { // 推流名字为空
                     Toast.makeText(LiveActivity.this, "name can't be empty", Toast.LENGTH_SHORT);
                     return;
                 } else {
                     option.channelName(pushfileNameInput.getText().toString());
                 }
 
-                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {
+                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {//默认格式
                     option.encode(TIMAvManager.StreamEncode.HLS);
                 } else {
                     option.encode(TIMAvManager.StreamEncode.RTMP);
                 }
-//                mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start push stream"
-                        + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
-                mLiveHelper.startPush(option);
+                mLiveHelper.startPush(option);//开启推流
                 mPushDialog.dismiss();
             }
         });
@@ -1578,7 +1576,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private void initRecordDialog() {
         recordDialog = new Dialog(this, R.style.dialog);
-        recordDialog.setContentView(R.layout.record_param);
+        recordDialog.setContentView(R.layout.record_layout);
 
         filenameEditText = (EditText) recordDialog.findViewById(R.id.record_filename);
 
