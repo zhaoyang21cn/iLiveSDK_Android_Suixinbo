@@ -160,6 +160,33 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         }
     }
 
+    public void switchRoom(){
+        ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
+                .autoCamera(false)
+                .roomDisconnectListener(this)
+                .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
+                .controlRole(Constants.NORMAL_MEMBER_ROLE)
+                .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
+                .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
+                .autoMic(false);
+        ILVLiveManager.getInstance().switchRoom(CurLiveInfo.getRoomNum(), memberOption, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                ILiveLog.d(TAG, "ILVB-Suixinbo|switchRoom->join room sucess");
+                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ILiveLog.d(TAG, "ILVB-Suixinbo|switchRoom->join room failed:" + module + "|" + errCode + "|" + errMsg);
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                }
+            }
+        });
+        SxbLog.i(TAG, "switchRoom startEnterRoom ");
+    }
+
 
     public void startExitRoom() {
         ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
