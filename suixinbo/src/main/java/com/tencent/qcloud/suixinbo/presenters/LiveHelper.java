@@ -114,10 +114,10 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
 
     /**
-     * 申请房间
+     * 拉取成员
      */
     public void pullMemberList() {
-        mGetMemListTask = new GetMemberListTask(); //申请房间
+        mGetMemListTask = new GetMemberListTask(); //拉取成员
         mGetMemListTask.execute();
 
     }
@@ -508,7 +508,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
-                Toast.makeText(mContext, "sendCmd->failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "sendCmd->failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }

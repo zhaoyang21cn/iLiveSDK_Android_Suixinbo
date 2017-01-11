@@ -1460,7 +1460,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         final RadioGroup radgroup = (RadioGroup) mPushDialog.findViewById(R.id.push_type);
 
 
-        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_ok);
+        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_video);
         recordOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1486,7 +1486,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
 
 
-        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_cancel);
+        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_audio);
         recordCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1587,25 +1587,32 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
         filenameEditText.setText("" + CurLiveInfo.getRoomNum());
 
-        Button recordOk = (Button) recordDialog.findViewById(R.id.btn_record_ok);
-        recordOk.setOnClickListener(new View.OnClickListener() {
+        Button videoRecord = (Button) recordDialog.findViewById(R.id.btn_record_video);
+        videoRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ILiveRecordOption option = new ILiveRecordOption();
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start record"
-                        + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
                 filename = filenameEditText.getText().toString();
                 option.fileName("sxb_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + filename);
 
                 option.classId(123);
+                option.recordType(TIMAvManager.RecordType.VIDEO);
                 mLiveHelper.startRecord(option);
                 recordDialog.dismiss();
             }
         });
-        Button recordCancel = (Button) recordDialog.findViewById(R.id.btn_record_cancel);
-        recordCancel.setOnClickListener(new View.OnClickListener() {
+        Button audioRecord = (Button) recordDialog.findViewById(R.id.btn_record_audio);
+        audioRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ILiveRecordOption option = new ILiveRecordOption();
+                filename = filenameEditText.getText().toString();
+                option.fileName("sxb_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + filename);
+
+                option.classId(123);
+                option.recordType(TIMAvManager.RecordType.AUDIO);
+                mLiveHelper.startRecord(option);
+                recordDialog.dismiss();
                 recordDialog.dismiss();
             }
         });
