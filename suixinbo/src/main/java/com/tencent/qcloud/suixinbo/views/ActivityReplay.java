@@ -43,6 +43,7 @@ public class ActivityReplay extends BaseActivity implements ITXLivePlayListener 
 
         mTxlpPlayer.setPlayerView(txvvPlayerView);
         mTxlpPlayer.setConfig(new TXLivePlayConfig());
+        mTxlpPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION);
     }
 
     @Override
