@@ -147,6 +147,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         mLiveView = null;
         mContext = null;
         MessageEvent.getInstance().deleteObserver(this);
+        ILVLiveManager.getInstance().quitRoom(null);
     }
 
     /**
