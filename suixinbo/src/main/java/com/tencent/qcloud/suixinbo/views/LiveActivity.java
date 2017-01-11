@@ -1150,7 +1150,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     if (showTips) {
                         mQualityCircle.setVisibility(View.VISIBLE);
                         mQualityText.setVisibility(View.VISIBLE);
-                        if (tvTipsMsg != null) {
+                        if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
+                                ILiveSDK.getInstance().getAVContext().getRoom() != null) {
                             String strTips = ILiveSDK.getInstance().getAVContext().getRoom().getQualityParam();
                             String[] tips = strTips.split(",");
                             int loss_rate_recv = 0, loss_rate_send = 0, loss_rate_recv_udt = 0, loss_rate_send_udt = 0;
