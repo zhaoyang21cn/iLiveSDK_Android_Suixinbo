@@ -449,6 +449,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     private void createRoom() {
         ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId())
                 .roomDisconnectListener(this)
+                .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
                 .controlRole(Constants.HOST_ROLE)
                 .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
@@ -477,6 +478,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
                 .autoCamera(false)
                 .roomDisconnectListener(this)
+                .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
                 .controlRole(Constants.NORMAL_MEMBER_ROLE)
                 .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
