@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -133,7 +134,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-        return Uri.fromFile(outputImage);
+        return UIUtils.getUriFromFile(this, outputImage);
     }
 
     private boolean checkCropPermission(){
@@ -247,7 +248,14 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     public void startPhotoZoom(Uri uri) {
         iconCrop = createCoverUri("_icon_crop");
 
+        revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 300);
@@ -281,7 +289,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             if (null != path){
                 SxbLog.e(TAG, "startPhotoZoom->path:" + path);
                 File file = new File(path);
-                startPhotoZoom(Uri.fromFile(file));
+                startPhotoZoom(UIUtils.getUriFromFile(this, file));
             }
             break;
         case CROP_CHOOSE:

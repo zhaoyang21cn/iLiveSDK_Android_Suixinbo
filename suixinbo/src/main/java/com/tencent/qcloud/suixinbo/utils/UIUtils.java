@@ -14,6 +14,11 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
+
+import com.tencent.qcloud.suixinbo.BuildConfig;
+
+import java.io.File;
 
 /**
  * UI通用方法类
@@ -45,6 +50,15 @@ public class UIUtils {
             return source.substring(0, length)+"...";
         }
         return source;
+    }
+
+    // 获取Uri
+    public static Uri getUriFromFile(Context context, File file){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+        }else {
+            return Uri.fromFile(file);
+        }
     }
 
     /**
