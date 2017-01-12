@@ -1022,14 +1022,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     break;
             }
         } else if (i == R.id.switch_cam) {
-            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
-                case ILiveConstants.FRONT_CAMERA:
-                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
-                    break;
-                case ILiveConstants.BACK_CAMERA:
-                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
-                    break;
-            }
+            ILiveRoomManager.getInstance().enableCamera((ILiveRoomManager.getInstance().getCurCameraId() + 1)%2, true);
+//            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
+//
+//                case ILiveConstants.FRONT_CAMERA:
+//                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
+//                    break;
+//                case ILiveConstants.BACK_CAMERA:
+//                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
+//                    break;
+//            }
         } else if (i == R.id.mic_btn) {
             if (mLiveHelper.isMicOn()) {
                 BtnMic.setBackgroundResource(R.drawable.icon_mic_close);
