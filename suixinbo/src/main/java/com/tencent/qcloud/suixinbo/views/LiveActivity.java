@@ -802,7 +802,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     public boolean showInviteView(String id) {
         SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "invite up show" +
                 LogConstants.DIV + "id " + id);
-        int requetCount = 1 + inviteViewCount;
+        int index = mRootView.findValidViewIndex();
+        if (index == -1) {
+            Toast.makeText(LiveActivity.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        int requetCount = index + inviteViewCount;
         if (requetCount > 3) {
             Toast.makeText(LiveActivity.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
             return false;
