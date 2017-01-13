@@ -1,4 +1,17 @@
 #关键路径的LOG 
+
+## 获取日志
+在遇到无法解决的问题时，请提供相关日志文件，ILiveSDK的日志文件分三个模块:
+
+SDK|目录
+:--|:--:
+iLiveSDK|tencent/imsdklogs/包名/ilivesdk_YYYYMMDD.log
+IMSDK|tencent/imsdklogs/包名/imsdk_YYYYMMDD.log
+AVSDK|tencent/imsdklogs/包名/QAVSDK_YYYYMMDD.log
+
+
+## Android Studio过滤日志
+
 <br/>
 *在ILiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到创建房间加入房间的关键路径*
 <br/>
