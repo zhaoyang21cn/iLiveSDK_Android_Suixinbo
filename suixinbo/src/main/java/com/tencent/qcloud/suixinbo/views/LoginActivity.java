@@ -50,9 +50,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
 
         // 初始化直播模块
-        ILVLiveConfig liveConfig = new ILVLiveConfig();
+/*        ILVLiveConfig liveConfig = new ILVLiveConfig();
         liveConfig.messageListener(MessageEvent.getInstance());
-        ILVLiveManager.getInstance().init(liveConfig);
+        ILVLiveManager.getInstance().init(liveConfig);*/
     }
 
     @Override

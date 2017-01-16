@@ -31,6 +31,7 @@ public class LiveListViewHelper extends Presenter {
 
     @Override
     public void onDestory() {
+        mLiveListView = null;
     }
 
 
