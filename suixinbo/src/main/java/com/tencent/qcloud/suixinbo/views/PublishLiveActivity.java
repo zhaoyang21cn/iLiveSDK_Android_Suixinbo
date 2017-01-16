@@ -256,7 +256,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-        return UIUtils.getUriFromFile(this, outputImage);
+        return Uri.fromFile(outputImage);
     }
 
 
