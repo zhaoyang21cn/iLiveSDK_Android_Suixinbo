@@ -1,10 +1,13 @@
 ##Release Note
 
-###V1.1.2(2017-01-16)
+###V1.2.0(2017-01-16)
  - 修改默认为支持后模式([参考文档](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/breakEvent.md))
  - 修复PC端多路视频不关闭问题
  - 开放surfaceView创建回调(AVRootView的setSurfaceCreateListener)
  - 优化旋转方案([参考文档](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/rotate.md))
+ 
+ ---
+
  
 ###V1.1.1(2017-01-09)
 - 修复低概率渲染空指针异常
