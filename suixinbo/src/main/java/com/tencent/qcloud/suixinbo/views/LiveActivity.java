@@ -788,8 +788,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public boolean showInviteView(String id) {
-        SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "invite up show" +
-                LogConstants.DIV + "id " + id);
         int requetCount = 1 + inviteViewCount;
         if (requetCount > 3) {
             Toast.makeText(LiveActivity.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
@@ -1317,8 +1315,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onClick(View view) {
 //                mVideoMemberCtrlView.setVisibility(View.VISIBLE);
 //                mNomalMemberCtrView.setVisibility(View.INVISIBLE);
-                SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "accept invite" +
-                        LogConstants.DIV + "host id " + CurLiveInfo.getHostID());
                 //上麦 ；TODO 上麦 上麦 上麦 ！！！！！；
                 mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN, "", CurLiveInfo.getHostID());
                 mLiveHelper.upMemberVideo();
@@ -1674,6 +1670,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
         mRootView.clearUserView();
     }
+
+
+
 
 /*    @Override
     public void onSlideUp() {
