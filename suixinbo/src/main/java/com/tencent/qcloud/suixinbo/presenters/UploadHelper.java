@@ -157,7 +157,14 @@ public class UploadHelper extends Presenter {
         });
 
         task.setAuth(sig);
-        fileUploadMgr.upload(task);
+        if (!fileUploadMgr.upload(task)){
+            Message msg = new Message();
+            msg.what = MAIN_CALL_BACK;
+            msg.arg1 = -1;
+            msg.obj = "upload failed";
+
+            mMainHandler.sendMessage(msg);
+        }
     }
 
     public void updateSig() {
