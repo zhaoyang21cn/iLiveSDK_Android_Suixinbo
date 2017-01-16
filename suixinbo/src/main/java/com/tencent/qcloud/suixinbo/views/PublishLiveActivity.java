@@ -198,13 +198,13 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
         switch (type) {
             case CAPTURE_IMAGE_CAMERA:
-                fileUri = createCoverUri("");
+                fileUri = createCoverUri("", false);
                 Intent intent_photo = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent_photo.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                 startActivityForResult(intent_photo, CAPTURE_IMAGE_CAMERA);
                 break;
             case IMAGE_STORE:
-                fileUri = createCoverUri("_select");
+                fileUri = createCoverUri("_select", false);
                 Intent intent_album = new Intent("android.intent.action.GET_CONTENT");
                 intent_album.setType("image/*");
                 startActivityForResult(intent_album, IMAGE_STORE);
@@ -239,7 +239,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
         return true;
     }
 
-    private Uri createCoverUri(String type) {
+    private Uri createCoverUri(String type, boolean bCrop) {
         String filename = MySelfInfo.getInstance().getId() + type + ".jpg";
         File outputImage = new File(Environment.getExternalStorageDirectory(), filename);
 /*        if (ContextCompat.checkSelfPermission(PublishLiveActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -256,7 +256,11 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-        return Uri.fromFile(outputImage);
+        if (bCrop) {
+            return Uri.fromFile(outputImage);
+        }else {
+            return UIUtils.getUriFromFile(this, outputImage);
+        }
     }
 
 
@@ -289,7 +293,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void startPhotoZoom(Uri uri) {
-        cropUri = createCoverUri("_crop");
+        cropUri = createCoverUri("_crop", true);
 
         Intent intent = new Intent("com.android.camera.action.CROP");
         /* 这句要记得写：这是申请权限，之前因为没有添加这个，打开裁剪页面时，一直提示“无法修改低于50*50像素的图片”，
@@ -340,10 +344,12 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case Constants.WRITE_PERMISSION_REQ_CODE:
-                for (int ret : grantResults) {
-                    if (ret != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
+                for (int i=0; i<grantResults.length; i++){
+                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        SxbLog.d(TAG, "request permission failed: "+permissions[i]);
+                     }else{
+                         SxbLog.d(TAG, "request permission success: "+permissions[i]);
+                     }
                 }
                 bPermission = true;
                 break;
@@ -358,7 +364,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             CurLiveInfo.setCoverurl(url);
             Toast.makeText(this, getString(R.string.publish_upload_success), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getString(R.string.publish_upload_cover_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.publish_upload_cover_failed)+"|"+code+"|"+url, Toast.LENGTH_SHORT).show();
         }
         bUploading = false;
     }
