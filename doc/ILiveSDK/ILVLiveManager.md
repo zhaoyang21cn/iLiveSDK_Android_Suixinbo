@@ -167,5 +167,5 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 [信令及上麦参见](./ILVLiveSenior.md)        
 
 ##API文档
-[API文档1.0.1](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
+[API文档1.0.4](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
 
