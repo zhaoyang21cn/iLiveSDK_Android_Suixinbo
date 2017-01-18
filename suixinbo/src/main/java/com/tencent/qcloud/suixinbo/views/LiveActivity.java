@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -36,9 +35,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
+import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
@@ -47,15 +48,21 @@ import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.livesdk.ILVCustomCmd;
+import com.tencent.livesdk.ILVLiveConstants;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.livesdk.ILVText;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.adapters.ChatMsgListAdapter;
 import com.tencent.qcloud.suixinbo.model.ChatEntity;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
-import com.tencent.qcloud.suixinbo.presenters.OKhttpHelper;
+import com.tencent.qcloud.suixinbo.presenters.LiveListViewHelper;
+import com.tencent.qcloud.suixinbo.presenters.UserServerHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
@@ -86,6 +93,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     //private EnterLiveHelper mEnterRoomHelper;
     //private OldLiveHelper mOldLiveHelper;
     private LiveHelper mLiveHelper;
+    private LiveListViewHelper mLiveListHelper;
 
     private ArrayList<ChatEntity> mArrayListChatEntity;
     private ChatMsgListAdapter mChatMsgListAdapter;
@@ -115,6 +123,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private ImageView mRecordBall;
     private ImageView mQualityCircle;
     private TextView mQualityText;
+    private TextView roomId;
     private int thumbUp = 0;
     private long admireTime = 0;
     private int watchCount = 0;
@@ -122,8 +131,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private static boolean mWhite = true;
     private boolean bCleanMode = false;
     private boolean mProfile;
-    private boolean bFirstRender = true;
     private boolean bInAvRoom = false, bSlideUp = false, bDelayQuit = false;
+    private boolean bReadyToChange = false;
 
     private String backGroundId;
 
@@ -146,6 +155,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         checkPermission();
 
         mLiveHelper = new LiveHelper(this, this);
+        mLiveListHelper = new LiveListViewHelper(this);
 
         initView();
         backGroundId = CurLiveInfo.getHostID();
@@ -244,7 +254,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mHostCtrView = (LinearLayout) findViewById(R.id.host_bottom_layout);
         mNomalMemberCtrView = (LinearLayout) findViewById(R.id.member_bottom_layout);
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);
-        mHostLeaveLayout = (LinearLayout)findViewById(R.id.ll_host_leave);
+        mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);
         mVideoChat = (TextView) findViewById(R.id.video_interact);
         mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);
         mVideoTime = (TextView) findViewById(R.id.broadcasting_time);
@@ -254,7 +264,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvMembers = (TextView) findViewById(R.id.member_counts);
         tvAdmires = (TextView) findViewById(R.id.heart_counts);
         mQualityText = (TextView) findViewById(R.id.quality_text);
-        speedBtn = (TextView)findViewById(R.id.speed_test_btn);
+        speedBtn = (TextView) findViewById(R.id.speed_test_btn);
         speedBtn.setOnClickListener(this);
         mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
@@ -263,8 +273,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnCtrlVideo.setOnClickListener(this);
         BtnCtrlMic.setOnClickListener(this);
         BtnHungup.setOnClickListener(this);
-        TextView roomId = (TextView) findViewById(R.id.room_id);
-        roomId.setText(CurLiveInfo.getChatRoomId());
+        roomId = (TextView) findViewById(R.id.room_id);
 
         //for 测试用
         TextView paramVideo = (TextView) findViewById(R.id.param_video);
@@ -299,19 +308,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             inviteView2.setOnClickListener(this);
             inviteView3.setOnClickListener(this);
 
-
-            pushBtn = (TextView) findViewById(R.id.push_btn);
-            pushBtn.setVisibility(View.VISIBLE);
-            pushBtn.setOnClickListener(this);
-
-            recordBtn = (TextView) findViewById(R.id.record_btn);
-            recordBtn.setVisibility(View.VISIBLE);
-            recordBtn.setOnClickListener(this);
+            tvAdmires.setVisibility(View.VISIBLE);
 
             initBackDialog();
             initDetailDailog();
-            initPushDialog();
-            initRecordDialog();
 
 
             mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
@@ -368,7 +368,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             List<String> ids = new ArrayList<>();
             ids.add(CurLiveInfo.getHostID());
             showHeadIcon(mHeadIcon, CurLiveInfo.getHostAvator());
-            mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostName(), 10));
+            mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
 
             mHostLayout = (LinearLayout) findViewById(R.id.head_up_layout);
             mHostLayout.setOnClickListener(this);
@@ -377,6 +377,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnNormal = (TextView) findViewById(R.id.normal_btn);
         BtnNormal.setOnClickListener(this);
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
+
+        pushBtn = (TextView) findViewById(R.id.push_btn);
+        pushBtn.setVisibility(View.VISIBLE);
+        pushBtn.setOnClickListener(this);
+
+        recordBtn = (TextView) findViewById(R.id.record_btn);
+        recordBtn.setVisibility(View.VISIBLE);
+        recordBtn.setOnClickListener(this);
+
+        initPushDialog();
+        initRecordDialog();
 
         BtnBack = (TextView) findViewById(R.id.btn_back);
         BtnBack.setOnClickListener(this);
@@ -390,7 +401,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvAdmires.setText("" + CurLiveInfo.getAdmires());
 
         //TODO 获取渲染层
-        mRootView = (AVRootView)findViewById(R.id.av_root_view);
+        mRootView = (AVRootView) findViewById(R.id.av_root_view);
         //TODO 设置渲染层
         ILVLiveManager.getInstance().setAvVideoView(mRootView);
 
@@ -404,10 +415,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
             @Override
             public void onSubViewCreated() {
-                for (int i=1; i< ILiveConstants.MAX_AV_VIDEO_NUM; i++){
+                for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
                     final int index = i;
                     AVVideoView avVideoView = mRootView.getViewByIndex(index);
-                    avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener(){
+                    avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
                             mRootView.swapVideoView(0, index);
@@ -441,19 +452,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     });
                 }
 
-                mRootView.getViewByIndex(0).setRecvFirstFrameListener(new AVVideoView.RecvFirstFrameListener() {
+                mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener(){
                     @Override
-                    public void onFirstFrameRecved(int width, int height, int angle, String identifier) {
-                        //主播心跳
-                        mHearBeatTimer = new Timer(true);
-                        mHeartBeatTask = new HeartBeatTask();
-                        mHearBeatTimer.schedule(mHeartBeatTask, 1000, 3 * 1000);
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        if(e1.getY()-e2.getY() > 20 && Math.abs(velocityY) > 10){
+                            bSlideUp = true;
+                        }else if(e2.getY()-e1.getY() > 20 && Math.abs(velocityY) > 10){
+                            bSlideUp = false;
+                        }
+                        switchRoom();
 
-                        //直播时间
-                        mVideoTimer = new Timer(true);
-                        mVideoTimerTask = new VideoTimerTask();
-                        mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
-                        bFirstRender = false;
+                        return false;
                     }
                 });
             }
@@ -482,7 +491,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         public void run() {
             String host = CurLiveInfo.getHostID();
             SxbLog.i(TAG, "HeartBeatTask " + host);
-            OKhttpHelper.getInstance().sendHeartBeat(host, CurLiveInfo.getMembers(), CurLiveInfo.getAdmires(), 0);
+            if (MySelfInfo.getInstance().getId().equals(CurLiveInfo.getHostID()))
+                UserServerHelper.getInstance().heartBeater(1);
+            else
+                UserServerHelper.getInstance().heartBeater(0);
+            mLiveHelper.pullMemberList();
         }
     }
 
@@ -533,7 +546,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         if (bInAvRoom) {
             bDelayQuit = false;
             quiteLiveByPurpose();
-        }else{
+        } else {
             clearOldData();
             finish();
         }
@@ -550,8 +563,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else {
             mLiveHelper.startExitRoom();
-//            mLiveHelper.perpareQuitRoom(true);
-//            mEnterRoomHelper.quiteLive();
+
         }
     }
 
@@ -565,14 +577,27 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //如果是直播，发消息
-                if (null != mLiveHelper) {
-//                    mLiveHelper.perpareQuitRoom(true);
-                    mLiveHelper.startExitRoom();
-                    if (isPushed) {
-                        mLiveHelper.stopPush();
+                ILVCustomCmd cmd = new ILVCustomCmd();
+                cmd.setCmd(Constants.AVIMCMD_EXITLIVE);
+                cmd.setType(ILVText.ILVTextType.eGroupMsg);
+                ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
+                    @Override
+                    public void onSuccess(TIMMessage data) {
+                        //如果是直播，发消息
+                        if (null != mLiveHelper) {
+                            mLiveHelper.startExitRoom();
+                            if (isPushed) {
+                                mLiveHelper.stopPush();
+                            }
+                        }
                     }
-                }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+
+                    }
+
+                });
                 backDialog.dismiss();
             }
         });
@@ -584,51 +609,35 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
         });
     }
-//
-//    private void updateHostLeaveLayout() {
-//        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-//            return;
-//        } else {
-//            // 退出房间或主屏为主播且无主播画面显示主播已离开
-//            if (!bInAvRoom || (CurLiveInfo.getHostID().equals(backGroundId) && !mRenderUserList.contains(backGroundId))) {
-//                mHostLeaveLayout.setVisibility(View.VISIBLE);
-//            } else {
-//                mHostLeaveLayout.setVisibility(View.GONE);
-//            }
-//        }
-//    }
 
-//    /**
-//     * 被动退出直播
-//     */
-//    private void quiteLivePassively() {
-//        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
-//        mLiveHelper.perpareQuitRoom(false);
-////        mEnterRoomHelper.quiteLive();
-//    }
-
-    @Override
-    public void readyToQuit() {
-        mLiveHelper.startExitRoom();
-    }
 
     /**
      * 完成进出房间流程
-     *
-     * @param id_status
-     * @param isSucc
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
-        //mEnterRoomHelper.initAvUILayer(avView);
+        mRootView.getViewByIndex(0).setRotate(true);
+//        mRootView.getViewByIndex(0).setDiffDirectionRenderMode(AVVideoView.ILiveRenderMode.BLACK_TO_FILL);
         bInAvRoom = true;
         bDelayQuit = true;
-
+        bReadyToChange = true;
+        roomId.setText("" + CurLiveInfo.getRoomNum());
         if (isSucc == true) {
+            //主播心跳
+            mHearBeatTimer = new Timer(true);
+            mHeartBeatTask = new HeartBeatTask();
+            mHearBeatTimer.schedule(mHeartBeatTask, 100, 5 * 1000); //5秒重复上报心跳 拉取房间列表
+
+            //直播时间
+            mVideoTimer = new Timer(true);
+            mVideoTimerTask = new VideoTimerTask();
+            mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
+                mHostNameTv.setText(MySelfInfo.getInstance().getId());
                 //开启摄像头渲染画面
                 SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
@@ -638,26 +647,22 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 //发消息通知上线
                 mLiveHelper.sendGroupCmd(Constants.AVIMCMD_ENTERLIVE, "");
             }
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-                if (bFirstRender) {
-                    //主播心跳
-                    mHearBeatTimer = new Timer(true);
-                    mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 3 * 1000);
 
-                    //直播时间
-                    mVideoTimer = new Timer(true);
-                    mVideoTimerTask = new VideoTimerTask();
-                    mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
-                    bFirstRender = false;
-                }
-            }
+
         }
     }
 
 
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                UserServerHelper.getInstance().reportMe(MySelfInfo.getInstance().getIdStatus(), 1);//通知server 我下线了
+            }
+        }.start();
+
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             if ((getBaseContext() != null) && (null != mDetailDialog) && (mDetailDialog.isShowing() == false)) {
                 SxbLog.d(TAG, LogConstants.ACTION_HOST_QUIT_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "quite room callback"
@@ -669,17 +674,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mDetailAdmires.setText("" + CurLiveInfo.getAdmires());
                 mDetailWatchCount.setText("" + watchCount);
                 mDetailDialog.show();
+
+
             }
         } else {
-            //finish();
-//            if (bDelayQuit) {
-//                clearOldData();
-//                mHostLeaveLayout.setVisibility(View.VISIBLE);
-//            }else{
-                clearOldData();
-                finish();
-//            }
+            clearOldData();
+            finish();
         }
+
+        //发送
+
         bInAvRoom = false;
     }
 
@@ -708,9 +712,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 成员状态变更
-     *
-     * @param id
-     * @param name
      */
     @Override
     public void memberJoin(String id, String name) {
@@ -719,19 +720,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         watchCount++;
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
 
-        CurLiveInfo.setMembers(CurLiveInfo.getMembers() + 1);
-        tvMembers.setText("" + CurLiveInfo.getMembers());
     }
 
-    @Override
-    public void memberQuit(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "quite live", Constants.MEMBER_EXIT);
-
-        if (CurLiveInfo.getMembers() > 1) {
-            CurLiveInfo.setMembers(CurLiveInfo.getMembers() - 1);
-            tvMembers.setText("" + CurLiveInfo.getMembers());
-        }
-    }
 
     @Override
     public void hostLeave(String id, String name) {
@@ -742,40 +732,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     public void hostBack(String id, String name) {
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
     }
-//
-//    /**
-//     * 有成员退群
-//     *
-//     * @param list 成员ID 列表
-//     */
-//    @Override
-//    public void memberQuiteLive(String[] list) {
-//        if (list == null) return;
-//        for (String id : list) {
-//            SxbLog.i(TAG, "memberQuiteLive id " + id);
-//            if (CurLiveInfo.getHostID().equals(id)) {
-//                if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
-//                    quiteLivePassively();
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 有成员入群
-//     *
-//     * @param list 成员ID 列表
-//     */
-//    @Override
-//    public void memberJoinLive(final String[] list) {
-//    }
-//
-//    @Override
-//    public void alreadyInLive(String[] list) {
-//        for (String id : list) {
-//            mRootView.renderVideoView(true, id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
-//        }
-//
-//    }
+
+    @Override
+    public void refreshMember(ArrayList<MemberID> memlist) {
+        if (memlist != null && tvMembers != null)
+            tvMembers.setText("" + memlist.size());
+    }
+
 
     /**
      * 红点动画
@@ -840,7 +803,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     public boolean showInviteView(String id) {
         SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "invite up show" +
                 LogConstants.DIV + "id " + id);
-        int requetCount = 1 + inviteViewCount;
+        int index = mRootView.findValidViewIndex();
+        if (index == -1) {
+            Toast.makeText(LiveActivity.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        int requetCount = index + inviteViewCount;
         if (requetCount > 3) {
             Toast.makeText(LiveActivity.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
             return false;
@@ -881,9 +849,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 判断是否邀请过同一个人
-     *
-     * @param id
-     * @return
      */
     private boolean hasInvited(String id) {
         if (id.equals(inviteView1.getTag())) {
@@ -947,7 +912,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else {
             //TODO 主动下麦 下麦；
             SxbLog.d(TAG, LogConstants.ACTION_VIEWER_UNSHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start unShow" +
-                LogConstants.DIV + "id " + id);
+                    LogConstants.DIV + "id " + id);
             mLiveHelper.downMemberVideo();
         }
         mLiveHelper.sendGroupCmd(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, id);
@@ -1051,26 +1016,28 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
 
         } else if (i == R.id.flash_btn) {
-            switch (ILiveRoomManager.getInstance().getActiveCameraId()){
-            case ILiveConstants.FRONT_CAMERA:
-                Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
-                break;
-            case ILiveConstants.BACK_CAMERA:
-                mLiveHelper.toggleFlashLight();
-                break;
-            default:
-                Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
-                break;
+            switch (ILiveRoomManager.getInstance().getActiveCameraId()) {
+                case ILiveConstants.FRONT_CAMERA:
+                    Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
+                    break;
+                case ILiveConstants.BACK_CAMERA:
+                    mLiveHelper.toggleFlashLight();
+                    break;
+                default:
+                    Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
+                    break;
             }
         } else if (i == R.id.switch_cam) {
-            switch (ILiveRoomManager.getInstance().getCurCameraId()){
-            case ILiveConstants.FRONT_CAMERA:
-                ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
-                break;
-            case ILiveConstants.BACK_CAMERA:
-                ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
-                break;
-            }
+            ILiveRoomManager.getInstance().enableCamera((ILiveRoomManager.getInstance().getCurCameraId() + 1)%2, true);
+//            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
+//
+//                case ILiveConstants.FRONT_CAMERA:
+//                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.BACK_CAMERA);
+//                    break;
+//                case ILiveConstants.BACK_CAMERA:
+//                    ILiveRoomManager.getInstance().switchCamera(ILiveConstants.FRONT_CAMERA);
+//                    break;
+//            }
         } else if (i == R.id.mic_btn) {
             if (mLiveHelper.isMicOn()) {
                 BtnMic.setBackgroundResource(R.drawable.icon_mic_close);
@@ -1097,8 +1064,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.camera_controll) {
             Toast.makeText(LiveActivity.this, "切换" + backGroundId + "camrea 状态", Toast.LENGTH_SHORT).show();
-            if (ILiveRoomManager.getInstance().getHostId().equals(MySelfInfo.getInstance().getId())) {//自己关闭自己
-                mLiveHelper.toggleCamera();
+            Log.i(TAG, "onClick: hostid " + ILiveRoomManager.getInstance().getHostId() + " myself " + MySelfInfo.getInstance().getId());
+            if (MySelfInfo.getInstance().getId().equals(backGroundId)) {//自己关闭自己
+                mLiveHelper.switchCamera();
             } else {
                 mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MULTI_HOST_CONTROLL_CAMERA, backGroundId, backGroundId);
             }
@@ -1165,6 +1133,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.param_video) {
             showTips = !showTips;
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    UserServerHelper.getInstance().getRoomPlayUrl(MySelfInfo.getInstance().getMyRoomNum());//通知server 我下线了
+                    UserServerHelper.getInstance().getPlayUrlList(0, 10);
+                }
+            }.start();
 
         } else if (i == R.id.push_btn) {
             pushStream();
@@ -1194,21 +1170,22 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     if (showTips) {
                         mQualityCircle.setVisibility(View.VISIBLE);
                         mQualityText.setVisibility(View.VISIBLE);
-                        if (tvTipsMsg != null) {
+                        if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
+                                ILiveSDK.getInstance().getAVContext().getRoom() != null) {
                             String strTips = ILiveSDK.getInstance().getAVContext().getRoom().getQualityParam();
                             String[] tips = strTips.split(",");
                             int loss_rate_recv = 0, loss_rate_send = 0, loss_rate_recv_udt = 0, loss_rate_send_udt = 0;
                             for (String tip : tips) {
-                                if (tip.contains("loss_rate_recv")){
+                                if (tip.contains("loss_rate_recv")) {
                                     loss_rate_recv = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_send")){
+                                if (tip.contains("loss_rate_send")) {
                                     loss_rate_send = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_recv_udt")){
+                                if (tip.contains("loss_rate_recv_udt")) {
                                     loss_rate_recv_udt = getQuality(tip);
                                 }
-                                if (tip.contains("loss_rate_send_udt")){
+                                if (tip.contains("loss_rate_send_udt")) {
                                     loss_rate_send_udt = getQuality(tip);
                                 }
                             }
@@ -1217,52 +1194,37 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                 tvTipsMsg.setText(strTips);
                             }
 
-                            if (loss_rate_recv > 4000 || loss_rate_send > 4000 || loss_rate_recv_udt > 2000 || loss_rate_send_udt > 500)
-                            {
+                            if (loss_rate_recv > 4000 || loss_rate_send > 4000 || loss_rate_recv_udt > 2000 || loss_rate_send_udt > 500) {
                                 mQualityCircle.setImageResource(R.drawable.circle_red);
                             }
                             //黄色示警
-                            else if (loss_rate_recv > 2000 || loss_rate_send > 2000 || loss_rate_recv_udt > 1000 || loss_rate_send_udt > 300)
-                            {
+                            else if (loss_rate_recv > 2000 || loss_rate_send > 2000 || loss_rate_recv_udt > 1000 || loss_rate_send_udt > 300) {
                                 mQualityCircle.setImageResource(R.drawable.circle_yellow);
-                            }else{
+                            } else {
                                 mQualityCircle.setImageResource(R.drawable.circle_green);
                             }
 
                             //网络质量(暂时用丢包率表示)
                             int status = 0;
                             // 如果下行为0，证明有可能是主播端，没有下行视频，那么要看上行视频
-                            if (loss_rate_recv == 0)
-                            {
-                                if (loss_rate_send > 4000)
-                                {
+                            if (loss_rate_recv == 0) {
+                                if (loss_rate_send > 4000) {
                                     status = 3;//红色警告
-                                }
-                                else if (loss_rate_send > 2000)
-                                {
+                                } else if (loss_rate_send > 2000) {
                                     status = 2;//黄色警告
+                                } else {
+                                    status = 1;//正常
                                 }
-                                else
-                                {
+                            } else {
+                                if (loss_rate_recv > 4000) {
+                                    status = 3;//红色警告
+                                } else if (loss_rate_recv > 2000) {
+                                    status = 2;//黄色警告
+                                } else {
                                     status = 1;//正常
                                 }
                             }
-                            else
-                            {
-                                if (loss_rate_recv > 4000)
-                                {
-                                    status = 3;//红色警告
-                                }
-                                else if (loss_rate_recv > 2000)
-                                {
-                                    status = 2;//黄色警告
-                                }
-                                else
-                                {
-                                    status = 1;//正常
-                                }
-                            }
-                            switch (status){
+                            switch (status) {
                                 case 1:
                                     mQualityText.setText("network good");
                                     break;
@@ -1291,7 +1253,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         for (int i = 0; i < str.length(); ++i) {
             char c = str.charAt(i);
             if (c >= '0' && c <= '9') {
-                res = res*10 + (c-'0');
+                res = res * 10 + (c - '0');
             }
         }
         return res;
@@ -1375,10 +1337,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onClick(View view) {
 //                mVideoMemberCtrlView.setVisibility(View.VISIBLE);
 //                mNomalMemberCtrView.setVisibility(View.INVISIBLE);
-                SxbLog.d(TAG, LogConstants.ACTION_VIEWER_SHOW + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "accept invite"+
-                    LogConstants.DIV + "host id " + CurLiveInfo.getHostID());
                 //上麦 ；TODO 上麦 上麦 上麦 ！！！！！；
-                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN,"",CurLiveInfo.getHostID());
+                mLiveHelper.sendC2CCmd(Constants.AVIMCMD_MUlTI_JOIN, "", CurLiveInfo.getHostID());
                 mLiveHelper.upMemberVideo();
                 inviteDg.dismiss();
             }
@@ -1525,22 +1485,19 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onClick(View view) {
                 ILivePushOption option = new ILivePushOption();
-                if (pushfileNameInput.getText().toString().equals("")) {
+                if (pushfileNameInput.getText().toString().equals("")) { // 推流名字为空
                     Toast.makeText(LiveActivity.this, "name can't be empty", Toast.LENGTH_SHORT);
                     return;
                 } else {
                     option.channelName(pushfileNameInput.getText().toString());
                 }
 
-                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {
+                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {//默认格式
                     option.encode(TIMAvManager.StreamEncode.HLS);
                 } else {
                     option.encode(TIMAvManager.StreamEncode.RTMP);
                 }
-//                mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start push stream"
-                        + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
-                mLiveHelper.startPush(option);
+                mLiveHelper.startPush(option);//开启推流
                 mPushDialog.dismiss();
             }
         });
@@ -1564,8 +1521,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 推流成功
-     *
-     * @param streamRes
      */
     @Override
     public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
@@ -1589,9 +1544,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     /**
      * 将地址黏贴到黏贴版
-     *
-     * @param url
-     * @param url2
      */
     private void ClipToBoard(final String url, final String url2) {
         SxbLog.i(TAG, "ClipToBoard url " + url);
@@ -1643,7 +1595,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private void initRecordDialog() {
         recordDialog = new Dialog(this, R.style.dialog);
-        recordDialog.setContentView(R.layout.record_param);
+        recordDialog.setContentView(R.layout.record_layout);
 
         filenameEditText = (EditText) recordDialog.findViewById(R.id.record_filename);
 
@@ -1652,25 +1604,32 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
         filenameEditText.setText("" + CurLiveInfo.getRoomNum());
 
-        Button recordOk = (Button) recordDialog.findViewById(R.id.btn_record_ok);
-        recordOk.setOnClickListener(new View.OnClickListener() {
+        Button videoRecord = (Button) recordDialog.findViewById(R.id.btn_record_video);
+        videoRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ILiveRecordOption option = new ILiveRecordOption();
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_CREATE_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "start record"
-                        + LogConstants.DIV + "room id " + MySelfInfo.getInstance().getMyRoomNum());
                 filename = filenameEditText.getText().toString();
-                option.fileName("sxb_"+ ILiveLoginManager.getInstance().getMyUserId()+"_"+filename);
+                option.fileName("sxb_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + filename);
 
                 option.classId(123);
+                option.recordType(TIMAvManager.RecordType.VIDEO);
                 mLiveHelper.startRecord(option);
                 recordDialog.dismiss();
             }
         });
-        Button recordCancel = (Button) recordDialog.findViewById(R.id.btn_record_cancel);
-        recordCancel.setOnClickListener(new View.OnClickListener() {
+        Button audioRecord = (Button) recordDialog.findViewById(R.id.btn_record_audio);
+        audioRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ILiveRecordOption option = new ILiveRecordOption();
+                filename = filenameEditText.getText().toString();
+                option.fileName("sxb_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + filename);
+
+                option.classId(123);
+                option.recordType(TIMAvManager.RecordType.AUDIO);
+                mLiveHelper.startRecord(option);
+                recordDialog.dismiss();
                 recordDialog.dismiss();
             }
         });
@@ -1723,7 +1682,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     // 清除老房间数据
-    private void clearOldData(){
+    private void clearOldData() {
         mArrayListChatEntity.clear();
         mBoolNeedRefresh = true;
         if (mBoolRefreshLock) {
@@ -1734,31 +1693,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mRootView.clearUserView();
     }
 
-/*    @Override
-    public void onSlideUp() {
-        if (MySelfInfo.getInstance().getIdStatus() != Constants.HOST) {
-            SxbLog.v(TAG, "ILVB-DBG|onSlideUp->enter");
-            quiteLiveByPurpose();
-            mLiveListViewHelper.getPageData();
-            bSlideUp = true;
-        }
-    }
 
     @Override
-    public void onSlideDown() {
-        if (MySelfInfo.getInstance().getIdStatus() != Constants.HOST) {
-            SxbLog.v(TAG, "ILVB-DBG|onSlideDown->enter");
-            quiteLiveByPurpose();
-            mLiveListViewHelper.getPageData();
-            bSlideUp = false;
-        }
-    }*/
-
-    @Override
-    public void showFirstPage(ArrayList<LiveInfoJson> livelist) {
+    public void showRoomList(ArrayList<RoomInfoJson> livelist) {
         int index = 0, oldPos = 0;
         for (; index<livelist.size(); index++){
-            if (livelist.get(index).getAvRoomId() == CurLiveInfo.getRoomNum()){
+            if (livelist.get(index).getInfo().getRoomnum() == CurLiveInfo.getRoomNum()){
                 oldPos = index;
                 index ++;
                 break;
@@ -1767,19 +1707,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         if (bSlideUp){
             index -= 2;
         }
-        LiveInfoJson info = livelist.get((index+livelist.size())%livelist.size());
-        SxbLog.v(TAG, "ILVB-DBG|showFirstPage->index:"+index+"/"+oldPos+"|room:"+info.getHost().getUid()+"/"+CurLiveInfo.getHostID());
+        RoomInfoJson info = livelist.get((index+livelist.size())%livelist.size());
 
         if (null != info){
             MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
             MySelfInfo.getInstance().setJoinRoomWay(false);
-            CurLiveInfo.setHostID(info.getHost().getUid());
-            CurLiveInfo.setHostName(info.getHost().getUsername());
-            CurLiveInfo.setHostAvator(info.getHost().getAvatar());
-            CurLiveInfo.setRoomNum(info.getAvRoomId());
-            CurLiveInfo.setMembers(info.getWatchCount() + 1); // 添加自己
-            CurLiveInfo.setAdmires(info.getAdmireCount());
-            CurLiveInfo.setAddress(info.getLbs().getAddress());
+            CurLiveInfo.setHostID(info.getHostId());
+            CurLiveInfo.setHostName("");
+            CurLiveInfo.setHostAvator("");
+            CurLiveInfo.setRoomNum(info.getInfo().getRoomnum());
+            CurLiveInfo.setMembers(info.getInfo().getMemsize()); // 添加自己
+            CurLiveInfo.setAdmires(info.getInfo().getThumbup());
 
             backGroundId = CurLiveInfo.getHostID();
 
@@ -1792,8 +1730,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             tvMembers.setText("" + CurLiveInfo.getMembers());
             tvAdmires.setText("" + CurLiveInfo.getAdmires());
 
+            clearOldData();
             //进入房间流程
-            mLiveHelper.startEnterRoom();
+            mLiveHelper.switchRoom();
+        }else{
+            bReadyToChange = true;
+        }
+    }
+
+    private void switchRoom(){
+        if (bReadyToChange) {
+            mLiveListHelper.getPageData();
         }
     }
 

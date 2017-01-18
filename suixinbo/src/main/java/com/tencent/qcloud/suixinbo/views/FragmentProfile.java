@@ -22,7 +22,8 @@ import com.bumptech.glide.RequestManager;
 import com.tencent.TIMManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVContext;
-import com.tencent.qalsdk.QALSDKManager;
+import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
@@ -138,7 +139,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             enterEditProfile();
 
         } else if (i == R.id.logout) {
-            mLoginHeloper.imLogout();
+            mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
 
         } else if (i == R.id.version) {
             showSDKVersion();
@@ -153,9 +154,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private void showSDKVersion() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("APP : " + getAppVersion() + "\r\n" + "IM SDK: " + TIMManager.getInstance().getVersion() + "\r\n"
-                + "QAL SDK: " + QALSDKManager.getInstance().getSdkVersion() + "\r\n"
-                + "AV SDK: " + AVContext.getVersion());
+        builder.setMessage("IM SDK: " + TIMManager.getInstance().getVersion() + "\r\n"
+                + "AV SDK: " + AVContext.getVersion()+ "\r\n"
+                + "Live SDK: " + ILVLiveManager.getInstance().getVersion() + "\r\n"
+                + "ILiveSDK: " + ILiveSDK.getInstance().getVersion());
         builder.show();
     }
 

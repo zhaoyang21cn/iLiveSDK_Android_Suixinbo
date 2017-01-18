@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.qcloud.suixinbo.BuildConfig;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -106,7 +108,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(this, getString(R.string.publish_wait_uploading) + " " + uploadPercent + "%", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(this, LiveActivity.class);
-                intent.putExtra(Constants.ID_STATUS, Constants.HOST);
                 MySelfInfo.getInstance().setIdStatus(Constants.HOST);
                 MySelfInfo.getInstance().setJoinRoomWay(true);
                 CurLiveInfo.setTitle(tvTitle.getText().toString());
@@ -197,13 +198,13 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
         switch (type) {
             case CAPTURE_IMAGE_CAMERA:
-                fileUri = createCoverUri("");
+                fileUri = createCoverUri("", false);
                 Intent intent_photo = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent_photo.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                 startActivityForResult(intent_photo, CAPTURE_IMAGE_CAMERA);
                 break;
             case IMAGE_STORE:
-                fileUri = createCoverUri("_select");
+                fileUri = createCoverUri("_select", false);
                 Intent intent_album = new Intent("android.intent.action.GET_CONTENT");
                 intent_album.setType("image/*");
                 startActivityForResult(intent_album, IMAGE_STORE);
@@ -224,6 +225,9 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(PublishLiveActivity.this, Manifest.permission.READ_PHONE_STATE)) {
                 permissions.add(Manifest.permission.READ_PHONE_STATE);
             }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(PublishLiveActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
             if (permissions.size() != 0) {
                 ActivityCompat.requestPermissions(PublishLiveActivity.this,
                         (String[]) permissions.toArray(new String[0]),
@@ -235,14 +239,14 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
         return true;
     }
 
-    private Uri createCoverUri(String type) {
+    private Uri createCoverUri(String type, boolean bCrop) {
         String filename = MySelfInfo.getInstance().getId() + type + ".jpg";
         File outputImage = new File(Environment.getExternalStorageDirectory(), filename);
-        if (ContextCompat.checkSelfPermission(PublishLiveActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+/*        if (ContextCompat.checkSelfPermission(PublishLiveActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(PublishLiveActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_PERMISSION_REQ_CODE);
             return null;
-        }
+        }*/
         try {
             if (outputImage.exists()) {
                 outputImage.delete();
@@ -252,7 +256,11 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-        return Uri.fromFile(outputImage);
+        if (bCrop) {
+            return Uri.fromFile(outputImage);
+        }else {
+            return UIUtils.getUriFromFile(this, outputImage);
+        }
     }
 
 
@@ -268,7 +276,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                     if (null != path) {
                         SxbLog.d(TAG, "startPhotoZoom->path:" + path);
                         File file = new File(path);
-                        startPhotoZoom(Uri.fromFile(file));
+                        startPhotoZoom(UIUtils.getUriFromFile(this, file));
                     }
                     break;
                 case CROP_CHOOSE:
@@ -285,9 +293,14 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void startPhotoZoom(Uri uri) {
-        cropUri = createCoverUri("_crop");
+        cropUri = createCoverUri("_crop", true);
 
         Intent intent = new Intent("com.android.camera.action.CROP");
+        /* 这句要记得写：这是申请权限，之前因为没有添加这个，打开裁剪页面时，一直提示“无法修改低于50*50像素的图片”，
+      开始还以为是图片的问题呢，结果发现是因为没有添加FLAG_GRANT_READ_URI_PERMISSION。
+      如果关联了源码，点开FileProvider的getUriForFile()看看（下面有），注释就写着需要添加权限。
+      */
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 500);
@@ -331,10 +344,12 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case Constants.WRITE_PERMISSION_REQ_CODE:
-                for (int ret : grantResults) {
-                    if (ret != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
+                for (int i=0; i<grantResults.length; i++){
+                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        SxbLog.d(TAG, "request permission failed: "+permissions[i]);
+                     }else{
+                         SxbLog.d(TAG, "request permission success: "+permissions[i]);
+                     }
                 }
                 bPermission = true;
                 break;
@@ -349,7 +364,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             CurLiveInfo.setCoverurl(url);
             Toast.makeText(this, getString(R.string.publish_upload_success), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getString(R.string.publish_upload_cover_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.publish_upload_cover_failed)+"|"+code+"|"+url, Toast.LENGTH_SHORT).show();
         }
         bUploading = false;
     }

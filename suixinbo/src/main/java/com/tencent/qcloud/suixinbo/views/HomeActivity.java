@@ -13,15 +13,17 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.tencent.TIMUserProfile;
+import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.qcloud.suixinbo.R;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseFragmentActivity;
-import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.qcloud.suixinbo.views.customviews.NotifyDialog;
 
 import java.util.List;
@@ -83,7 +85,17 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    Intent intent = new Intent(HomeActivity.this, LiveActivity.class);
+                    MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+                    MySelfInfo.getInstance().setJoinRoomWay(true);
+                    CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getId());
+                    CurLiveInfo.setHostAvator("");
+                    CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+//                    CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
+//                    CurLiveInfo.setAdmires(item.getInfo().getThumbup());
+//                    CurLiveInfo.setAddress(item.getLbs().getAddress());
+                    startActivity(intent);
                 }
             }, new DialogInterface.OnClickListener() {
                 @Override
@@ -102,7 +114,7 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
             InitBusinessHelper.initApp(getApplicationContext());
             SxbLog.i(TAG, "HomeActivity retry login");
             mLoginHelper = new LoginHelper(this);
-            mLoginHelper.imLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
+            mLoginHelper.iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         }
     }
 

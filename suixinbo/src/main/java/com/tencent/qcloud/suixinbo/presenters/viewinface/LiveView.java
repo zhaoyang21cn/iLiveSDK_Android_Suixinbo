@@ -3,7 +3,9 @@ package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 import com.tencent.av.TIMAvManager;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MemberID;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +33,6 @@ public interface LiveView extends MvpView {
 
     void memberJoin(String id, String name);
 
-    void memberQuit(String id, String name);
-
-    void readyToQuit();
-
     void hideInviteDialog();
 
     void pushStreamSucc(TIMAvManager.StreamRes streamRes);
@@ -48,4 +46,6 @@ public interface LiveView extends MvpView {
     void hostLeave(String id, String name);
 
     void hostBack(String id, String name);
+
+    void refreshMember(ArrayList<MemberID> memlist);
 }

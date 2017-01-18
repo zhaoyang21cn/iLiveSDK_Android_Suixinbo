@@ -61,7 +61,7 @@ public class GetMemberListHelper extends Presenter {
             MemberInfo member = new MemberInfo();
             member.setUserId(item.getUser());
             //if (QavsdkControl.getInstance().containIdView(item.getUser())) {
-            AVVideoView avVideoView = ILiveRoomManager.getInstance().getRoomView().getUserAvVideoView(item.getUser(), AVView.VIDEO_SRC_TYPE_CAMERA);
+            AVVideoView avVideoView = ILiveRoomManager.getInstance().getRoomView().getUserAvVideoView(item.getUser(),  AVView.VIDEO_SRC_TYPE_CAMERA);
             if (null != avVideoView && avVideoView.isRendering()){
                 member.setIsOnVideoChat(true);
             }

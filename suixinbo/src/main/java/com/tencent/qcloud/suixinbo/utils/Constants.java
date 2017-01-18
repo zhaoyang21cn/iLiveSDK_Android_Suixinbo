@@ -15,6 +15,8 @@ public class Constants {
 
     public static final String USER_SIG = "user_sig";
 
+    public static final String USER_TOKEN = "user_token";
+
     public static final String USER_NICK = "user_nick";
 
     public static final String USER_SIGN = "user_sign";
@@ -36,8 +38,8 @@ public class Constants {
     //public static final int ACCOUNT_TYPE = 884;
 
     // ILiveSDK 随心播
-    public static final int SDK_APPID = 1400019301;
-    public static final int ACCOUNT_TYPE = 8871;
+    public static final int SDK_APPID = 1400019352;
+    public static final int ACCOUNT_TYPE = 8970;
 
     public static final String ID_STATUS = "id_status";
 
@@ -78,6 +80,7 @@ public class Constants {
     public static final int AVIMCMD_MULTI_HOST_CANCELINVITE = AVIMCMD_MULTI_HOST_DISABLEINTERACTCAMERA + 1; //主播让某个互动者下麦
     public static final int AVIMCMD_MULTI_HOST_CONTROLL_CAMERA = AVIMCMD_MULTI_HOST_CANCELINVITE + 1; //主播控制某个上麦成员摄像头
     public static final int AVIMCMD_MULTI_HOST_CONTROLL_MIC = AVIMCMD_MULTI_HOST_CONTROLL_CAMERA + 1; //主播控制某个上麦成员MIC
+    public static final int AVIMCMD_MULTI_HOST_SWITCH_CAMERA = AVIMCMD_MULTI_HOST_CONTROLL_MIC+1; ////主播切换某个上麦成员MIC
 
     public static final int AVIMCMD_TEXT = -1;         // 普通的聊天消息
 

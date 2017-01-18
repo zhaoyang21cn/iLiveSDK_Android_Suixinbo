@@ -27,8 +27,9 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
     private Activity mActivity;
     private class ViewHolder{
         TextView tvName;
-        TextView tvHost;
+        TextView tvUser;
         TextView tvTime;
+        TextView tvVideoId;
         TextView tvUrl;
     }
 
@@ -50,8 +51,9 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
 
             holder = new ViewHolder();
             holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.tvHost = (TextView) convertView.findViewById(R.id.tv_host);
+            holder.tvUser = (TextView) convertView.findViewById(R.id.tv_user);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            holder.tvVideoId = (TextView) convertView.findViewById(R.id.tv_videoid);
             holder.tvUrl = (TextView) convertView.findViewById(R.id.tv_url);
 
             convertView.setTag(holder);
@@ -67,8 +69,11 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
         });
 
         holder.tvName.setText(data.getStrName());
-        holder.tvHost.setText( data.getStrUser());
-        holder.tvTime.setText(data.getStrCreateTime());
+        if (!TextUtils.isEmpty(data.getStrUser()))
+            holder.tvUser.setText(data.getStrUser());
+        if (!TextUtils.isEmpty(data.getStrCreateTime()))
+            holder.tvTime.setText( data.getStrCreateTime());
+        holder.tvVideoId.setText(data.getStrVideoId());
         holder.tvUrl.setText(data.getPlayUrl());
 
         return convertView;

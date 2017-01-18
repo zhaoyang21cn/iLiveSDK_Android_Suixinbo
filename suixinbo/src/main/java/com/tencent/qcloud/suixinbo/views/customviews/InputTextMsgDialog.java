@@ -99,11 +99,11 @@ public class InputTextMsgDialog extends Dialog {
                 //获取当前界面可视部分
                 getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
                 //获取屏幕的高度
-                int screenHeight =  getWindow().getDecorView().getRootView().getHeight();
+                int screenHeight = getWindow().getDecorView().getRootView().getHeight();
                 //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
                 int heightDifference = screenHeight - r.bottom;
 
-                if (heightDifference <= 0 && mLastDiff > 0){
+                if (heightDifference <= 0 && mLastDiff > 0) {
                     imm.hideSoftInputFromWindow(messageTextView.getWindowToken(), 0);
                     dismiss();
                 }
@@ -186,7 +186,7 @@ public class InputTextMsgDialog extends Dialog {
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
-                Toast.makeText(mContext, "send msg failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "send msg failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }

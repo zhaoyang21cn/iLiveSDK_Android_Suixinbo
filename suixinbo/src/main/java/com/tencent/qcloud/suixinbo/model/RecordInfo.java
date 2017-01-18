@@ -1,10 +1,8 @@
 package com.tencent.qcloud.suixinbo.model;
 
-import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -13,25 +11,18 @@ import org.json.JSONObject;
 public class RecordInfo {
     private String strName;
     private String strUser;
-    private String strDuring;
-    private String strFileId;
     private String strCreateTime;
-    private String status;
+    private String strCover;
+    private String strVideoId;
     private String playUrl;
 
-    public RecordInfo(JSONObject jsonRecord) throws Exception{
-        String filename = jsonRecord.optString("fileName");
-        strFileId = jsonRecord.optString("fileId");
-        status = jsonRecord.optString("status");
-        strDuring = jsonRecord.optString("duration");
-        JSONArray jsonPlaySets = jsonRecord.optJSONArray("playSet");
-        if (null != jsonPlaySets){
-            for (int i=0; i<jsonPlaySets.length(); i++){
-                JSONObject jsonPlay = jsonPlaySets.getJSONObject(i);
-                playUrl = jsonPlay.optString("url");
-                if (TextUtils.isEmpty(playUrl))
-                    break;
-            }
+    public RecordInfo(JSONObject jsonRecord) throws JSONException{
+        String filename = jsonRecord.optString("uid");
+        strCover = jsonRecord.optString("cover");
+        strVideoId = jsonRecord.optString("videoId");
+        JSONArray urls = jsonRecord.getJSONArray("playurl");
+        if (null != urls && urls.length()>0){
+            playUrl = urls.getString(0);
         }
 
         String infos[] = filename.split("_");
@@ -48,24 +39,20 @@ public class RecordInfo {
         return strName;
     }
 
-    public String getStrUser() {
-        return strUser;
-    }
-
-    public String getStrDuring() {
-        return strDuring;
-    }
-
-    public String getStrFileId() {
-        return strFileId;
-    }
-
     public String getStrCreateTime() {
         return strCreateTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStrUser() {
+        return strUser;
+    }
+
+    public String getStrCover() {
+        return strCover;
+    }
+
+    public String getStrVideoId() {
+        return strVideoId;
     }
 
     public String getPlayUrl() {

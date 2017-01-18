@@ -78,7 +78,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
             //注册一个账号
-            mLoginHeloper.tlsRegister(userId, mPassword.getText().toString());
+            mLoginHeloper.standardRegister(userId, mPassword.getText().toString());
         }
         if (view.getId() == R.id.back) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -93,7 +93,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void loginFail() {
+    public void loginFail(String module, int errCode, String errMsg) {
+        Toast.makeText(this, "code "+errCode+"     "+errMsg , Toast.LENGTH_SHORT).show();
 
     }
 

@@ -45,8 +45,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else {
             //有账户登录直接IM登录
             SxbLog.i(TAG, "LoginActivity onCreate");
-            mLoginHeloper.imLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
+            mLoginHeloper.iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         }
+
+        // 初始化直播模块
+/*        ILVLiveConfig liveConfig = new ILVLiveConfig();
+        liveConfig.messageListener(MessageEvent.getInstance());
+        ILVLiveManager.getInstance().init(liveConfig);*/
     }
 
     @Override
@@ -77,8 +82,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 Toast.makeText(LoginActivity.this, "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            tlsLogin(mUserName.getText().toString(),mPassWord.getText().toString());
-            mLoginHeloper.tlsLogin(mUserName.getText().toString(), mPassWord.getText().toString());
+            mLoginHeloper.standardLogin(mUserName.getText().toString(), mPassWord.getText().toString());
         }
     }
 
@@ -125,8 +129,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void loginFail() {
-        initView();
+    public void loginFail(String mode,int code ,String errorinfo) {
+        Toast.makeText(LoginActivity.this, "login fail" + MySelfInfo.getInstance().getId() + " : "+errorinfo, Toast.LENGTH_SHORT).show();
     }
 
     void checkPermission() {
@@ -136,6 +140,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 permissionsList.add(Manifest.permission.READ_PHONE_STATE);
             if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
                 permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if ((checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.ACCESS_NETWORK_STATE);
+            if ((checkSelfPermission(Manifest.permission.CHANGE_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.CHANGE_NETWORK_STATE);
             if (permissionsList.size() != 0) {
                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_PHONE_PERMISSIONS);

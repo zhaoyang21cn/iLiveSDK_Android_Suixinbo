@@ -98,7 +98,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         liveConfig.setLiveMsgListener(new ILVLiveConfig.ILVLiveMsgListener() {
             @Override
-            public void onNewTextMsg(String text, String id) {
+            public void onNewTextMsg(ILVText text, String SenderId) {
                 Toast.makeText(LiveActivity.this, "onNewTextMsg : " + text, Toast.LENGTH_SHORT).show();
             }
 
@@ -108,7 +108,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE:
                         Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
                         ILiveLog.d(TAG, "ILVB-LiveApp|received ");
-                        ILVLiveManager.getInstance().upToVideoMember("LiveGuest",new ILiveCallBack() {  //上麦角色
+                        ILVLiveManager.getInstance().upToVideoMember( "LiveGuest", new ILiveCallBack() {
                             @Override
                             public void onSuccess(Object data) {
 
@@ -149,6 +149,12 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(LiveActivity.this, "cmd "+ cmd, Toast.LENGTH_SHORT).show();
 
             }
+
+            @Override
+            public void onNewOtherMsg(TIMMessage message) {
+
+            }
+
         });
         //初始化直播场景
         ILVLiveManager.getInstance().init(liveConfig);
@@ -314,7 +320,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.text_send) {
             //发送消息
-            ILVText iliveText = new ILVText("ss", "", ILVLiveConstants.GROUP_TYPE);
+            ILVText iliveText = new ILVText(ILVText.ILVTextType.eGroupMsg,ILiveRoomManager.getInstance().getIMGroupId(), "");
             iliveText.setText("" + textInput.getText());
             //发送消息
             ILVLiveManager.getInstance().sendText(iliveText, new ILiveCallBack() {
@@ -336,8 +342,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             //邀请上麦
             ILVCustomCmd cmd = new ILVCustomCmd();
             cmd.setCmd(ILVLiveConstants.ILVLIVE_CMD_INVITE);
-            cmd.setType(ILVLiveConstants.C2C_TYPE);
-            cmd.setDestid("" + memId.getText());
+            cmd.setType(ILVText.ILVTextType.eC2CMsg);
+            cmd.setDestId("" + memId.getText());
             cmd.setParam("");
             ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
                 @Override
@@ -363,8 +369,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             //关闭上麦
             ILVCustomCmd cmd = new ILVCustomCmd();
             cmd.setCmd(ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE);
-            cmd.setType(ILVLiveConstants.C2C_TYPE);
-            cmd.setDestid("" + memId.getText());
+            cmd.setType(ILVText.ILVTextType.eC2CMsg);
+            cmd.setDestId("" + memId.getText());
             cmd.setParam("");
             ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
                 @Override

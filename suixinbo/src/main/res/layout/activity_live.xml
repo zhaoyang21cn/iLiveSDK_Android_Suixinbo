@@ -22,23 +22,19 @@
         android:layout_marginTop="5dp"
         android:layout_below="@id/quality_circle"
         android:layout_alignRight="@id/quality_circle"
-        android:textColor="#FFFFFF"
-        android:text="111"/>
+        android:textColor="#FFFFFF" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="80dp"
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/qav_tips_msg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="80dp"
-            android:maxLength="2000"
-            android:singleLine="false"
             android:textSize="13sp" />
 
     </ScrollView>
@@ -63,7 +59,8 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="10dp"
-            android:text="1231231" />
+            android:textColor="@color/white"
+            android:text="" />
 
 
         <LinearLayout
@@ -123,12 +120,12 @@
 
         <TextView
             android:id="@+id/btn_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="top|right"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/back_live_btn"
+            android:background="@drawable/cross_icon"
             android:onClick="onClick" />
 
         <ListView
@@ -192,17 +189,11 @@
     <include
         android:id="@+id/qav_beauty_setting"
         layout="@layout/qav_beauty_setting"
+        android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="20dp" />
-
-
-    <include
-        android:id="@+id/invite_views"
-        layout="@layout/invite_views"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
 
 
     <TextView
@@ -235,4 +226,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <include
+            android:id="@+id/invite_views"
+            layout="@layout/invite_views"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 </RelativeLayout>
