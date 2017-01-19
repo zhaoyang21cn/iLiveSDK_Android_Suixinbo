@@ -49,7 +49,6 @@ import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
-import com.tencent.livesdk.ILVLiveConstants;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.livesdk.ILVText;
 import com.tencent.qcloud.suixinbo.R;
@@ -1172,71 +1171,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         mQualityText.setVisibility(View.VISIBLE);
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
-                            String strTips = ILiveSDK.getInstance().getAVContext().getRoom().getQualityParam();
-                            String[] tips = strTips.split(",");
-                            int loss_rate_recv = 0, loss_rate_send = 0, loss_rate_recv_udt = 0, loss_rate_send_udt = 0;
-                            for (String tip : tips) {
-                                if (tip.contains("loss_rate_recv")) {
-                                    loss_rate_recv = getQuality(tip);
-                                }
-                                if (tip.contains("loss_rate_send")) {
-                                    loss_rate_send = getQuality(tip);
-                                }
-                                if (tip.contains("loss_rate_recv_udt")) {
-                                    loss_rate_recv_udt = getQuality(tip);
-                                }
-                                if (tip.contains("loss_rate_send_udt")) {
-                                    loss_rate_send_udt = getQuality(tip);
-                                }
-                            }
-                            strTips = praseString(strTips);
-                            if (!TextUtils.isEmpty(strTips)) {
-                                tvTipsMsg.setText(strTips);
-                            }
 
-                            if (loss_rate_recv > 4000 || loss_rate_send > 4000 || loss_rate_recv_udt > 2000 || loss_rate_send_udt > 500) {
-                                mQualityCircle.setImageResource(R.drawable.circle_red);
-                            }
-                            //黄色示警
-                            else if (loss_rate_recv > 2000 || loss_rate_send > 2000 || loss_rate_recv_udt > 1000 || loss_rate_send_udt > 300) {
-                                mQualityCircle.setImageResource(R.drawable.circle_yellow);
-                            } else {
-                                mQualityCircle.setImageResource(R.drawable.circle_green);
-                            }
-
-                            //网络质量(暂时用丢包率表示)
-                            int status = 0;
-                            // 如果下行为0，证明有可能是主播端，没有下行视频，那么要看上行视频
-                            if (loss_rate_recv == 0) {
-                                if (loss_rate_send > 4000) {
-                                    status = 3;//红色警告
-                                } else if (loss_rate_send > 2000) {
-                                    status = 2;//黄色警告
-                                } else {
-                                    status = 1;//正常
-                                }
-                            } else {
-                                if (loss_rate_recv > 4000) {
-                                    status = 3;//红色警告
-                                } else if (loss_rate_recv > 2000) {
-                                    status = 2;//黄色警告
-                                } else {
-                                    status = 1;//正常
-                                }
-                            }
-                            switch (status) {
-                                case 1:
-                                    mQualityText.setText("network good");
-                                    break;
-                                case 2:
-                                    mQualityText.setText("network normal");
-                                    break;
-                                case 3:
-                                    mQualityText.setText("network bad");
-                                    break;
-                            }
-
-
+                            tvTipsMsg.setText(" "+ ILiveRoomManager.getInstance().getQualityData());
                         }
                     } else {
                         tvTipsMsg.setText("");
@@ -1247,50 +1183,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             });
         }
     };
-
-    private int getQuality(String str) {
-        int res = 0;
-        for (int i = 0; i < str.length(); ++i) {
-            char c = str.charAt(i);
-            if (c >= '0' && c <= '9') {
-                res = res * 10 + (c - '0');
-            }
-        }
-        return res;
-    }
-
-    //for 测试 解析参数
-    private String praseString(String video) {
-        if (video.length() == 0) {
-            return "";
-        }
-        String result = "";
-        String splitItems[];
-        String tokens[];
-        splitItems = video.split("\\n");
-        for (int i = 0; i < splitItems.length; ++i) {
-            if (splitItems[i].length() < 2)
-                continue;
-
-            tokens = splitItems[i].split(":");
-            if (tokens[0].length() == "mainVideoSendSmallViewQua".length()) {
-                continue;
-            }
-            if (tokens[0].endsWith("BigViewQua")) {
-                tokens[0] = "mainVideoSendViewQua";
-            }
-            if (tokens[0].endsWith("BigViewQos")) {
-                tokens[0] = "mainVideoSendViewQos";
-            }
-            result += tokens[0] + ":\n" + "\t\t";
-            for (int j = 1; j < tokens.length; ++j)
-                result += tokens[j];
-            result += "\n\n";
-            //Log.d(TAG, "test:" + result);
-        }
-        //Log.d(TAG, "test:" + result);
-        return result;
-    }
 
 
     private void backToNormalCtrlView() {
