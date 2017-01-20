@@ -518,7 +518,7 @@ public class UserServerHelper {
     }
 
     /**
-     * 心跳上报
+     * 获取播放列表
      */
     public ResquestResult getPlayUrlList (int page,int size) {
         try {
@@ -544,7 +544,7 @@ public class UserServerHelper {
 
 
     /**
-     * 心跳上报
+     * 获取房间回放地址
      */
     public ResquestResult getRoomPlayUrl (int room) {
         try {

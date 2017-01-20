@@ -4,6 +4,7 @@
  - 修复主播本地预览默认全屏模式
  - 修复渲染保护
  - 默认关闭初始化拉取最近联系人及消息(用到的用户请在初始化iLiveSDK后调用IMSDK接口开启)
+ - 新版本随心播 更新后台协议，调整为独立模式，更新部分信令格式
  
 ###V1.2.0(2017-01-16)
  - 修改默认为支持后模式([参考文档](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/breakEvent.md))
