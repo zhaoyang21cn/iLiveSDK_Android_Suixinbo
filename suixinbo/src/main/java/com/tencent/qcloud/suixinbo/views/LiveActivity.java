@@ -1615,6 +1615,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 option.classId(123);
                 option.recordType(TIMAvManager.RecordType.VIDEO);
                 mLiveHelper.startRecord(option);
+                mLiveHelper.notifyNewRecordInfo(filename);
                 recordDialog.dismiss();
             }
         });

@@ -251,6 +251,26 @@ public class UserServerHelper {
         return null;
     }
 
+    /***
+     * 上报录制信息
+     */
+    public ResquestResult reporNewtRecordInfo(String inputJson) {
+        try {
+            Log.v(TAG, "reporNewtRecordInfo->"+inputJson);
+            String res = post(REPORT_RECORD, inputJson);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            return new ResquestResult(code, errorInfo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * 心跳上报

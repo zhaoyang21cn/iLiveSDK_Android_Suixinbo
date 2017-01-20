@@ -421,6 +421,34 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         }).start();
     }
 
+    /**
+     * 上报录制信息
+     */
+    public void notifyNewRecordInfo(final String name) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject recordInfo = null;
+                try {
+                    recordInfo = new JSONObject();
+                    recordInfo.put("token", MySelfInfo.getInstance().getToken());
+                    recordInfo.put("roomnum", CurLiveInfo.getRoomNum());
+                    recordInfo.put("uid", MySelfInfo.getInstance().getId());
+                    recordInfo.put("name", name);
+                    recordInfo.put("type", 0);
+                    recordInfo.put("cover", CurLiveInfo.getCoverurl());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (recordInfo != null) {
+                    SxbLog.standardEnterRoomLog(TAG, "upload record info to serve", "", "record info " + recordInfo.toString());
+                    UserServerHelper.getInstance().reporNewtRecordInfo(recordInfo.toString());
+                }
+
+            }
+        }).start();
+    }
+
     public void toggleCamera() {
         bCameraOn = !bCameraOn;
         SxbLog.d(TAG, "toggleCamera->change camera:" + bCameraOn);
