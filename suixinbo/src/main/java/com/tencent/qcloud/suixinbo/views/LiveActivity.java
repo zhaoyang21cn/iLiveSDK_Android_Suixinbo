@@ -38,6 +38,8 @@ import com.bumptech.glide.RequestManager;
 import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
+import com.tencent.av.sdk.AVAudioCtrl;
+import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
@@ -1171,8 +1173,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         mQualityText.setVisibility(View.VISIBLE);
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
-
-                            tvTipsMsg.setText(" "+ ILiveRoomManager.getInstance().getQualityData());
+                            String tips =getQualityTips();
+                            tvTipsMsg.setText(tips);
                         }
                     } else {
                         tvTipsMsg.setText("");
@@ -1636,20 +1638,44 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
+    public String getAudioQualityTips() {
+        AVAudioCtrl avAudioCtrl;
+        if ( ILiveSDK.getInstance().getAVContext() != null) {
+            avAudioCtrl =  ILiveSDK.getInstance().getAVContext().getAudioCtrl();
+            return avAudioCtrl.getQualityTips();
+        }
 
-//    public void forSevenVersion(){
-//        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-//        params.format = PixelFormat.RGBA_8888;
-//        params.gravity = Gravity.LEFT | Gravity.TOP;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            if(Build.VERSION.SDK_INT > 24){
-//                params.type = WindowManager.LayoutParams.TYPE_PHONE;
-//            }else{
-//                params.type = WindowManager.LayoutParams.TYPE_TOAST;
-//            }
-//        } else {
-//            params.type = WindowManager.LayoutParams.TYPE_PHONE;
-//        }
-//        addContentView(,params);
-//    }
+        return "";
+    }
+
+    public String getVideoQualityTips() {
+        AVVideoCtrl avVideoCtrl;
+        if (ILiveSDK.getInstance().getAVContext() != null) {
+             avVideoCtrl = ILiveSDK.getInstance().getAVContext() .getVideoCtrl();
+            return avVideoCtrl.getQualityTips();
+        }
+        return "";
+    }
+
+
+    public String getQualityTips() {
+        String audioQos = "";
+        String videoQos = "";
+        String roomQos = "";
+
+        if (ILiveSDK.getInstance().getAVContext() != null) {
+            audioQos = getAudioQualityTips();
+
+            videoQos = getVideoQualityTips();
+
+            roomQos = ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips();
+        }
+
+        if (audioQos != null && videoQos != null && roomQos != null) {
+            return audioQos + videoQos + roomQos;
+        } else {
+            return "";
+        }
+
+    }
 }
