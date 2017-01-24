@@ -251,6 +251,28 @@ public class UserServerHelper {
         return null;
     }
 
+    /***
+     * 上报录制信息
+     */
+    public ResquestResult reporNewtRecordInfo(String inputJson) {
+        try {
+            Log.v(TAG, "reporNewtRecordInfo->"+inputJson);
+            String res = post(REPORT_RECORD, inputJson);
+            JSONTokener jsonParser = new JSONTokener(res);
+            JSONObject response = (JSONObject) jsonParser.nextValue();
+            int code = response.getInt("errorCode");
+            String errorInfo = response.getString("errorInfo");
+            ResquestResult ret =  new ResquestResult(code, errorInfo);
+            Log.v(TAG, "reporNewtRecordInfo->rsp:"+ret.errorCode+"|"+ret.getErrorInfo());
+            return ret;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * 心跳上报
@@ -468,7 +490,7 @@ public class UserServerHelper {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
-			jasonPacket.put("type", 0);
+			jasonPacket.put("type", Constants.VOD_MODE);
             jasonPacket.put("index", page);
             jasonPacket.put("size",size);
             String json = jasonPacket.toString();
