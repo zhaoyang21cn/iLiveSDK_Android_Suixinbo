@@ -1017,7 +1017,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
 
         } else if (i == R.id.flash_btn) {
-            switch (ILiveRoomManager.getInstance().getActiveCameraId()) {
+            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
                 case ILiveConstants.FRONT_CAMERA:
                     Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
                     break;
