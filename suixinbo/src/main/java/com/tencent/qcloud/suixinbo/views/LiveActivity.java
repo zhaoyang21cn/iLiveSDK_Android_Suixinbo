@@ -280,7 +280,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         TextView paramVideo = (TextView) findViewById(R.id.param_video);
         paramVideo.setOnClickListener(this);
         tvTipsMsg = (TextView) findViewById(R.id.qav_tips_msg);
-        tvTipsMsg.setTextColor(Color.GREEN);
+        tvTipsMsg.setTextColor(Color.BLACK);
         paramTimer.schedule(task, 1000, 1000);
 
 
@@ -1174,10 +1174,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
                             String tips =getQualityTips();
+                            tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
+                            tvTipsMsg.setVisibility(View.VISIBLE);
                         }
                     } else {
                         tvTipsMsg.setText("");
+                        tvTipsMsg.setVisibility(View.INVISIBLE);
                         mQualityCircle.setVisibility(View.GONE);
                         mQualityText.setVisibility(View.GONE);
                     }
@@ -1590,7 +1593,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
 
     @Override
-    public void showRoomList(ArrayList<RoomInfoJson> livelist) {
+    public void showRoomList(UserServerHelper.RequestBackInfo reqinfo,ArrayList<RoomInfoJson> livelist) {
+        if(reqinfo.getErrorCode()!=0){
+            Toast.makeText(this, "error" + reqinfo.getErrorCode()+" info " +reqinfo.getErrorInfo() , Toast.LENGTH_SHORT).show();
+            return;
+
+
+        }
         int index = 0, oldPos = 0;
         for (; index<livelist.size(); index++){
             if (livelist.get(index).getInfo().getRoomnum() == CurLiveInfo.getRoomNum()){

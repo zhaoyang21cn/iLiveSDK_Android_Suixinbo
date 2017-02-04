@@ -1,6 +1,7 @@
 package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
+import com.tencent.qcloud.suixinbo.presenters.UserServerHelper;
 
 import java.util.ArrayList;
 
@@ -11,5 +12,5 @@ import java.util.ArrayList;
 public interface LiveListView extends MvpView{
 
 
-    void showRoomList(ArrayList<RoomInfoJson> roomlist);
+    void showRoomList(UserServerHelper.RequestBackInfo result, ArrayList<RoomInfoJson> roomlist);
 }

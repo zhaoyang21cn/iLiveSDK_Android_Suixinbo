@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.adapters.LiveShowAdapter;
@@ -18,6 +19,7 @@ import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.LiveListViewHelper;
+import com.tencent.qcloud.suixinbo.presenters.UserServerHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
@@ -110,7 +112,12 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void showRoomList(ArrayList<RoomInfoJson> roomlist) {
+    public void showRoomList(UserServerHelper.RequestBackInfo info , ArrayList<RoomInfoJson> roomlist) {
+        if(info.getErrorCode()!=0){
+            Toast.makeText(getContext(), "error "+info.getErrorCode()+" info " +info.getErrorInfo(), Toast.LENGTH_SHORT).show();
+            return ;
+        }
+
         mSwipeRefreshLayout.setRefreshing(false);
         roomList.clear();
         if (null != roomlist) {

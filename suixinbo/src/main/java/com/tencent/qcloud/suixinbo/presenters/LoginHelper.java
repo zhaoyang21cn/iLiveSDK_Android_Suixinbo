@@ -39,16 +39,16 @@ public class LoginHelper extends Presenter {
     //登录模式登录
     private StandardLoginTask loginTask;
 
-    class StandardLoginTask extends AsyncTask<String, Integer, UserServerHelper.ResquestResult> {
+    class StandardLoginTask extends AsyncTask<String, Integer, UserServerHelper.RequestBackInfo> {
 
         @Override
-        protected UserServerHelper.ResquestResult doInBackground(String... strings) {
+        protected UserServerHelper.RequestBackInfo doInBackground(String... strings) {
 
             return UserServerHelper.getInstance().loginId(strings[0], strings[1]);
         }
 
         @Override
-        protected void onPostExecute(UserServerHelper.ResquestResult result) {
+        protected void onPostExecute(UserServerHelper.RequestBackInfo result) {
 
             if (result != null) {
                 if (result.getErrorCode() == 0) {
@@ -120,7 +120,7 @@ public class LoginHelper extends Presenter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final UserServerHelper.ResquestResult result = UserServerHelper.getInstance().registerId(id, psw);
+                final UserServerHelper.RequestBackInfo result = UserServerHelper.getInstance().registerId(id, psw);
                 ((Activity) mContext).runOnUiThread(new Runnable() {
                     public void run() {
 
@@ -144,7 +144,7 @@ public class LoginHelper extends Presenter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                UserServerHelper.ResquestResult result = UserServerHelper.getInstance().logoutId(id);
+                UserServerHelper.RequestBackInfo result = UserServerHelper.getInstance().logoutId(id);
                 if (result != null && (result.getErrorCode() == 0 || result.getErrorCode() == 10008)) {
                 }
             }

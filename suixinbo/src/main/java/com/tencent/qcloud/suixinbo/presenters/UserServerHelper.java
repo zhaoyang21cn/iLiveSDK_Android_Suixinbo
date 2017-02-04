@@ -58,12 +58,12 @@ public class UserServerHelper {
 //    private int avRoom;
 //    private String groupID;
 
-    class ResquestResult {
+    public class RequestBackInfo {
 
         int errorCode;
         String errorInfo;
 
-        ResquestResult(int code, String bad) {
+        RequestBackInfo(int code, String bad) {
             errorCode = code;
             errorInfo = bad;
         }
@@ -87,6 +87,13 @@ public class UserServerHelper {
         return instance;
     }
 
+
+
+    private ArrayList<RoomInfoJson> roomList;
+
+    public ArrayList<RoomInfoJson> getRoomListData(){
+        return roomList;
+    }
 
 
     public static final MediaType JSON
@@ -116,7 +123,7 @@ public class UserServerHelper {
     /**
      * 注册ID （独立方式）
      */
-    public ResquestResult registerId(String id, String password) {
+    public RequestBackInfo registerId(String id, String password) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("id", id);
@@ -128,7 +135,7 @@ public class UserServerHelper {
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
 
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -140,7 +147,7 @@ public class UserServerHelper {
     /**
      * 登录ID （独立方式）
      */
-    public ResquestResult  loginId(String id, String password) {
+    public RequestBackInfo loginId(String id, String password) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("id", id);
@@ -162,7 +169,7 @@ public class UserServerHelper {
                 MySelfInfo.getInstance().setToken(token);
 
             }
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -174,7 +181,7 @@ public class UserServerHelper {
     /**
      * 登出ID （独立方式）
      */
-    public ResquestResult logoutId(String id) {
+    public RequestBackInfo logoutId(String id) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("id", id);
@@ -186,7 +193,7 @@ public class UserServerHelper {
 
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -202,7 +209,7 @@ public class UserServerHelper {
     /**
      * 申请创建房间
      */
-    public ResquestResult applyCreateRoom() {
+    public RequestBackInfo applyCreateRoom() {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("type", "live");
@@ -220,7 +227,7 @@ public class UserServerHelper {
                 CurLiveInfo.setRoomNum(avRoom);
                 String groupID = data.getString("groupid");
             }
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -234,7 +241,7 @@ public class UserServerHelper {
     /**
      * 上报房间信息
      */
-    public ResquestResult reporNewtRoomInfo(String inputJson) {
+    public RequestBackInfo reporNewtRoomInfo(String inputJson) {
         try {
 
             String res = post(REPORT_ROOM_INFO, inputJson);
@@ -242,7 +249,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -254,7 +261,7 @@ public class UserServerHelper {
     /***
      * 上报录制信息
      */
-    public ResquestResult reporNewtRecordInfo(String inputJson) {
+    public RequestBackInfo reporNewtRecordInfo(String inputJson) {
         try {
             Log.v(TAG, "reporNewtRecordInfo->"+inputJson);
             String res = post(REPORT_RECORD, inputJson);
@@ -262,7 +269,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            ResquestResult ret =  new ResquestResult(code, errorInfo);
+            RequestBackInfo ret =  new RequestBackInfo(code, errorInfo);
             Log.v(TAG, "reporNewtRecordInfo->rsp:"+ret.errorCode+"|"+ret.getErrorInfo());
             return ret;
         } catch (JSONException e) {
@@ -277,7 +284,7 @@ public class UserServerHelper {
     /**
      * 心跳上报
      */
-    public ResquestResult heartBeater (int role) {
+    public RequestBackInfo heartBeater (int role) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("role", role);
@@ -290,7 +297,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -303,7 +310,7 @@ public class UserServerHelper {
     /**
      * 获取房间列表
      */
-    public ArrayList<RoomInfoJson>  getRoomList() {
+    public RequestBackInfo getRoomList() {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
@@ -320,10 +327,10 @@ public class UserServerHelper {
                 JSONObject data = response.getJSONObject("data");
                 JSONArray record = data.getJSONArray("rooms");
                 Type listType = new TypeToken<ArrayList<RoomInfoJson>>() {}.getType();
-                ArrayList<RoomInfoJson> result = new Gson().fromJson(record.toString(), listType);
-                Log.i(TAG, "getRoomList: "+result);
-                return result;
+                roomList= new Gson().fromJson(record.toString(), listType);
             }
+            String errorInfo = response.getString("errorInfo");
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -335,10 +342,12 @@ public class UserServerHelper {
 
 
 
+
+
     /**
      * 通知UserServer结束房间
      */
-    public ResquestResult notifyCloseLive() {
+    public RequestBackInfo notifyCloseLive() {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
@@ -350,7 +359,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -363,7 +372,7 @@ public class UserServerHelper {
     /**
      * 上报成员
      */
-    public ResquestResult reportMe(int role,int action) {
+    public RequestBackInfo reportMe(int role, int action) {
         try {
             JSONObject jasonPacket = new JSONObject();
 
@@ -380,7 +389,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -428,7 +437,7 @@ public class UserServerHelper {
 //    /**
 //     * 上报录制视频URL
 //     */
-//    public ResquestResult reportRecord(String videoid,String videoUrl,int type,String cover) {
+//    public RequestBackInfo reportRecord(String videoid,String videoUrl,int type,String cover) {
 //        try {
 //            JSONObject jasonPacket = new JSONObject();
 //            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
@@ -443,7 +452,7 @@ public class UserServerHelper {
 //            JSONObject response = (JSONObject) jsonParser.nextValue();
 //            int code = response.getInt("errorCode");
 //            String errorInfo = response.getString("errorInfo");
-//            return new ResquestResult(code, errorInfo);
+//            return new RequestBackInfo(code, errorInfo);
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        } catch (IOException e) {
@@ -459,7 +468,7 @@ public class UserServerHelper {
 //    /**
 //     * 获取点播列表
 //     */
-//    public ResquestResult getRecordList() {
+//    public RequestBackInfo getRecordList() {
 //        try {
 //            JSONObject jasonPacket = new JSONObject();
 //            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
@@ -472,7 +481,7 @@ public class UserServerHelper {
 //            JSONObject response = (JSONObject) jsonParser.nextValue();
 //            int code = response.getInt("errorCode");
 //            String errorInfo = response.getString("errorInfo");
-//            return new ResquestResult(code, errorInfo);
+//            return new RequestBackInfo(code, errorInfo);
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        } catch (IOException e) {
@@ -522,7 +531,7 @@ public class UserServerHelper {
     /**
      * 获取播放列表
      */
-    public ResquestResult getPlayUrlList (int page,int size) {
+    public RequestBackInfo getPlayUrlList (int page, int size) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
@@ -534,7 +543,7 @@ public class UserServerHelper {
             JSONObject response = (JSONObject) jsonParser.nextValue();
             int code = response.getInt("errorCode");
             String errorInfo = response.getString("errorInfo");
-            return new ResquestResult(code, errorInfo);
+            return new RequestBackInfo(code, errorInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -548,7 +557,7 @@ public class UserServerHelper {
     /**
      * 获取房间回放地址
      */
-    public ResquestResult getRoomPlayUrl (int room) {
+    public RequestBackInfo getRoomPlayUrl (int room) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());

@@ -86,16 +86,16 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
 
-    class ApplyCreateRoom extends AsyncTask<String, Integer, UserServerHelper.ResquestResult> {
+    class ApplyCreateRoom extends AsyncTask<String, Integer, UserServerHelper.RequestBackInfo> {
 
         @Override
-        protected UserServerHelper.ResquestResult doInBackground(String... strings) {
+        protected UserServerHelper.RequestBackInfo doInBackground(String... strings) {
 
             return UserServerHelper.getInstance().applyCreateRoom(); //获取后台
         }
 
         @Override
-        protected void onPostExecute(UserServerHelper.ResquestResult result) {
+        protected void onPostExecute(UserServerHelper.RequestBackInfo result) {
             if (result != null && result.getErrorCode() == 0) {
                 createRoom();
             } else {

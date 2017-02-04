@@ -35,6 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:visibility="invisible"
+            android:background="@color/colorGray4"
             android:textSize="13sp" />
 
     </ScrollView>

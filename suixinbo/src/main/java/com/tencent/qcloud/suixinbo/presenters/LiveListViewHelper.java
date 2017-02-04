@@ -3,10 +3,7 @@ package com.tencent.qcloud.suixinbo.presenters;
 
 import android.os.AsyncTask;
 
-import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
-
-import java.util.ArrayList;
 
 /**
  * 直播列表页Presenter
@@ -40,18 +37,18 @@ public class LiveListViewHelper extends Presenter {
     /**
      * 获取后台数据接口
      */
-    class GetRoomListTask extends AsyncTask<Integer, Integer, ArrayList<RoomInfoJson>> {
+    class GetRoomListTask extends AsyncTask<Integer, Integer, UserServerHelper.RequestBackInfo> {
 
         @Override
-        protected ArrayList<RoomInfoJson> doInBackground(Integer... params) {
+        protected UserServerHelper.RequestBackInfo doInBackground(Integer... params) {
             return UserServerHelper.getInstance().getRoomList();
         }
 
         @Override
-        protected void onPostExecute(ArrayList<RoomInfoJson> result) {
-            if(null != result) {
+        protected void onPostExecute(UserServerHelper.RequestBackInfo info) {
+            if(null != info) {
                 if (mLiveListView != null)
-                    mLiveListView.showRoomList(result);
+                    mLiveListView.showRoomList(info,UserServerHelper.getInstance().getRoomListData());
             }
         }
     }
