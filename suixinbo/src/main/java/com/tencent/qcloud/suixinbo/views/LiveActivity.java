@@ -1178,13 +1178,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             String tips = "\n\n";
                             ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
                             if (null != qData){
+                                tips += "FPS:\t"+qData.getInteractiveSceneFPS()+"\n\n";
+                                tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
+                                tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
                                 tips += "SendLossRate:\t"+qData.getSendLossRate()+"%\t";
                                 tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
                                 tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
                                 tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
-                                tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
-                                tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
-                                tips += "FPS:\t"+qData.getInteractiveSceneFPS();
                             }
                             tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
