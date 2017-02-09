@@ -46,6 +46,7 @@ import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
+import com.tencent.ilivesdk.core.ILiveQualityData;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
@@ -1173,7 +1174,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         mQualityText.setVisibility(View.VISIBLE);
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
-                            String tips =getQualityTips();
+                            //String tips =getQualityTips();
+                            String tips = "\n\n";
+                            ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
+                            if (null != qData){
+                                tips += "FPS:\t"+qData.getInteractiveSceneFPS()+"\n\n";
+                                tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
+                                tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
+                                tips += "SendLossRate:\t"+qData.getSendLossRate()+"%\t";
+                                tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
+                                tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
+                                tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
+                            }
                             tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
                             tvTipsMsg.setVisibility(View.VISIBLE);
