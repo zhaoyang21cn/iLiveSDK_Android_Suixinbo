@@ -110,7 +110,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                 Intent intent = new Intent(this, LiveActivity.class);
                 MySelfInfo.getInstance().setIdStatus(Constants.HOST);
                 MySelfInfo.getInstance().setJoinRoomWay(true);
-                CurLiveInfo.setTitle(tvTitle.getText().toString());
+                CurLiveInfo.setTitle(tvTitle.getText().toString().isEmpty() ? "直播间" : tvTitle.getText().toString());
                 CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
                 CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
                 startActivity(intent);

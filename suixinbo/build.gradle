@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.4'
@@ -55,4 +55,6 @@ dependencies {
     compile 'com.tencent.ilivesdk:ilivesdk:1.2.1'
     compile 'com.tencent.livesdk:livesdk:1.0.5'
     compile 'com.tencent.rtmpsdk:rtmpsdk:1.0.1'
+    compile files('libs/MobCommons-2017.0216.1054.jar')
+    compile files('libs/MobTools-2017.0216.1054.jar')
 }

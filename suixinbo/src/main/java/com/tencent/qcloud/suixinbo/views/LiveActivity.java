@@ -83,6 +83,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+
 
 /**
  * Live直播类
@@ -162,6 +165,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
         mLiveHelper.startEnterRoom();
+        //初始化社会化分享组件
+        ShareSDK.initSDK(this);
     }
 
 
@@ -536,6 +541,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         CurLiveInfo.setAdmires(0);
         CurLiveInfo.setCurrentRequestCount(0);
         mLiveHelper.onDestory();
+
+		ShareSDK.stopSDK(this);
     }
 
 
@@ -1436,7 +1443,21 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
-        ClipToBoard(url, url2);
+        //分享到社交平台
+
+		OnekeyShare oks = new OnekeyShare();
+		//关闭sso授权
+		oks.disableSSOWhenAuthorize();
+
+		oks.setTitle(CurLiveInfo.getTitle());
+		oks.setImageUrl(CurLiveInfo.getCoverurl());
+		oks.setText("走过路过，不要错过~快来观看直播吧！");
+		oks.setUrl(url);
+
+		// 启动分享GUI
+		oks.show(this);
+
+//        ClipToBoard(url, url2);
     }
 
     /**
