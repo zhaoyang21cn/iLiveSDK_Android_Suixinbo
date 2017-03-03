@@ -1,10 +1,16 @@
-##质量相关接口简介
+##直播质量数据接口
 
-###ILiveQualityData
+直播质量数据接口可以获取当前直播质量情况。该接口可以获取收发包丢包率，上下行码率，上行视频帧率，CPU使用率，视频分辨率等。
 
-###数据内容
+##Android接口
 
-ILiveQualityData是ILiveSDK对音视频播放质量数据的封装。具体数据内容如下：
+**质量数据获取**
+
+    //必须在房间建立好后调用，建议判空逻辑
+    ILiveQualityData  data = ILiveRoomManager.getInstance().getQualityData()
+
+**数据结构**
+
 
     public class ILiveQualityData {
 		//获取开始时间
@@ -40,11 +46,16 @@ ILiveQualityData是ILiveSDK对音视频播放质量数据的封装。具体数�
 	        return recvKBS;
 	    }
 		//获取视频帧率
-	    public int getInteractiveSceneFPS() {
-	        return interactiveSceneFPS;
-	    }
+	    public int getUpFPS() {
+            return upFPS;
+        }
+        //获取各路视频信息，key为id，value为该id的视频信息
+        public Map<String, LiveInfo> getLives();
 	}
 
-
-####使用方式
-客户端程序可以在主线程中调用ILiveRoomManager.getInstance().getQualityData()获取当前质量数据。
+      public class LiveInfo {
+           //获取视频宽度
+           public int getWidth();
+           //获取视频高度
+           public int getHeight()
+      }

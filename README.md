@@ -15,9 +15,9 @@ iLiveSDK在Android Studio上开发。
 
 
 直播业务功能       
-compile 'com.tencent.livesdk:livesdk:1.0.5'      
+compile 'com.tencent.livesdk:livesdk:1.0.6'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.2.2'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.3.2.2'      
             
 
 ##DEMO
@@ -34,14 +34,25 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.2.2'
 ##错误码
 [错误码表](/doc/ILiveSDK/error.md)
 
-##已知问题
+##添加混淆
+由于内部有一些接口调用需要，在用户工程需要混淆时，请添加以下配置:
+```
+-keep class com.tencent.**{*;}
+-dontwarn com.tencent.**
 
-由于目前只支持armeabi架构，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
+-keep class tencent.**{*;}
+-dontwarn tencent.**
+
+-keep class qalsdk.**{*;}
+-dontwarn qalsdk.**
+```
+##已知问题
+由于目前只支持armeabi架构(1.0.5版本之后支持arm-v7a)，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
 <pre>
 android{
     defaultConfig{
         ndk{
-            abiFilter 'armeabi'
+            abiFilters 'armeabi', 'armeabi-v7a'
         }
     }
 }
