@@ -1,5 +1,12 @@
 ﻿##Release Note
-
+ 
+###V1.1.0(2017-03-06)
+ - 增加Live层配置类ILVLiveRoomOption
+ - 增加上麦返回类 ILVChangeRoleRes
+ - ILVLiveMessage ILVLivCustomMessage 类增加属性TIMProfile 增加昵称获取
+ - 增加配置自定义信令属性 isCustomProtocol
+ 
+ 
 ###V1.0.6(2017-03-01)
  - 同步iOS消息发送接口
  - 添加发送其它消息接口
