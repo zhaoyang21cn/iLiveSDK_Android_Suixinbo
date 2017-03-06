@@ -10,7 +10,7 @@ LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)�
 LiveSDK在Android Studio上开发。 导入只需要在gradle里增加一行（后面是版本号）,查看[版本更新说明](./live_release.md)
 
 ```
-compile 'com.tencent.livesdk:livesdk:1.0.6'
+compile 'com.tencent.livesdk:livesdk:1.1.0'
 ```
 
 
