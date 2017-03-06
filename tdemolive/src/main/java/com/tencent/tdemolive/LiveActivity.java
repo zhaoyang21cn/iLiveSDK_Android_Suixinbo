@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.TIMMessage;
+import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
@@ -21,12 +22,13 @@ import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
-import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.ilivesdk.view.AVRootView;
+import com.tencent.livesdk.ILVChangeRoleRes;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveConfig;
 import com.tencent.livesdk.ILVLiveConstants;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.livesdk.ILVLiveRoomOption;
 import com.tencent.livesdk.ILVText;
 
 import java.util.ArrayList;
@@ -98,19 +100,21 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         liveConfig.setLiveMsgListener(new ILVLiveConfig.ILVLiveMsgListener() {
             @Override
-            public void onNewTextMsg(ILVText text, String SenderId) {
+            public void onNewTextMsg(ILVText text, String SenderId,TIMUserProfile userProfile) {
                 Toast.makeText(LiveActivity.this, "onNewTextMsg : " + text, Toast.LENGTH_SHORT).show();
             }
 
+
+
             @Override
-            public void onNewCmdMsg(int cmd, String param, String id) {
-                switch (cmd) {
+            public void onNewCustomMsg(ILVCustomCmd cmd, String id, TIMUserProfile userProfile) {
+                switch (cmd.getCmd()) {
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE:
-                        Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LiveActivity.this, "onNewCmdMsg : received a invitation! ", Toast.LENGTH_SHORT).show();
                         ILiveLog.d(TAG, "ILVB-LiveApp|received ");
-                        ILVLiveManager.getInstance().upToVideoMember( "LiveGuest", new ILiveCallBack() {
+                        ILVLiveManager.getInstance().upToVideoMember("LiveGuest", true, true, new ILiveCallBack<ILVChangeRoleRes>() {
                             @Override
-                            public void onSuccess(Object data) {
+                            public void onSuccess(ILVChangeRoleRes data) {
 
                             }
 
@@ -120,13 +124,13 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                             }
                         });
                         break;
-                    case  ILVLiveConstants.ILVLIVE_CMD_INVITE_CANCEL:
+                    case ILVLiveConstants.ILVLIVE_CMD_INVITE_CANCEL:
 
                         break;
                     case ILVLiveConstants.ILVLIVE_CMD_INVITE_CLOSE:
-                        ILVLiveManager.getInstance().downToNorMember("Guest", new ILiveCallBack() {
+                        ILVLiveManager.getInstance().downToNorMember("Guest", new ILiveCallBack<ILVChangeRoleRes>() {
                             @Override
-                            public void onSuccess(Object data) {
+                            public void onSuccess(ILVChangeRoleRes data) {
 
                             }
 
@@ -138,14 +142,9 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                         break;
                     case ILVLiveConstants.ILVLIVE_CMD_INTERACT_AGREE:
                         break;
-                    case  ILVLiveConstants.ILVLIVE_CMD_INTERACT_REJECT:
+                    case ILVLiveConstants.ILVLIVE_CMD_INTERACT_REJECT:
                         break;
                 }
-
-            }
-
-            @Override
-            public void onNewCustomMsg(int cmd, String param, String id) {
                 Toast.makeText(LiveActivity.this, "cmd "+ cmd, Toast.LENGTH_SHORT).show();
 
             }
@@ -231,7 +230,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 public void onSuccess(Object data) {
                     bLogin = false;
                     loginView.setVisibility(View.VISIBLE);
-                    Toast.makeText(LiveActivity.this, "logout success !", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LiveActivity.this, "logout success !", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -246,7 +245,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         if (view.getId() == R.id.create) { //创建房间
             int room = Integer.parseInt("" + roomNum.getText());
             //创建房间配置项
-            ILiveRoomOption hostOption = new ILiveRoomOption(ILiveLoginManager.getInstance().getMyUserId()).
+            ILVLiveRoomOption hostOption = new ILVLiveRoomOption(ILiveLoginManager.getInstance().getMyUserId()).
                     controlRole("LiveMaster")//角色设置
                     .autoFocus(true)
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
@@ -258,7 +257,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             ILVLiveManager.getInstance().createRoom(room, hostOption, new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
-                    Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LiveActivity.this, "create room  ok", Toast.LENGTH_SHORT).show();
                     logoutBtn.setVisibility(View.INVISIBLE);
                     backBtn.setVisibility(View.VISIBLE);
                 }
@@ -274,7 +273,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             int room = Integer.parseInt("" + roomNumJoin.getText());
             String hostId = "" + hostIdInput.getText();
             //加入房间配置项
-            ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
+            ILVLiveRoomOption memberOption = new ILVLiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
                     .controlRole("Guest") //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
@@ -285,7 +284,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onSuccess(Object data) {
                     bEnterRoom = true;
-                    Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LiveActivity.this, "join room  ok ", Toast.LENGTH_SHORT).show();
                     logoutBtn.setVisibility(View.INVISIBLE);
                     backBtn.setVisibility(View.VISIBLE);
                 }
@@ -437,7 +436,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             int room = Integer.parseInt("" + roomNumJoin.getText());
             String hostId = "" + hostIdInput.getText();
             //加入房间配置项
-            ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
+            ILVLiveRoomOption memberOption = new ILVLiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
                     .controlRole("Guest") //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tencent.qcloud.suixinbo"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.tencent.qcloud.suixinbo"
     android:versionCode="102"
     android:versionName="1.01">
 
@@ -76,7 +77,7 @@
 
         <activity android:name=".views.ActivityReplay"
             android:screenOrientation="portrait"
-            />
+                  tools:ignore="DuplicateActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

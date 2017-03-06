@@ -29,6 +29,7 @@ import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.livesdk.ILVLiveRoomOption;
 import com.tencent.livesdk.ILVText;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -164,7 +165,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void switchRoom(){
-        ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
+        ILVLiveRoomOption memberOption = new ILVLiveRoomOption(CurLiveInfo.getHostID())
                 .autoCamera(false)
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
@@ -469,7 +470,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "upMemberVideo->with not in room");
         }
-        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, true,true, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 SxbLog.d(TAG, "upToVideoMember->success");
@@ -505,7 +506,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
 
     private void createRoom() {
-        ILiveRoomOption hostOption = new ILiveRoomOption(MySelfInfo.getInstance().getId())
+        ILVLiveRoomOption hostOption = new ILVLiveRoomOption(MySelfInfo.getInstance().getId())
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
                 .controlRole(Constants.HOST_ROLE)
@@ -533,7 +534,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
 
     private void joinRoom() {
-        ILiveRoomOption memberOption = new ILiveRoomOption(CurLiveInfo.getHostID())
+        ILVLiveRoomOption memberOption = new ILVLiveRoomOption(CurLiveInfo.getHostID())
                 .autoCamera(false)
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)

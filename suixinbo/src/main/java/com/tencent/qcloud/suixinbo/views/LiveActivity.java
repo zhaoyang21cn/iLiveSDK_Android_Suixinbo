@@ -46,9 +46,9 @@ import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
-import com.tencent.ilivesdk.core.ILiveQualityData;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
@@ -1178,7 +1178,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             String tips = "\n\n";
                             ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
                             if (null != qData){
-                                tips += "FPS:\t"+qData.getInteractiveSceneFPS()+"\n\n";
+                                tips += "FPS:\t"+qData.getUpFPS()+"\n\n";
                                 tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
                                 tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
                                 tips += "SendLossRate:\t"+qData.getSendLossRate()+"%\t";
