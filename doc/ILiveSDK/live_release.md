@@ -5,6 +5,7 @@
  - 增加上麦返回类 ILVChangeRoleRes
  - ILVLiveMessage ILVLivCustomMessage 类增加属性TIMProfile 增加昵称获取
  - 增加配置自定义信令属性 isCustomProtocol
+ - 消息回调上抛TIMUserProfile
  
  
 ###V1.0.6(2017-03-01)
