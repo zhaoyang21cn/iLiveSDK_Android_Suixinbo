@@ -501,7 +501,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             if (MySelfInfo.getInstance().getId().equals(CurLiveInfo.getHostID()))
                 UserServerHelper.getInstance().heartBeater(1);
             else
-                UserServerHelper.getInstance().heartBeater(0);
+                UserServerHelper.getInstance().heartBeater(MySelfInfo.getInstance().getIdStatus());
             mLiveHelper.pullMemberList();
         }
     }
@@ -674,8 +674,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             if ((getBaseContext() != null) && (null != mDetailDialog) && (mDetailDialog.isShowing() == false)) {
-                SxbLog.d(TAG, LogConstants.ACTION_HOST_QUIT_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "quite room callback"
-                        + LogConstants.DIV + LogConstants.STATUS.SUCCEED + LogConstants.DIV + "id status " + id_status);
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                 editor.putBoolean("living", false);
                 editor.apply();
