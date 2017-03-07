@@ -7,15 +7,18 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.tencent.cos.COSClient;
+import com.tencent.cos.COSClientConfig;
+import com.tencent.cos.common.COSEndPoint;
+import com.tencent.cos.model.COSRequest;
+import com.tencent.cos.model.COSResult;
+import com.tencent.cos.model.PutObjectRequest;
+import com.tencent.cos.model.PutObjectResult;
+import com.tencent.cos.task.listener.ITaskListener;
+import com.tencent.cos.task.listener.IUploadTaskListener;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.UploadView;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
-import com.tencent.upload.Const;
-import com.tencent.upload.UploadManager;
-import com.tencent.upload.task.ITask;
-import com.tencent.upload.task.IUploadTaskListener;
-import com.tencent.upload.task.data.FileInfo;
-import com.tencent.upload.task.impl.FileUploadTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,7 +31,7 @@ import java.io.InputStream;
 public class UploadHelper extends Presenter {
     private final String TAG = "PublishHelper";
     private final String bucket = "sxbbucket";
-    private final String appid = "10022853";
+    private final String appid = "1251659802";
 
     private final static int THREAD_GET_SIG = 1;
     private final static int THREAD_UPLAOD = 2;
@@ -149,25 +152,41 @@ public class UploadHelper extends Presenter {
             copyFile(path, tmpPath);
         }
 
-        UploadManager fileUploadMgr = new UploadManager(mContext, appid,
-                Const.FileType.File, "qcloudphoto");
-        SxbLog.d(TAG, "upload cover: " + tmpPath);
-        FileUploadTask task = new FileUploadTask(bucket, tmpPath, createNetUrl(), null, new IUploadTaskListener() {
-            @Override
-            public void onUploadSucceed(final FileInfo result) {
-                SxbLog.i(TAG, "upload succeed: " + result.url);
-                Message msg = new Message();
-                msg.what = MAIN_CALL_BACK;
-                msg.arg1 = 0;
-                msg.obj = result.url;
+        //创建COSClientConfig对象，根据需要修改默认的配置参数
+        final COSClientConfig config = new COSClientConfig();
+        //设置园区
+        config.setEndPoint(COSEndPoint.COS_TJ);
 
-                mMainHandler.sendMessage(msg);
+        //创建COSlient对象，实现对象存储的操作
+        COSClient cos = new COSClient(mContext, appid, config, null);
+
+        SxbLog.d(TAG, "upload cover: " + tmpPath);
+
+        //上传文件
+        PutObjectRequest putObjectRequest = new PutObjectRequest();
+        putObjectRequest.setBucket(bucket);
+        putObjectRequest.setCosPath(createNetUrl());
+        putObjectRequest.setSrcPath(tmpPath);
+        putObjectRequest.setSign(sig);
+        putObjectRequest.setListener(new IUploadTaskListener(){
+            @Override
+            public void onSuccess(COSRequest cosRequest, COSResult cosResult) {
+                PutObjectResult result = (PutObjectResult) cosResult;
+                if(result != null){
+                    SxbLog.i(TAG, "upload succeed: " + result.url);
+                    Message msg = new Message();
+                    msg.what = MAIN_CALL_BACK;
+                    msg.arg1 = 0;
+                    msg.obj = result.source_url;
+
+                    mMainHandler.sendMessage(msg);
+                }
             }
 
             @Override
-            public void onUploadFailed(int i, String s) {
-                SxbLog.w(TAG, "upload error code: " + i + " msg:" + s);
-                if (-96 == i) {  // 签名过期重试
+            public void onFailed(COSRequest COSRequest, final COSResult cosResult) {
+                SxbLog.w(TAG, "upload error code: " + cosResult.code + " msg:" + cosResult.msg);
+                if (-96 == cosResult.code) {  // 签名过期重试
                     Message msg = new Message();
                     msg.what = THREAD_GETSIG_UPLOAD;
                     msg.obj = path;
@@ -176,31 +195,32 @@ public class UploadHelper extends Presenter {
                 } else {
                     Message msg = new Message();
                     msg.what = MAIN_CALL_BACK;
-                    msg.arg1 = i;
-                    msg.obj = s;
+                    msg.arg1 = cosResult.code;
+                    msg.obj = cosResult.msg;
 
                     mMainHandler.sendMessage(msg);
                 }
             }
 
             @Override
-            public void onUploadProgress(long l, long l1) {
-                SxbLog.d(TAG, "onUploadProgress: " + l + "/" + l1);
+            public void onProgress(COSRequest cosRequest, final long currentSize, final long totalSize) {
+                SxbLog.d(TAG, "onUploadProgress: " + currentSize + "/" + totalSize);
                 Message msg = new Message();
                 msg.what = MAIN_PROCESS;
-                msg.arg1 = (int) (l * 100 / l1);
+                msg.arg1 = (int) (currentSize * 100 / totalSize);
 
                 mMainHandler.sendMessage(msg);
             }
 
-            @Override
-            public void onUploadStateChange(ITask.TaskState taskState) {
-                SxbLog.d(TAG, "onUploadStateChange: " + taskState);
-            }
-        });
+			@Override
+			public void onCancel(COSRequest cosRequest, COSResult cosResult) {
 
-        task.setAuth(sig);
-        if (!fileUploadMgr.upload(task)){
+			}
+		});
+
+        PutObjectResult putObjectResult = cos.putObject(putObjectRequest);
+
+        if (0 != putObjectResult.code){
             Message msg = new Message();
             msg.what = MAIN_CALL_BACK;
             msg.arg1 = -1;
