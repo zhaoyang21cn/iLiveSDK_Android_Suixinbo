@@ -26,7 +26,9 @@ AV_ERR_DEVICE_TEST_NOT_STOPPED         |1602   |AVDeviceTest对象未处于DEVIC
 AV_ERR_INVITE_FAILED                   |1801   |发送失败         |发送邀请时产生的失败
 AV_ERR_ACCEPT_FAILED                   |1802   |接受失败         |接受邀请时产生的失败
 AV_ERR_REFUSE_FAILED                   |1803   |拒绝失败         |拒绝邀请时产生的失败
-AV_ERR_SERVER_FAILED                   |10001  |一般错误         |具体原因需要通过分析日志确认
+AV_ERR_IMSDK_FAIL                      |6999   |IMSDK回调通知失败 |具体原因需通过分析日志确认
+AV_ERR_IMSDK_TIMEOUT                   |7000   |IMSDK回调通知等待超时 |具体原因需通过分析日志确认
+AV_ERR_SERVER_FAILED                   |10001  |一般错误         |具体原因需要通过分析日志确认
 AV_ERR_SERVER_INVALID_ARGUMENT         |10002  |错误参数         |错误的参数
 AV_ERR_SERVER_NO_PERMISSION            |10003  |没有权限         |没有权限使用某个功能
 AV_ERR_SERVER_TIMEOUT                  |10004  |进房间获取房间地址失败  |具体原因需要通过分析日志确认
