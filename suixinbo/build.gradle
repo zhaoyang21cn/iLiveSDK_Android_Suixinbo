@@ -13,10 +13,10 @@ android {
 
     signingConfigs{
         release{
-            storeFile file("$System.env.KEYSTORE_PATH")
-            storePassword "$System.env.STOREPASS"
-            keyAlias "$System.env.ALIAS"
-            keyPassword "$System.env.KEYPASS"
+            storeFile file("./tencent.store")
+            storePassword "tencent.com"
+            keyAlias "tencent"
+            keyPassword "tencent.com"
         }
     }
 //
