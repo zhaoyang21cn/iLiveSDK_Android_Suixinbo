@@ -19,20 +19,16 @@ android {
             keyPassword "$System.env.KEYPASS"
         }
     }
-//
-//    packagingOptions{
-//        exclude '*.apk'
-//    }
-//    dexOptions {
-//        jumboMode true
-//        incremental false
-//    }
-//    lintOptions{
-//        abortOnError false
-//    }
-//
-//
-//
+
+    packagingOptions{
+        exclude '*.apk'
+    }
+    lintOptions{
+        abortOnError false
+    }
+
+
+
     buildTypes {
         release {
             minifyEnabled false

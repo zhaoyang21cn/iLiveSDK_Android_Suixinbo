@@ -17,10 +17,6 @@ android {
     packagingOptions{
         exclude '*.apk'
     }
-    dexOptions {
-        jumboMode true
-        incremental false
-    }
     lintOptions{
         abortOnError false
     }
