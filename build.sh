@@ -10,4 +10,4 @@ PACKAGE_PATH=${PACKAGE_ROOT}/${PACKAGE_NAME}
 gradle build
 
 cp app/build/outputs/apk/app-debug.apk bin/iLiveSDK_Demos-debug-${MajorVersion}.${MinorVersion}.${FixVersion}.apk
-cp app/build/outputs/apk/app-release.apk bin/iLiveSDK_Demos-release_${MajorVersion}.${MinorVersion}.${FixVersion}.apk
+cp app/build/outputs/apk/*.apk bin/*.apk
