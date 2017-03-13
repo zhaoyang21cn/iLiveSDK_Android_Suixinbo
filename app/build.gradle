@@ -4,13 +4,6 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
-    defaultConfig {
-        applicationId "com.tencent.ilivedemo"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 1234567890
-        versionName "MagicVersionForReplace"
-    }
 
     signingConfigs{
         release{
@@ -21,9 +14,31 @@ android {
         }
     }
 
+    packagingOptions{
+        exclude '*.apk'
+    }
+    dexOptions {
+        jumboMode true
+        incremental false
+    }
+    lintOptions{
+        abortOnError false
+    }
+    buildTypes{
+        release{
+            signingConfig signingConfigs.release
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.tencent.ilivedemo"
+        minSdkVersion 16
+        targetSdkVersion 25
+    }
+
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
