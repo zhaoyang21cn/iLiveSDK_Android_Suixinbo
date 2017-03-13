@@ -8,9 +8,19 @@ android {
         applicationId "com.tencent.ilivedemo"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 1234567890
+        versionName "MagicVersionForReplace"
     }
+
+    signingConfigs{
+        release{
+            storeFile file("$System.env.KEYSTORE_PATH")
+            storePassword "$System.env.STOREPASS"
+            keyAlias "$System.env.ALIAS"
+            keyPassword "$System.env.KEYPASS"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
