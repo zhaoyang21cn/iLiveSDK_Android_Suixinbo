@@ -178,7 +178,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
             @Override
             public void onSuccess(Object data) {
                 ILiveLog.d(TAG, "ILVB-Suixinbo|switchRoom->join room sucess");
-                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                if (null != mLiveView) {
+                    mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                }
             }
 
             @Override
