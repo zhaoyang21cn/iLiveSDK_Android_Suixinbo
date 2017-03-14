@@ -79,6 +79,7 @@
     <string name="set_live_animator">渐隐动画</string>
     <string name="set_log_level">日志等级</string>
     <string name="set_sdk_version">SDK版本</string>
+    <string name="set_env">测试环境</string>
 
     <!-- edit -->
     <string name="edit_error">修改失败</string>
@@ -148,4 +149,5 @@
     <string name="str_push_title">推流地址</string>
     <string name="str_push_copy">复制地址</string>
     <string name="str_push_share">分享</string>
+    <string name="str_env_tips">杀进程重新启动应用后生效</string>
 </resources>

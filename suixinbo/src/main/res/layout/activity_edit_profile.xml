@@ -44,6 +44,7 @@
         app:canNav="true"/>
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:id="@+id/lcv_ep_sign"
+        android:visibility="gone"
         android:onClick="onClick"
         android:layout_width="match_parent"
         android:layout_height="40dp"

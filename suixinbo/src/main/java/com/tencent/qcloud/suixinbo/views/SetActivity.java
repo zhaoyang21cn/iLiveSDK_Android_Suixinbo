@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.tencent.TIMManager;
 import com.tencent.av.sdk.AVContext;
@@ -22,7 +23,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.TemplateTitle;
  */
 public class SetActivity extends BaseActivity implements View.OnClickListener{
     private final static String TAG = "SetActivity";
-    private CustomSwitch csAnimator;
+    private CustomSwitch csAnimator, csEnv;
     private LineControllerView lcvLog;
     private LineControllerView lcvVersion;
     private TemplateTitle ttHead;
@@ -43,12 +44,15 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
     private void initView(){
         ttHead = (TemplateTitle)findViewById(R.id.tt_head);
         csAnimator = (CustomSwitch)findViewById(R.id.cs_animator);
+        csEnv = (CustomSwitch)findViewById(R.id.cs_env);
         lcvLog = (LineControllerView)findViewById(R.id.lcv_set_log_level);
         lcvVersion = (LineControllerView)findViewById(R.id.lcv_set_version);
 
         lcvLog.setContent(MySelfInfo.getInstance().getLogLevel().toString());
 
         csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), false);
+        csEnv.setChecked(1==TIMManager.getInstance().getEnv(), false);
+
 
         ttHead.setReturnListener(new View.OnClickListener() {
             @Override
@@ -94,6 +98,11 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
         } else if (i == R.id.lcv_set_version) {
             showSDKVersion();
 
+        } else if (i == R.id.cs_env){
+            int ret = 1-TIMManager.getInstance().getEnv();
+            TIMManager.getInstance().setEnv(ret);
+            csEnv.setChecked(1==ret, false);
+            Toast.makeText(this, R.string.str_env_tips, Toast.LENGTH_SHORT).show();
         }
     }
 }

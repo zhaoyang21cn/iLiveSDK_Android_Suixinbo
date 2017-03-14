@@ -11,6 +11,7 @@
         app:titleText="@string/profile_set"
         />
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
@@ -23,6 +24,29 @@
             android:layout_height="match_parent" />
         <com.tencent.qcloud.suixinbo.views.customviews.CustomSwitch
             android:id="@+id/cs_animator"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/btn_switch_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:text="@string/set_env"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <com.tencent.qcloud.suixinbo.views.customviews.CustomSwitch
+            android:id="@+id/cs_env"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:clickable="true"
