@@ -1464,7 +1464,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         SxbLog.i("TAG", "pushStreamSucc->title:"+CurLiveInfo.getTitle());
         SxbLog.i("TAG", "pushStreamSucc->url:"+url);
 		oks.setTitle(CurLiveInfo.getTitle());
-		oks.setImageUrl(CurLiveInfo.getCoverurl());
+        String coverUrl = CurLiveInfo.getCoverurl();
+        if(coverUrl == null || coverUrl.length() == 0){//用户未选择封面时，使用默认封面
+            coverUrl = "https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/cover_default.png";
+        }
+        oks.setImageUrl(coverUrl);
 		oks.setText("走过路过，不要错过~快来观看直播吧！");
 		oks.setUrl(url);
 
