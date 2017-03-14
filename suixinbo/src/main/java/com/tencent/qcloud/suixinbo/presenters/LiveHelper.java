@@ -27,6 +27,7 @@ import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
+import com.tencent.livesdk.ILVChangeRoleRes;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.livesdk.ILVLiveRoomOption;
@@ -470,10 +471,11 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "upMemberVideo->with not in room");
         }
-        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, true, true, new ILiveCallBack() {
+        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, true,true, new ILiveCallBack<ILVChangeRoleRes>() {
             @Override
-            public void onSuccess(Object data) {
+            public void onSuccess(ILVChangeRoleRes data) {
                 SxbLog.d(TAG, "upToVideoMember->success");
+                MySelfInfo.getInstance().setIdStatus(Constants.VIDEO_MEMBER);
                 bMicOn = true;
                 bCameraOn = true;
             }
@@ -489,9 +491,10 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "downMemberVideo->with not in room");
         }
-        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack() {
+        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack<ILVChangeRoleRes>() {
             @Override
-            public void onSuccess(Object data) {
+            public void onSuccess(ILVChangeRoleRes data) {
+                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                 bMicOn = false;
                 bCameraOn = false;
                 SxbLog.e(TAG, "downMemberVideo->onSuccess");

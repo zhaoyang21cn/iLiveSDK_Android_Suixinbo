@@ -48,6 +48,7 @@ import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
@@ -500,7 +501,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             if (MySelfInfo.getInstance().getId().equals(CurLiveInfo.getHostID()))
                 UserServerHelper.getInstance().heartBeater(1);
             else
-                UserServerHelper.getInstance().heartBeater(0);
+                UserServerHelper.getInstance().heartBeater(MySelfInfo.getInstance().getIdStatus());
             mLiveHelper.pullMemberList();
         }
     }
@@ -1180,7 +1181,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         mQualityText.setVisibility(View.VISIBLE);
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
-                            String tips =getQualityTips();
+                            //String tips =getQualityTips();
+                            String tips = "\n\n";
+                            ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
+                            if (null != qData){
+                                tips += "FPS:\t"+qData.getUpFPS()+"\n\n";
+                                tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
+                                tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
+                                tips += "SendLossRate:\t"+qData.getSendLossRate()+"%\t";
+                                tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
+                                tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
+                                tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
+                            }
                             tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
                             tvTipsMsg.setVisibility(View.VISIBLE);
@@ -1449,6 +1461,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 		//关闭sso授权
 		oks.disableSSOWhenAuthorize();
 
+        SxbLog.i("TAG", "pushStreamSucc->title:"+CurLiveInfo.getTitle());
+        SxbLog.i("TAG", "pushStreamSucc->url:"+url);
 		oks.setTitle(CurLiveInfo.getTitle());
 		oks.setImageUrl(CurLiveInfo.getCoverurl());
 		oks.setText("走过路过，不要错过~快来观看直播吧！");
