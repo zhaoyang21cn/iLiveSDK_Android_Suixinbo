@@ -54,6 +54,7 @@ import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
+import com.tencent.ilivesdk.tools.quality.LiveInfo;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
@@ -87,6 +88,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1201,7 +1203,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                 tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
                                 tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
                                 tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
+                                Map<String, LiveInfo> userMaps = qData.getLives();
+                                for (Map.Entry<String, LiveInfo> entry : userMaps.entrySet()){
+                                    tips += "\t"+entry.getKey()+"-"+entry.getValue().getWidth()+"*"+entry.getValue().getHeight()+"\n";
+                                }
                             }
+
+                            tips += '\n';
+                            tips += getQualityTips(ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips());
                             tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
                             tvTipsMsg.setVisibility(View.VISIBLE);
@@ -1472,7 +1481,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private void showShareDlg(String url ){
         //分享到社交平台
-
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
@@ -1680,44 +1688,37 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
-    public String getAudioQualityTips() {
-        AVAudioCtrl avAudioCtrl;
-        if ( ILiveSDK.getInstance().getAVContext() != null) {
-            avAudioCtrl =  ILiveSDK.getInstance().getAVContext().getAudioCtrl();
-            return avAudioCtrl.getQualityTips();
+    private static String getValue(String src, String param, String sep){
+        int idx = src.indexOf(param);
+        if (-1 != idx) {
+            idx += param.length() + 1;
+            if (-1 != sep.indexOf(src.charAt(idx))){
+                idx ++;
+            }
+            for (int i = idx; i < src.length(); i++) {
+                if (-1 != sep.indexOf(src.charAt(i))) {
+                    return src.substring(idx, i).trim();
+                }
+            }
         }
 
         return "";
     }
 
-    public String getVideoQualityTips() {
-        AVVideoCtrl avVideoCtrl;
-        if (ILiveSDK.getInstance().getAVContext() != null) {
-             avVideoCtrl = ILiveSDK.getInstance().getAVContext() .getVideoCtrl();
-            return avVideoCtrl.getQualityTips();
-        }
-        return "";
-    }
+    public String getQualityTips(String qualityTips) {
+        String strTips = "";
+        String sep = "[](),\n";
 
+        strTips += "AVSDK版本号: " + getValue(qualityTips, "sdk_version", sep) + "\n";
+        strTips += "房间号: " + getValue(qualityTips, "RoomID", sep) + "\n";
+        strTips += "角色: " + getValue(qualityTips, "ControlRole", sep) + "\n";
+        strTips += "权限: " + getValue(qualityTips, "Authority", sep) + "\n";
+        String tmpStr = getValue(qualityTips, "视频采集", "\n");
+        if (!TextUtils.isEmpty(tmpStr))
+            strTips += "采集信息: " + getValue(qualityTips, "视频采集", "\n") + "\n";
+        strTips += "麦克风: " + getValue(qualityTips, "Mic", sep) + "\n";
+        strTips += "扬声器: " + getValue(qualityTips, "Spk", sep) + "\n";
 
-    public String getQualityTips() {
-        String audioQos = "";
-        String videoQos = "";
-        String roomQos = "";
-
-        if (ILiveSDK.getInstance().getAVContext() != null) {
-            audioQos = getAudioQualityTips();
-
-            videoQos = getVideoQualityTips();
-
-            roomQos = ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips();
-        }
-
-        if (audioQos != null && videoQos != null && roomQos != null) {
-            return audioQos + videoQos + roomQos;
-        } else {
-            return "";
-        }
-
+        return strTips;
     }
 }
