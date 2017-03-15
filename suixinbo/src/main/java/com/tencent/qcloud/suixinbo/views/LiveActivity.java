@@ -2,8 +2,12 @@ package com.tencent.qcloud.suixinbo.views;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -44,11 +48,13 @@ import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
+import com.tencent.ilivesdk.tools.quality.LiveInfo;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
@@ -80,10 +86,14 @@ import com.tencent.qcloud.suixinbo.views.customviews.MembersDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -138,6 +148,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private boolean mProfile;
     private boolean bInAvRoom = false, bSlideUp = false, bDelayQuit = false;
     private boolean bReadyToChange = false;
+    private boolean bHLSPush = false;
 
     private String backGroundId;
 
@@ -674,6 +685,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             if ((getBaseContext() != null) && (null != mDetailDialog) && (mDetailDialog.isShowing() == false)) {
+                SxbLog.d(TAG, LogConstants.ACTION_HOST_QUIT_ROOM + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "quite room callback"
+                        + LogConstants.DIV + LogConstants.STATUS.SUCCEED + LogConstants.DIV + "id status " + id_status);
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                 editor.putBoolean("living", false);
                 editor.apply();
@@ -1190,7 +1203,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                 tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
                                 tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
                                 tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
+                                Map<String, LiveInfo> userMaps = qData.getLives();
+                                for (Map.Entry<String, LiveInfo> entry : userMaps.entrySet()){
+                                    tips += "\t"+entry.getKey()+"-"+entry.getValue().getWidth()+"*"+entry.getValue().getHeight()+"\n";
+                                }
                             }
+
+                            tips += '\n';
+                            tips += getQualityTips(ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips());
                             tvTipsMsg.getBackground().setAlpha(125);
                             tvTipsMsg.setText(tips);
                             tvTipsMsg.setVisibility(View.VISIBLE);
@@ -1378,6 +1398,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
      */
     public void pushStream() {
         if (!isPushed) {
+            bHLSPush = false;
             if (mPushDialog != null)
                 mPushDialog.show();
         } else {
@@ -1408,6 +1429,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
                 if (radgroup.getCheckedRadioButtonId() == R.id.hls) {//默认格式
                     option.encode(TIMAvManager.StreamEncode.HLS);
+                    bHLSPush = true;
                 } else {
                     option.encode(TIMAvManager.StreamEncode.RTMP);
                 }
@@ -1432,6 +1454,52 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mPushDialog.setCanceledOnTouchOutside(false);
     }
 
+    private void showPushUrl(final String url){
+        ILiveLog.d("ILVBX", "showPushUrl->entered:"+url);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(R.string.str_push_title)
+                .setMessage(url)
+                .setPositiveButton(getString(R.string.str_push_copy), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ClipboardManager cmb = (ClipboardManager)getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clipData = ClipData.newPlainText("text", url);
+                        cmb.setPrimaryClip(clipData);
+                        Toast.makeText(getApplicationContext(), "Copy Success", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(getString(R.string.btn_cancel), null);
+        if (bHLSPush){
+            builder.setNeutralButton(getString(R.string.str_push_share), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    showShareDlg(url);
+                }
+            });
+        }
+        builder.show();
+    }
+
+    private void showShareDlg(String url ){
+        //分享到社交平台
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        SxbLog.i("TAG", "pushStreamSucc->title:"+CurLiveInfo.getTitle());
+        SxbLog.i("TAG", "pushStreamSucc->url:"+url);
+        oks.setTitle(CurLiveInfo.getTitle());
+        String coverUrl = CurLiveInfo.getCoverurl();
+        if(coverUrl == null || coverUrl.length() == 0){//用户未选择封面时，使用默认封面
+            coverUrl = "https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/cover_default.png";
+        }
+        oks.setImageUrl(coverUrl);
+        oks.setText("走过路过，不要错过~快来观看直播吧！");
+        oks.setUrl(url);
+
+        // 启动分享GUI
+        oks.show(this);
+    }
+
 
     /**
      * 推流成功
@@ -1453,68 +1521,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
-        //分享到社交平台
 
-		OnekeyShare oks = new OnekeyShare();
-		//关闭sso授权
-		oks.disableSSOWhenAuthorize();
-
-		oks.setTitle(CurLiveInfo.getTitle());
-		oks.setImageUrl(CurLiveInfo.getCoverurl());
-		oks.setText("走过路过，不要错过~快来观看直播吧！");
-		oks.setUrl(url);
-
-		// 启动分享GUI
-		oks.show(this);
-
-//        ClipToBoard(url, url2);
+        showPushUrl(url);
     }
-
-    /**
-     * 将地址黏贴到黏贴版
-     */
-    private void ClipToBoard(final String url, final String url2) {
-        SxbLog.i(TAG, "ClipToBoard url " + url);
-        SxbLog.i(TAG, "ClipToBoard url2 " + url2);
-        if (url == null) return;
-        final Dialog dialog = new Dialog(this, R.style.dialog);
-        dialog.setContentView(R.layout.clip_dialog);
-        TextView urlText = ((TextView) dialog.findViewById(R.id.url1));
-        TextView urlText2 = ((TextView) dialog.findViewById(R.id.url2));
-        Button btnClose = ((Button) dialog.findViewById(R.id.close_dialog));
-        urlText.setText(url);
-        urlText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clip = (ClipboardManager) getApplicationContext().getSystemService(getApplicationContext().CLIPBOARD_SERVICE);
-                clip.setText(url);
-                Toast.makeText(LiveActivity.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
-            }
-        });
-        if (url2 == null) {
-            urlText2.setVisibility(View.GONE);
-        } else {
-            urlText2.setText(url2);
-            urlText2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ClipboardManager clip = (ClipboardManager) getApplicationContext().getSystemService(getApplicationContext().CLIPBOARD_SERVICE);
-                    clip.setText(url2);
-                    Toast.makeText(LiveActivity.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-
-    }
-
 
     private Dialog recordDialog;
     private String filename = "";
@@ -1679,44 +1688,37 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
-    public String getAudioQualityTips() {
-        AVAudioCtrl avAudioCtrl;
-        if ( ILiveSDK.getInstance().getAVContext() != null) {
-            avAudioCtrl =  ILiveSDK.getInstance().getAVContext().getAudioCtrl();
-            return avAudioCtrl.getQualityTips();
+    private static String getValue(String src, String param, String sep){
+        int idx = src.indexOf(param);
+        if (-1 != idx) {
+            idx += param.length() + 1;
+            if (-1 != sep.indexOf(src.charAt(idx))){
+                idx ++;
+            }
+            for (int i = idx; i < src.length(); i++) {
+                if (-1 != sep.indexOf(src.charAt(i))) {
+                    return src.substring(idx, i).trim();
+                }
+            }
         }
 
         return "";
     }
 
-    public String getVideoQualityTips() {
-        AVVideoCtrl avVideoCtrl;
-        if (ILiveSDK.getInstance().getAVContext() != null) {
-             avVideoCtrl = ILiveSDK.getInstance().getAVContext() .getVideoCtrl();
-            return avVideoCtrl.getQualityTips();
-        }
-        return "";
-    }
+    public String getQualityTips(String qualityTips) {
+        String strTips = "";
+        String sep = "[](),\n";
 
+        strTips += "AVSDK版本号: " + getValue(qualityTips, "sdk_version", sep) + "\n";
+        strTips += "房间号: " + getValue(qualityTips, "RoomID", sep) + "\n";
+        strTips += "角色: " + getValue(qualityTips, "ControlRole", sep) + "\n";
+        strTips += "权限: " + getValue(qualityTips, "Authority", sep) + "\n";
+        String tmpStr = getValue(qualityTips, "视频采集", "\n");
+        if (!TextUtils.isEmpty(tmpStr))
+            strTips += "采集信息: " + getValue(qualityTips, "视频采集", "\n") + "\n";
+        strTips += "麦克风: " + getValue(qualityTips, "Mic", sep) + "\n";
+        strTips += "扬声器: " + getValue(qualityTips, "Spk", sep) + "\n";
 
-    public String getQualityTips() {
-        String audioQos = "";
-        String videoQos = "";
-        String roomQos = "";
-
-        if (ILiveSDK.getInstance().getAVContext() != null) {
-            audioQos = getAudioQualityTips();
-
-            videoQos = getVideoQualityTips();
-
-            roomQos = ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips();
-        }
-
-        if (audioQos != null && videoQos != null && roomQos != null) {
-            return audioQos + videoQos + roomQos;
-        } else {
-            return "";
-        }
-
+        return strTips;
     }
 }

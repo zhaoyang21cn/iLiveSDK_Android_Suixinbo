@@ -178,7 +178,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
             @Override
             public void onSuccess(Object data) {
                 ILiveLog.d(TAG, "ILVB-Suixinbo|switchRoom->join room sucess");
-                mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                if (null != mLiveView) {
+                    mLiveView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                }
             }
 
             @Override
@@ -505,6 +507,33 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         });
     }
 
+    private void checkEnterReturn(int iRet){
+        if (ILiveConstants.NO_ERR != iRet){
+            ILiveLog.d(TAG, "ILVB-Suixinbo|checkEnterReturn->enter room failed:" + iRet);
+            if (ILiveConstants.ERR_ALREADY_IN_ROOM == iRet){     // 上次房间未退出处理做退出处理
+                ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        if (null != mLiveView) {
+                            mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        if (null != mLiveView) {
+                            mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                        }
+                    }
+                });
+            }else {
+                if (null != mLiveView) {
+                    mLiveView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+                }
+            }
+        }
+    }
+
 
     private void createRoom() {
         ILVLiveRoomOption hostOption = new ILVLiveRoomOption(MySelfInfo.getInstance().getId())
@@ -513,7 +542,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 .controlRole(Constants.HOST_ROLE)
                 .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
-        ILVLiveManager.getInstance().createRoom(MySelfInfo.getInstance().getMyRoomNum(), hostOption, new ILiveCallBack() {
+        int ret = ILVLiveManager.getInstance().createRoom(MySelfInfo.getInstance().getMyRoomNum(), hostOption, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 ILiveLog.d(TAG, "ILVB-SXB|startEnterRoom->create room sucess");
@@ -531,6 +560,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 }
             }
         });
+        checkEnterReturn(ret);
     }
 
 
@@ -543,7 +573,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
                 .autoMic(false);
-        ILVLiveManager.getInstance().joinRoom(CurLiveInfo.getRoomNum(), memberOption, new ILiveCallBack() {
+        int ret = ILVLiveManager.getInstance().joinRoom(CurLiveInfo.getRoomNum(), memberOption, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 ILiveLog.d(TAG, "ILVB-Suixinbo|startEnterRoom->join room sucess");
@@ -558,6 +588,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 }
             }
         });
+        checkEnterReturn(ret);
         SxbLog.i(TAG, "joinLiveRoom startEnterRoom ");
     }
 

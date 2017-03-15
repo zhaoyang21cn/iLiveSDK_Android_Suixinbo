@@ -2,7 +2,9 @@ package com.tencent.qcloud.suixinbo.views;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -179,6 +181,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void logoutSucc() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
         Toast.makeText(getContext(), "Logout and quite", Toast.LENGTH_SHORT).show();
         getActivity().finish();
     }

@@ -25,9 +25,13 @@ public class RecordInfo {
             playUrl = urls.getString(0);
         }
         strName = jsonRecord.optString("name");
-        if (strName.startsWith("sxb_")){    // 去掉手动录制的前缀
-            strName = strName.substring(4);
+
+        String info[] = strName.split("_");
+        if ("sxb".equals(info[0])){     //手动录制
+            strName = info[2];
+            strCreateTime = info[info.length-2];
         }
+
 
 /*        String infos[] = filename.split("_");
         if (5 == infos.length){
