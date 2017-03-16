@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId "com.tencent.ilivedemo"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 0
         versionName "$System.env.MajorVersion-$System.env.MinorVersion-$System.env.FixVersion-$System.env.BuildNo"
