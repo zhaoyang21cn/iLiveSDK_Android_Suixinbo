@@ -31,16 +31,6 @@ public class RecordInfo {
             strName = info[2];
             strCreateTime = info[info.length-2];
         }
-
-
-/*        String infos[] = filename.split("_");
-        if (5 == infos.length){
-            strUser = infos[1];
-            strName = infos[2];
-            strCreateTime = infos[3];
-        }else{
-            strName = filename;
-        }*/
     }
 
     public String getStrName() {
