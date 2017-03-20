@@ -2,6 +2,7 @@ package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 
 import com.tencent.av.TIMAvManager;
+import com.tencent.ilivesdk.data.ILivePushRes;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MemberID;
 
@@ -35,7 +36,7 @@ public interface LiveView extends MvpView {
 
     void hideInviteDialog();
 
-    void pushStreamSucc(TIMAvManager.StreamRes streamRes);
+    void pushStreamSucc(ILivePushRes streamRes);
 
     void stopStreamSucc();
 
