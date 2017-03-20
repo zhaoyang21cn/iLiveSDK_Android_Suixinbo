@@ -179,6 +179,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void logoutSucc() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
         Toast.makeText(getContext(), "Logout and quite", Toast.LENGTH_SHORT).show();
         getActivity().finish();
     }
