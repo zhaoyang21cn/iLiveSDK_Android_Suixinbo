@@ -1,20 +1,20 @@
 package com.tencent.qcloud.suixinbo.views;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.tencent.qcloud.suixinbo.R;
 
 /**
- * Created by xkazerzhang on 2016/12/22.
+ * Created by tencent on 2016/12/22.
  */
 public class FragmentList extends Fragment implements TabHost.OnTabChangeListener {
     private FragmentTabHost tabHost;
@@ -24,21 +24,21 @@ public class FragmentList extends Fragment implements TabHost.OnTabChangeListene
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        tabHost = (FragmentTabHost)view.findViewById(android.R.id.tabhost);
+        tabHost = (FragmentTabHost)view.findViewById(R.id.tab_host);
         tabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 
         tabHost.addTab(tabHost.newTabSpec("Live")
-                        .setIndicator(getString(R.string.live_titile)),
+                        .setIndicator(getTabView(getString(R.string.live_titile))),
                 FragmentLiveList.class,
                 null);
 
         tabHost.addTab(tabHost.newTabSpec("Record")
-                        .setIndicator(getString(R.string.str_record)),
+                        .setIndicator(getTabView(getString(R.string.str_record))),
                 FragmentRecordList.class,
                 null);
-
         tabHost.setCurrentTabByTag("Live");
-        updateTab(tabHost);
+        tabHost.getTabWidget().setDividerDrawable(null);
+//        updateTab(tabHost);
         tabHost.setOnTabChangedListener(this);
         return view;
     }
@@ -46,7 +46,7 @@ public class FragmentList extends Fragment implements TabHost.OnTabChangeListene
     @Override
     public void onTabChanged(String tabId) {
         tabHost.setCurrentTabByTag(tabId);
-        updateTab(tabHost);
+//        updateTab(tabHost);
     }
 
     /**
@@ -66,5 +66,14 @@ public class FragmentList extends Fragment implements TabHost.OnTabChangeListene
                 tv.setTextColor(Color.GRAY);
             }
         }
+    }
+
+    private View getTabView(String title) {
+        View tabView = LayoutInflater.from(getContext()).inflate(R.layout.toptab_layout, null);
+        ImageView tabImageView = (ImageView) tabView.findViewById(R.id.tab_image);
+        tabImageView.setImageResource(R.drawable.tap_line);
+        TextView tabTextView = (TextView) tabView.findViewById(R.id.tab_text);
+        tabTextView.setText(title);
+        return tabView;
     }
 }
