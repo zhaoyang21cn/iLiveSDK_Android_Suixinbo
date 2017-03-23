@@ -50,7 +50,8 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.3.3'
 ## 直播外延
 [音视频预处理](https://www.qcloud.com/document/product/268/7645)        
 [如何旋转和裁剪画面](https://www.qcloud.com/document/product/268/7647)       
-[画面对焦](https://www.qcloud.com/document/product/268/7646)       
+[画面对焦](https://www.qcloud.com/document/product/268/7646)    
+[美颜包](/doc/ILiveSDK/ilivefilter.md)  
 
 ## 已知问题
 由于目前只支持armeabi架构(1.0.5版本之后支持arm-v7a)，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
