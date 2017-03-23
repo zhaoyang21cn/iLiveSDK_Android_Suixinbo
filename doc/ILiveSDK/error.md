@@ -31,6 +31,7 @@ ERR_NOT_SUPPORT         |8023|请求不支持
 ERR_ALREADY_STATE       |8024|状态已到位(一般为重复调用引起)
 ERR_KICK_OUT            |8050|被踢下线
 ERR_EXPIRE              |8051|票据过期(需更新票据userSig)
+ERR_PARSE_FAIL          |8052|解析网络请求失败
 
 #### 视频通话错误码
 *主叫方和接听方错误码一致*

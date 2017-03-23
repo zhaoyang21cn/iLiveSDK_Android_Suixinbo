@@ -145,4 +145,7 @@
     <string name="str_record">录制</string>
     <string name="str_loading_record">正在努力获取录制视频列表。。。</string>
     <string name="str_rec_nobody">未知</string>
+    <string name="str_push_title">推流地址</string>
+    <string name="str_push_copy">复制地址</string>
+    <string name="str_push_share">分享</string>
 </resources>
