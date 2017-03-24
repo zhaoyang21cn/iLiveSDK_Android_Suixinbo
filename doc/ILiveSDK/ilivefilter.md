@@ -9,7 +9,7 @@
 | **int processData(byte[] data, int len, int width, int height, int type)** | 数据预处理|data：原始数据（预处理后，数据仍然通过data返回） len：数据长度 width：视频宽 height：视频高 type：视频格式（暂时未使用；目前只支持I420）|-1： 失败 0：成功|
 | **void destroyFilter()** | 销毁滤镜资源；在退出房间quitRoom 时，一定要调用此函数销毁滤镜资源；否则下次调用 setFilter无效|无|无|
 
-###使用代码范例：
+### 使用代码范例：
 
 1： 在工程中添加配置，引入 ilivefilter 
 <pre>
