@@ -1,10 +1,10 @@
 ## Release Note
 
 ### V1.3.4(2017-03-24)
- - 重构推流接口
+ - 重构ILiveRoomManager推流接口startPushStream(部分参数做了调整)
  - 增加[日志上报](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/loguploader.md)功能
  - 增加[音视频测速](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/speed%20test.md)接口
- - 开放硬件编解码配置接口ILiveRoomOption
+ - ILiveRoomOption开放硬件编解码配置接口(enableHwEnc, enableHwDnc)
  - 添加拖动边界面保护(避免小AVVideoView拖出AVRootView)
  
 ### V1.3.3(2017-03-06)
