@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVRoomMulti;
+import com.tencent.av.sdk.AVVideoCtrl;
+import com.tencent.ilivefilter.TILFilter;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
@@ -35,15 +38,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiveActivity extends Activity implements View.OnClickListener {
-    Button createBtn, joinbtn, switchBtn,backBtn, sendBtn, inviteBtn, closeMemBtn;
+    Button createBtn, joinbtn, switchBtn, backBtn, sendBtn, inviteBtn, closeMemBtn, beautyBtn;
     AVRootView avRootView;
-    Button logoutBtn,loginLive,registLive;
-    EditText roomNum, roomNumJoin, textInput, memId, hostIdInput,myId,myPwd;
+    Button logoutBtn, loginLive, registLive;
+    EditText roomNum, roomNumJoin, textInput, memId, hostIdInput, myId, myPwd;
     TextView myLoginId;
     FrameLayout loginView;
     private static final String TAG = LiveActivity.class.getSimpleName();
     private final int REQUEST_PHONE_PERMISSIONS = 0;
     private int mCurCameraId;
+    private TILFilter mUDFilter; //美颜处理器
+    boolean isbeauty = false;
 
     private boolean bLogin = false, bEnterRoom = false;
 
@@ -55,17 +60,18 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         createBtn = (Button) findViewById(R.id.create);
         joinbtn = (Button) findViewById(R.id.join);
         backBtn = (Button) findViewById(R.id.back);
-        switchBtn =  (Button) findViewById(R.id.switchRoom);
+        switchBtn = (Button) findViewById(R.id.switchRoom);
         sendBtn = (Button) findViewById(R.id.text_send);
         inviteBtn = (Button) findViewById(R.id.invite);
         closeMemBtn = (Button) findViewById(R.id.close_mem);
+        beautyBtn = (Button) findViewById(R.id.beauty);
 
         loginLive = (Button) findViewById(R.id.login_live);
         registLive = (Button) findViewById(R.id.register_live);
-        loginView =  (FrameLayout)findViewById(R.id.login_fragment);
+        loginView = (FrameLayout) findViewById(R.id.login_fragment);
 
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
-
+        mUDFilter = new TILFilter(this);
 
         logoutBtn = (Button) findViewById(R.id.btn_logout);
         roomNum = (EditText) findViewById(R.id.room_num);
@@ -73,8 +79,8 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         textInput = (EditText) findViewById(R.id.text_input);
         hostIdInput = (EditText) findViewById(R.id.host_id);
         memId = (EditText) findViewById(R.id.mem_id);
-        myId= (EditText) findViewById(R.id.my_id);
-        myPwd =(EditText) findViewById(R.id.my_pwd);
+        myId = (EditText) findViewById(R.id.my_id);
+        myPwd = (EditText) findViewById(R.id.my_pwd);
         myLoginId = (TextView) findViewById(R.id.my_login_id);
 
         createBtn.setOnClickListener(this);
@@ -87,6 +93,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         loginLive.setOnClickListener(this);
         registLive.setOnClickListener(this);
         switchBtn.setOnClickListener(this);
+        beautyBtn.setOnClickListener(this);
         checkPermission();
 
 
@@ -100,10 +107,9 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         liveConfig.setLiveMsgListener(new ILVLiveConfig.ILVLiveMsgListener() {
             @Override
-            public void onNewTextMsg(ILVText text, String SenderId,TIMUserProfile userProfile) {
+            public void onNewTextMsg(ILVText text, String SenderId, TIMUserProfile userProfile) {
                 Toast.makeText(LiveActivity.this, "onNewTextMsg : " + text, Toast.LENGTH_SHORT).show();
             }
-
 
 
             @Override
@@ -145,7 +151,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     case ILVLiveConstants.ILVLIVE_CMD_INTERACT_REJECT:
                         break;
                 }
-                Toast.makeText(LiveActivity.this, "cmd "+ cmd, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LiveActivity.this, "cmd " + cmd, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -225,7 +231,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_logout) { //登陆房间
-            ILiveLoginManager.getInstance().iLiveLogout( new ILiveCallBack() {
+            ILiveLoginManager.getInstance().iLiveLogout(new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     bLogin = false;
@@ -307,6 +313,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(LiveActivity.this, "quit room  ok ", Toast.LENGTH_SHORT).show();
                     logoutBtn.setVisibility(View.VISIBLE);
                     backBtn.setVisibility(View.INVISIBLE);
+                    mUDFilter.destroyFilter();
                 }
 
                 @Override
@@ -319,7 +326,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         if (view.getId() == R.id.text_send) {
             //发送消息
-            ILVText iliveText = new ILVText(ILVText.ILVTextType.eGroupMsg,ILiveRoomManager.getInstance().getIMGroupId(), "");
+            ILVText iliveText = new ILVText(ILVText.ILVTextType.eGroupMsg, ILiveRoomManager.getInstance().getIMGroupId(), "");
             iliveText.setText("" + textInput.getText());
             //发送消息
             ILVLiveManager.getInstance().sendText(iliveText, new ILiveCallBack() {
@@ -352,7 +359,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-                    Log.i(TAG, "onError: "+errMsg);
+                    Log.i(TAG, "onError: " + errMsg);
                 }
 
             });
@@ -386,9 +393,9 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         }
 
-        if(view.getId()==R.id.register_live){
+        if (view.getId() == R.id.register_live) {
             Log.i(TAG, "onClick: register ");
-            ILiveLoginManager.getInstance().tlsRegister(""+myId.getText(), ""+myPwd.getText(), new ILiveCallBack() {
+            ILiveLoginManager.getInstance().tlsRegister("" + myId.getText(), "" + myPwd.getText(), new ILiveCallBack() {
                 @Override
                 public void onSuccess(Object data) {
                     Toast.makeText(LiveActivity.this, "register suc !!!", Toast.LENGTH_SHORT).show();
@@ -396,14 +403,14 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onError(String module, int errCode, String errMsg) {
-                    Toast.makeText(LiveActivity.this, "register failed : "+errMsg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LiveActivity.this, "register failed : " + errMsg, Toast.LENGTH_SHORT).show();
                 }
             });
 
 
         }
 
-        if(view.getId()==R.id.login_live){
+        if (view.getId() == R.id.login_live) {
             ILiveLoginManager.getInstance().tlsLogin("" + myId.getText(), "" + myPwd.getText(), new ILiveCallBack<String>() {
                 @Override
                 public void onSuccess(String data) {
@@ -412,7 +419,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                         public void onSuccess(Object data) {
                             bLogin = true;
                             Toast.makeText(LiveActivity.this, "login success !", Toast.LENGTH_SHORT).show();
-                            myLoginId.setText(""+ILiveLoginManager.getInstance().getMyUserId());
+                            myLoginId.setText("" + ILiveLoginManager.getInstance().getMyUserId());
                             loginView.setVisibility(View.INVISIBLE);
                         }
 
@@ -431,7 +438,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
             });
         }
 
-        if(view.getId()==R.id.switchRoom){
+        if (view.getId() == R.id.switchRoom) {
             Log.i(TAG, "onClick: switchRoom ");
             int room = Integer.parseInt("" + roomNumJoin.getText());
             String hostId = "" + hostIdInput.getText();
@@ -458,9 +465,32 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 }
             });
 
+        }
+
+
+        if (view.getId() == R.id.beauty) {
+            if (isbeauty == false) {
+                mUDFilter.setFilter(1);
+                mUDFilter.setBeauty(5);
+                mUDFilter.setWhite(3);
+                ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+                    @Override
+                    public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
+
+                        mUDFilter.processData(var1.data, var1.dataLen, var1.width, var1.height, var1.srcType);
+                    }
+                });
+                isbeauty = true;
+            } else {
+                mUDFilter.setFilter(-1);
+                ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(null);
+                isbeauty = false;
+            }
 
         }
     }
+
 
     @Override
     protected void onStart() {

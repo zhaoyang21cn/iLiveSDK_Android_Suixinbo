@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/room_num"
-                android:text="createRoom"
+                android:text="create"
                 android:textColor="@color/white"/>
 
         <Button
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="backRoom"
+                android:text="quite"
                 android:textColor="@color/white"
                 android:visibility="invisible"/>
 
@@ -104,7 +104,7 @@
                 android:id="@+id/join"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="joinRoom"
+                android:text="join"
                 android:textColor="@color/white"/>
 
         <Button
@@ -173,13 +173,24 @@
                 android:text="closeMem"
                 android:textColor="@color/white"/>
 
-        <!--<Button-->
-        <!--android:id="@+id/thumbUp"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="thumbUp"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:visibility="gone" />-->
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+        <Button
+                android:id="@+id/beauty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="beauty"
+                android:layout_gravity="bottom|center"
+                android:textColor="@color/white"
+                android:visibility="visible"/>
+
     </LinearLayout>
 
 
@@ -221,6 +232,7 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/colorGray1"/>
         </LinearLayout>
+
 
         <LinearLayout
                 android:layout_width="match_parent"
