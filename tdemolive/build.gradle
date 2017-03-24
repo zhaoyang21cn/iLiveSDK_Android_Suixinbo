@@ -24,4 +24,5 @@ dependencies {
 
     compile 'com.tencent.ilivesdk:ilivesdk:1.3.4'
     compile 'com.tencent.livesdk:livesdk:1.1.0'
+    compile 'com.tencent.ilivefilter:ilivefilter:1.1.1'
 }
