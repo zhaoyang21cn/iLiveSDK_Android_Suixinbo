@@ -27,6 +27,8 @@ import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.core.ILiveRoomOption;
+import com.tencent.ilivesdk.data.ILivePushRes;
+import com.tencent.ilivesdk.data.ILivePushUrl;
 import com.tencent.livesdk.ILVChangeRoleRes;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
@@ -335,10 +337,10 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     }
 
     public void startPush(ILivePushOption option) {
-        ILiveRoomManager.getInstance().startPushStream(option, new ILiveCallBack<TIMAvManager.StreamRes>() {
+        ILiveRoomManager.getInstance().startPushStream(option, new ILiveCallBack<ILivePushRes>() {
             @Override
-            public void onSuccess(TIMAvManager.StreamRes data) {
-                List<TIMAvManager.LiveUrl> liveUrls = data.getUrls();
+            public void onSuccess(ILivePushRes data) {
+                List<ILivePushUrl> liveUrls = data.getUrls();
                 streamChannelID = data.getChnlId();
                 mLiveView.pushStreamSucc(data);
             }
