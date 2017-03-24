@@ -53,6 +53,8 @@ import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.ilivesdk.core.ILivePushOption;
 import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.data.ILivePushRes;
+import com.tencent.ilivesdk.data.ILivePushUrl;
 import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
 import com.tencent.ilivesdk.tools.quality.LiveInfo;
 import com.tencent.ilivesdk.view.AVRootView;
@@ -1428,10 +1430,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 }
 
                 if (radgroup.getCheckedRadioButtonId() == R.id.hls) {//默认格式
-                    option.encode(TIMAvManager.StreamEncode.HLS);
+                    option.encode(ILivePushOption.Encode.HLS);
                     bHLSPush = true;
                 } else {
-                    option.encode(TIMAvManager.StreamEncode.RTMP);
+                    option.encode(ILivePushOption.Encode.RTMP);
                 }
                 mLiveHelper.startPush(option);//开启推流
                 mPushDialog.dismiss();
@@ -1505,20 +1507,20 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
      * 推流成功
      */
     @Override
-    public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
-        List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
+    public void pushStreamSucc(ILivePushRes streamRes) {
+        List<ILivePushUrl> liveUrls = streamRes.getUrls();
         isPushed = true;
         pushBtn.setText(R.string.live_btn_stop_push);
         int length = liveUrls.size();
         String url = null;
         String url2 = null;
         if (length == 1) {
-            TIMAvManager.LiveUrl avUrl = liveUrls.get(0);
+            ILivePushUrl avUrl = liveUrls.get(0);
             url = avUrl.getUrl();
         } else if (length == 2) {
-            TIMAvManager.LiveUrl avUrl = liveUrls.get(0);
+            ILivePushUrl avUrl = liveUrls.get(0);
             url = avUrl.getUrl();
-            TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
+            ILivePushUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
 
