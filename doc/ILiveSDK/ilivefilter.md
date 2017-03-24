@@ -10,45 +10,52 @@
 | **void destroyFilter()** | 销毁滤镜资源；在退出房间quitRoom 时，一定要调用此函数销毁滤镜资源；否则下次调用 setFilter无效|无|无|
 
 ###使用代码范例：
-<pre>
-build.gradle 中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.1'
+1： 在工程中添加配置，引入 ilivefilter 
+<pre>
+build.gradle 的dependency中添加
+
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.2'
 </pre>
+2：判断当前系统 Opengl ES 版本；（**因为ilivefilter 只支持 Opengl ES 3.0**）
 <pre>
-
 TILFilter mUDFilter = null;
 
-// 因为 sdk 只支持 Opengl ES 3.0;所以需要判断当前 Opengl ES 环境
 ActivityManager am = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+// 获取 Opengl ES 版本
 ConfigurationInfo info = am.getDeviceConfigurationInfo();
 
 if (info.reqGlEsVersion > 0x00020000){
     Log.i(TAG, "Opengl ES 3.0");
-    mUDFilter = new TILFilter(LiveActivity.this);   
+    // 当前为 Opengl ES 3.0; 可以正常使用
+    mUDFilter = new TILFilter(this);
 }else{
     Log.e(TAG, "SDK not support Opengl ES " + info.reqGlEsVersion);
 }
-........
-// 设置 AVSDK 相机数据回调
+</pre>
+3：设置 AVSDK相机数据回调（**设置回调，一定要在进入房间成功后，才有效！！**;顺序可与 4步骤 互换）
+<pre>
 boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback(){
     @Override
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
-
+        // 回调的数据，传递给 ilivefilter processData接口处理
         mUDFilter.processData(var1.data, var1.dataLen, var1.width, var1.height, var1.srcType);
     }
 });
-.......
-// 设置美颜滤镜
+</pre>
+4：在任意地方，设置滤镜，和美颜级别（**美颜级别适用所有的滤镜**；可与  3步骤 互换）
+<pre>
+// 小于或等于0：原始滤镜 1：美颜 2：浪漫 3：清新 4：唯美 5：粉嫩 6: 怀旧 7:蓝调  8: 清凉 9: 日系
 mUDFilter.setFilter(1);
-........
-// 设置美颜级别 （0~7）
-mUDFilter.setBeauty(5);
-// 设置美白级别（0~9）
-mUDFilter.setWhite(3)；
-.......
 
-//退出房间
+// 设置美颜级别 （级别为 0~7）
+mUDFilter.setBeauty(5);
+
+// 设置美白级别（级别为 0~9）
+mUDFilter.setWhite(3)；
+</pre>
+5：**退出房间时，必须销毁滤镜资源！！否则下次进入房间，设置滤镜不生效！**
+<pre>
 ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
     @Override
     public void onSuccess(Object data) {
