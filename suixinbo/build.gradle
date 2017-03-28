@@ -48,7 +48,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.tencent.ilivesdk:ilivesdk:1.3.3.6'
+    compile 'com.tencent.ilivesdk:ilivesdk:$rootProject.iLiveVersion'
     compile 'com.tencent.livesdk:livesdk:1.1.0'
     compile 'com.tencent.rtmpsdk:rtmpsdk:1.0.1'
     compile files('libs/MobCommons-2017.0216.1054.jar')
