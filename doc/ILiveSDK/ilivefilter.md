@@ -15,7 +15,7 @@
 <pre>
 build.gradle 的dependency中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.2'
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.3'
 </pre>
 2：判断当前系统 Opengl ES 版本；（**因为ilivefilter 只支持 Opengl ES 3.0**）
 <pre>
