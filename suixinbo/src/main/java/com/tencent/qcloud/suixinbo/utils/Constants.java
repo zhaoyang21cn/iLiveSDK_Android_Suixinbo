@@ -38,10 +38,12 @@ public class Constants {
     //public static final int ACCOUNT_TYPE = 884;
 
     // ILiveSDK 随心播
-    public static final int SDK_APPID = 1400019352;
-    public static final int ACCOUNT_TYPE = 8970;
-
-    public static final String ID_STATUS = "id_status";
+//    public static final int SDK_APPID = 1400019352;
+//    public static final int ACCOUNT_TYPE = 8970;
+//
+//
+    public static final int SDK_APPID = 1400027849;
+    public static final int ACCOUNT_TYPE = 11656;
 
     public static final int HOST = 1;
 
