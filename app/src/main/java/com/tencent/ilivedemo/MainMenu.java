@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.tencent.qcloud.suixinbo.views.LoginActivity;
 import com.tencent.tdemolive.LiveActivity;
 
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class MainMenu extends Activity {
         lvMenu = (ListView) findViewById(R.id.lv_menu);
 
         listDemo.add("Live: 简单直播");
-        listDemo.add("Suixinbo:新随心播");
         adapterDemo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 listDemo);
         lvMenu.setAdapter(adapterDemo);
@@ -52,9 +50,6 @@ public class MainMenu extends Activity {
                 switch (position) {
                     case 0:
                         intent.setClass(MainMenu.this, LiveActivity.class);
-                        break;
-                    case 1:
-                        intent.setClass(MainMenu.this, LoginActivity.class);
                         break;
                 }
 

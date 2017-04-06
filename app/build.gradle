@@ -35,5 +35,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24+'
 
     compile project(':tdemolive')
-    compile project(':suixinbo')
+//    compile project(':suixinbo')
 }

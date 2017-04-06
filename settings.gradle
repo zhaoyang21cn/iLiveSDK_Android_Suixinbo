@@ -1,1 +1,1 @@
-include ':app', ':tdemolive', ':suixinbo'
+include ':app', ':tdemolive'
