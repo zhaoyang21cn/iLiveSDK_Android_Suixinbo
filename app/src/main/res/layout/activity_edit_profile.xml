@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:titleText="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.tencent.qcloud.suixinbo.views.customviews.TemplateTitle
+        android:id="@+id/tt_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:titleText="@string/profile_title"
+        app:backText="@string/btn_return"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_ep_icon"
+        android:onClick="onClick"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp" >
+        <TextView
+            android:text="@string/profile_icon"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/iv_ep_icon"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:layout_width="45dp"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_ep_nickname"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/profile_nickname"
+        app:isBottom="true"
+        app:canNav="true"/>
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_ep_sign"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/profile_sign"
+        app:isBottom="true"
+        app:canNav="true"/>
+</LinearLayout>
