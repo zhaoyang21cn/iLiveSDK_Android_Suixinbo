@@ -246,7 +246,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     /**
      * 初始化UI
      */
-    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnMoreMenu, BtnHeart, BtnBackPrimary, BtnChangeVoice, BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnMoreMenu, BtnHeart, BtnBackPrimary, BtnChangeVoice, BtnLogReport,BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
     private LinearLayout mHostCtrView, mHostCtrViewMore, mNomalMemberCtrView, mVideoMemberCtrlView, mBeautySettings;
@@ -286,6 +286,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         tvAdmires = (TextView) findViewById(R.id.heart_counts);
         mQualityText = (TextView) findViewById(R.id.quality_text);
         speedBtn = (TextView) findViewById(R.id.speed_test_btn);
+        BtnLogReport = (TextView) findViewById(R.id.log_report);
         speedBtn.setOnClickListener(this);
         mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
@@ -294,6 +295,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         BtnCtrlVideo.setOnClickListener(this);
         BtnCtrlMic.setOnClickListener(this);
         BtnHungup.setOnClickListener(this);
+        BtnLogReport.setOnClickListener(this);
         roomId = (TextView) findViewById(R.id.room_id);
 
         //for 测试用
@@ -1246,6 +1248,25 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             if (voiceTypeDialog != null) voiceTypeDialog.show();
 
         }
+        else if (i == R.id.log_report) {
+            ILiveSDK.getInstance().uploadLog("report log", new ILiveCallBack(){
+                @Override
+                public void onSuccess(Object data) {
+                    LiveActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(LiveActivity.this, "Log report succ!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    });
+                }
+
+                @Override
+                public void onError(String module, int errCode, String errMsg) {
+                    Toast.makeText(LiveActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     //for 测试获取测试参数
