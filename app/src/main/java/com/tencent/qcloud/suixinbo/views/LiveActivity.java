@@ -26,6 +26,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -43,7 +45,6 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVAudioCtrl;
-import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
@@ -88,16 +89,15 @@ import com.tencent.qcloud.suixinbo.views.customviews.MembersDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+
+import static com.tencent.qcloud.suixinbo.R.id.change_voice;
 
 
 /**
@@ -246,10 +246,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     /**
      * 初始化UI
      */
-    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnHeart, BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnMoreMenu, BtnHeart, BtnBackPrimary, BtnChangeVoice, BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
-    private LinearLayout mHostCtrView, mNomalMemberCtrView, mVideoMemberCtrlView, mBeautySettings;
+    private LinearLayout mHostCtrView, mHostCtrViewMore, mNomalMemberCtrView, mVideoMemberCtrlView, mBeautySettings;
     private FrameLayout mFullControllerUi, mBackgound;
     private SeekBar mBeautyBar;
     private int mBeautyRate, mWhiteRate;
@@ -272,6 +272,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
      */
     private void initView() {
         mHostCtrView = (LinearLayout) findViewById(R.id.host_bottom_layout);
+        mHostCtrViewMore = (LinearLayout) findViewById(R.id.host_bottom_layout_more);
         mNomalMemberCtrView = (LinearLayout) findViewById(R.id.member_bottom_layout);
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);
         mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);
@@ -313,6 +314,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             BtnWhite = (TextView) findViewById(R.id.white_btn);
             BtnMic = (TextView) findViewById(R.id.mic_btn);
             BtnScreen = (TextView) findViewById(R.id.fullscreen_btn);
+            BtnMoreMenu = (TextView) findViewById(R.id.menu_more);
+            BtnBackPrimary = (TextView) findViewById(R.id.back_primary);
+            BtnChangeVoice = (TextView) findViewById(change_voice);
+
+
             mVideoChat.setVisibility(View.VISIBLE);
             Btnflash.setOnClickListener(this);
             BtnSwitch.setOnClickListener(this);
@@ -327,12 +333,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             inviteView1.setOnClickListener(this);
             inviteView2.setOnClickListener(this);
             inviteView3.setOnClickListener(this);
-
+            BtnMoreMenu.setOnClickListener(this);
+            BtnBackPrimary.setOnClickListener(this);
+            BtnChangeVoice.setOnClickListener(this);
             tvAdmires.setVisibility(View.VISIBLE);
 
             initBackDialog();
             initDetailDailog();
-
+            initVoiceTypeDialog();
 
             mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
             startRecordAnimation();
@@ -472,12 +480,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     });
                 }
 
-                mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener(){
+                mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                        if(e1.getY()-e2.getY() > 20 && Math.abs(velocityY) > 10){
+                        if (e1.getY() - e2.getY() > 20 && Math.abs(velocityY) > 10) {
                             bSlideUp = true;
-                        }else if(e2.getY()-e1.getY() > 20 && Math.abs(velocityY) > 10){
+                        } else if (e2.getY() - e1.getY() > 20 && Math.abs(velocityY) > 10) {
                             bSlideUp = false;
                         }
                         switchRoom();
@@ -556,7 +564,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         CurLiveInfo.setCurrentRequestCount(0);
         mLiveHelper.onDestory();
 
-		ShareSDK.stopSDK(this);
+        ShareSDK.stopSDK(this);
     }
 
 
@@ -633,6 +641,44 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
 
+    private Dialog voiceTypeDialog;
+
+    private void initVoiceTypeDialog() {
+        voiceTypeDialog = new Dialog(this, R.style.dialog);
+        voiceTypeDialog.setContentView(R.layout.dialog_voice_type);
+        ListView voiceTypeList = (ListView) voiceTypeDialog.findViewById(R.id.voice_type_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_expandable_list_item_1,
+                getData());
+        voiceTypeList.setAdapter(adapter);
+        voiceTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ILiveSDK.getInstance().getAvAudioCtrl().setVoiceType(position);
+                voiceTypeDialog.dismiss();
+            }
+        });
+    }
+
+    private ArrayList<String> list = new ArrayList<String>();
+
+    private ArrayList<String> getData() {
+        list.add("原声");
+        list.add("萝莉");
+        list.add("空灵");
+        list.add("幼稚园");
+        list.add("重机器");
+        list.add("擎天柱");
+        list.add("困獸");
+        list.add("方言");
+        list.add("金属机器人");
+        list.add("死肥仔");
+        return list;
+    }
+
+
     /**
      * 完成进出房间流程
      */
@@ -660,6 +706,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 mHostNameTv.setText(MySelfInfo.getInstance().getId());
+
+                //注册一个音频回调为变声用
+                ILiveSDK.getInstance().getAvAudioCtrl().registAudioDataCallbackWithByteBuffer(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, new AVAudioCtrl.RegistAudioDataCompleteCallbackWithByteBuffer() {
+                    @Override
+                    public int onComplete(AVAudioCtrl.AudioFrameWithByteBuffer audioFrameWithByteBuffer, int i) {
+                        return 0;
+                    }
+                });
+
+
                 //开启摄像头渲染画面
                 SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
@@ -1050,7 +1106,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     break;
             }
         } else if (i == R.id.switch_cam) {
-            ILiveRoomManager.getInstance().enableCamera((ILiveRoomManager.getInstance().getCurCameraId() + 1)%2, true);
+            ILiveRoomManager.getInstance().enableCamera((ILiveRoomManager.getInstance().getCurCameraId() + 1) % 2, true);
 //            switch (ILiveRoomManager.getInstance().getCurCameraId()) {
 //
 //                case ILiveConstants.FRONT_CAMERA:
@@ -1178,6 +1234,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         } else if (i == R.id.speed_test_btn) {
             new SpeedTestDialog(this).start();
 
+        } else if (i == R.id.menu_more) {
+            mHostCtrView.setVisibility(View.INVISIBLE);
+            mHostCtrViewMore.setVisibility(View.VISIBLE);
+
+        } else if (i == R.id.back_primary) {
+            mHostCtrView.setVisibility(View.VISIBLE);
+            mHostCtrViewMore.setVisibility(View.INVISIBLE);
+
+        } else if (i == R.id.change_voice) {
+            if (voiceTypeDialog != null) voiceTypeDialog.show();
+
         }
     }
 
@@ -1197,17 +1264,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             //String tips =getQualityTips();
                             String tips = "\n\n";
                             ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
-                            if (null != qData){
-                                tips += "FPS:\t"+qData.getUpFPS()+"\n\n";
-                                tips += "Send:\t"+qData.getSendKbps()+"Kbps\t";
-                                tips += "Recv:\t"+qData.getRecvKbps()+"Kbps\n\n";
-                                tips += "SendLossRate:\t"+qData.getSendLossRate()+"%\t";
-                                tips += "RecvLossRate:\t"+qData.getRecvLossRate()+"%\n\n";
-                                tips += "AppCPURate:\t"+qData.getAppCPURate()+"%\t";
-                                tips += "SysCPURate:\t"+qData.getSysCPURate()+"%\n\n";
+                            if (null != qData) {
+                                tips += "FPS:\t" + qData.getUpFPS() + "\n\n";
+                                tips += "Send:\t" + qData.getSendKbps() + "Kbps\t";
+                                tips += "Recv:\t" + qData.getRecvKbps() + "Kbps\n\n";
+                                tips += "SendLossRate:\t" + qData.getSendLossRate() + "%\t";
+                                tips += "RecvLossRate:\t" + qData.getRecvLossRate() + "%\n\n";
+                                tips += "AppCPURate:\t" + qData.getAppCPURate() + "%\t";
+                                tips += "SysCPURate:\t" + qData.getSysCPURate() + "%\n\n";
                                 Map<String, LiveInfo> userMaps = qData.getLives();
-                                for (Map.Entry<String, LiveInfo> entry : userMaps.entrySet()){
-                                    tips += "\t"+entry.getKey()+"-"+entry.getValue().getWidth()+"*"+entry.getValue().getHeight()+"\n";
+                                for (Map.Entry<String, LiveInfo> entry : userMaps.entrySet()) {
+                                    tips += "\t" + entry.getKey() + "-" + entry.getValue().getWidth() + "*" + entry.getValue().getHeight() + "\n";
                                 }
                             }
 
@@ -1456,21 +1523,21 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mPushDialog.setCanceledOnTouchOutside(false);
     }
 
-    private void showPushUrl(final String url){
-        ILiveLog.d("ILVBX", "showPushUrl->entered:"+url);
+    private void showPushUrl(final String url) {
+        ILiveLog.d("ILVBX", "showPushUrl->entered:" + url);
         AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(R.string.str_push_title)
                 .setMessage(url)
                 .setPositiveButton(getString(R.string.str_push_copy), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ClipboardManager cmb = (ClipboardManager)getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipboardManager cmb = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clipData = ClipData.newPlainText("text", url);
                         cmb.setPrimaryClip(clipData);
                         Toast.makeText(getApplicationContext(), "Copy Success", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(getString(R.string.btn_cancel), null);
-        if (bHLSPush){
+        if (bHLSPush) {
             builder.setNeutralButton(getString(R.string.str_push_share), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -1481,17 +1548,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         builder.show();
     }
 
-    private void showShareDlg(String url ){
+    private void showShareDlg(String url) {
         //分享到社交平台
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
 
-        SxbLog.i("TAG", "pushStreamSucc->title:"+CurLiveInfo.getTitle());
-        SxbLog.i("TAG", "pushStreamSucc->url:"+url);
+        SxbLog.i("TAG", "pushStreamSucc->title:" + CurLiveInfo.getTitle());
+        SxbLog.i("TAG", "pushStreamSucc->url:" + url);
         oks.setTitle(CurLiveInfo.getTitle());
         String coverUrl = CurLiveInfo.getCoverurl();
-        if(coverUrl == null || coverUrl.length() == 0){//用户未选择封面时，使用默认封面
+        if (coverUrl == null || coverUrl.length() == 0) {//用户未选择封面时，使用默认封面
             coverUrl = "https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/cover_default.png";
         }
         oks.setImageUrl(coverUrl);
@@ -1635,27 +1702,27 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
 
     @Override
-    public void showRoomList(UserServerHelper.RequestBackInfo reqinfo,ArrayList<RoomInfoJson> livelist) {
-        if(reqinfo.getErrorCode()!=0){
-            Toast.makeText(this, "error" + reqinfo.getErrorCode()+" info " +reqinfo.getErrorInfo() , Toast.LENGTH_SHORT).show();
+    public void showRoomList(UserServerHelper.RequestBackInfo reqinfo, ArrayList<RoomInfoJson> livelist) {
+        if (reqinfo.getErrorCode() != 0) {
+            Toast.makeText(this, "error" + reqinfo.getErrorCode() + " info " + reqinfo.getErrorInfo(), Toast.LENGTH_SHORT).show();
             return;
 
 
         }
         int index = 0, oldPos = 0;
-        for (; index<livelist.size(); index++){
-            if (livelist.get(index).getInfo().getRoomnum() == CurLiveInfo.getRoomNum()){
+        for (; index < livelist.size(); index++) {
+            if (livelist.get(index).getInfo().getRoomnum() == CurLiveInfo.getRoomNum()) {
                 oldPos = index;
-                index ++;
+                index++;
                 break;
             }
         }
-        if (bSlideUp){
+        if (bSlideUp) {
             index -= 2;
         }
-        RoomInfoJson info = livelist.get((index+livelist.size())%livelist.size());
+        RoomInfoJson info = livelist.get((index + livelist.size()) % livelist.size());
 
-        if (null != info){
+        if (null != info) {
             MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
             MySelfInfo.getInstance().setJoinRoomWay(false);
             CurLiveInfo.setHostID(info.getHostId());
@@ -1670,7 +1737,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             showHeadIcon(mHeadIcon, CurLiveInfo.getHostAvator());
             if (!TextUtils.isEmpty(CurLiveInfo.getHostName())) {
                 mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostName(), 10));
-            }else{
+            } else {
                 mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
             }
             tvMembers.setText("" + CurLiveInfo.getMembers());
@@ -1679,23 +1746,23 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             clearOldData();
             //进入房间流程
             mLiveHelper.switchRoom();
-        }else{
+        } else {
             bReadyToChange = true;
         }
     }
 
-    private void switchRoom(){
+    private void switchRoom() {
         if (bReadyToChange) {
             mLiveListHelper.getPageData();
         }
     }
 
-    private static String getValue(String src, String param, String sep){
+    private static String getValue(String src, String param, String sep) {
         int idx = src.indexOf(param);
         if (-1 != idx) {
             idx += param.length() + 1;
-            if (-1 != sep.indexOf(src.charAt(idx))){
-                idx ++;
+            if (-1 != sep.indexOf(src.charAt(idx))) {
+                idx++;
             }
             for (int i = idx; i < src.length(); i++) {
                 if (-1 != sep.indexOf(src.charAt(i))) {

@@ -169,6 +169,15 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="15dp" />
 
+        <include
+                layout="@layout/host_bottom_layout2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:visibility="gone"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp" />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
