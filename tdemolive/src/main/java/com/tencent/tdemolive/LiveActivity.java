@@ -106,6 +106,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         ILVLiveConfig liveConfig = new ILVLiveConfig();
 
         liveConfig.setLiveMsgListener(new ILVLiveConfig.ILVLiveMsgListener() {
+
             @Override
             public void onNewTextMsg(ILVText text, String SenderId, TIMUserProfile userProfile) {
                 Toast.makeText(LiveActivity.this, "onNewTextMsg : " + text, Toast.LENGTH_SHORT).show();
@@ -151,8 +152,6 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                     case ILVLiveConstants.ILVLIVE_CMD_INTERACT_REJECT:
                         break;
                 }
-                Toast.makeText(LiveActivity.this, "cmd " + cmd, Toast.LENGTH_SHORT).show();
-
             }
 
             @Override

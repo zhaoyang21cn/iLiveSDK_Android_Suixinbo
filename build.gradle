@@ -25,6 +25,15 @@ allprojects {
     }
 }
 
+Properties properties = new Properties()
+if (project.rootProject.file('gradle.properties').exists()) {
+    properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+}
+
+ext {
+    iLiveVersion = properties.getProperty("ilive")
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
