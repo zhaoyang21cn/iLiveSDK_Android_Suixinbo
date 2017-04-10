@@ -246,7 +246,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     /**
      * 初始化UI
      */
-    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnMoreMenu, BtnHeart, BtnBackPrimary, BtnChangeVoice, BtnLogReport,BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView BtnBack, BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnScreen, BtnMoreMenu, BtnHeart,BtnChangeRole, BtnBackPrimary, BtnChangeVoice, BtnLogReport,BtnNormal, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
     private LinearLayout mHostCtrView, mHostCtrViewMore, mNomalMemberCtrView, mVideoMemberCtrlView, mBeautySettings;
@@ -287,11 +287,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mQualityText = (TextView) findViewById(R.id.quality_text);
         speedBtn = (TextView) findViewById(R.id.speed_test_btn);
         BtnLogReport = (TextView) findViewById(R.id.log_report);
-        speedBtn.setOnClickListener(this);
+        BtnChangeRole = (TextView) findViewById(R.id.change_role);
         mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
         BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
         BtnHungup = (TextView) findViewById(R.id.close_member_video);
+        speedBtn.setOnClickListener(this);
+        BtnChangeRole.setOnClickListener(this);
         BtnCtrlVideo.setOnClickListener(this);
         BtnCtrlMic.setOnClickListener(this);
         BtnHungup.setOnClickListener(this);
@@ -343,6 +345,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             initBackDialog();
             initDetailDailog();
             initVoiceTypeDialog();
+            initRoleDialog();
 
             mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
             startRecordAnimation();
@@ -652,7 +655,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_expandable_list_item_1,
-                getData());
+                getVoiceType());
         voiceTypeList.setAdapter(adapter);
         voiceTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -664,21 +667,67 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
     }
 
-    private ArrayList<String> list = new ArrayList<String>();
+    private ArrayList<String> voiceList = new ArrayList<String>();
 
-    private ArrayList<String> getData() {
-        list.add("原声");
-        list.add("萝莉");
-        list.add("空灵");
-        list.add("幼稚园");
-        list.add("重机器");
-        list.add("擎天柱");
-        list.add("困獸");
-        list.add("方言");
-        list.add("金属机器人");
-        list.add("死肥仔");
-        return list;
+    private ArrayList<String> getVoiceType() {
+        voiceList.add("原声");
+        voiceList.add("萝莉");
+        voiceList.add("空灵");
+        voiceList.add("幼稚园");
+        voiceList.add("重机器");
+        voiceList.add("擎天柱");
+        voiceList.add("困獸");
+        voiceList.add("方言");
+        voiceList.add("金属机器人");
+        voiceList.add("死肥仔");
+        return voiceList;
     }
+
+
+
+
+
+    private Dialog roleDialog;
+    private void initRoleDialog() {
+        roleDialog = new Dialog(this, R.style.dialog);
+        roleDialog.setContentView(R.layout.dialog_role_type);
+        ListView roleList = (ListView) roleDialog.findViewById(R.id.role_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_expandable_list_item_1,
+                getRoleType());
+        roleList.setAdapter(adapter);
+        roleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0 :
+                        mLiveHelper.changeRole("HD");
+                        break;
+                    case 1 :
+                        mLiveHelper.changeRole("SD");
+                        break;
+                    case 2 :
+                        mLiveHelper.changeRole("LD");
+                        break;
+                }
+                roleDialog.dismiss();
+            }
+        });
+    }
+
+    private ArrayList<String> roleList = new ArrayList<String>();
+
+    private ArrayList<String> getRoleType() {
+        roleList.add("高清");
+        roleList.add("普通");
+        roleList.add("流畅");
+        return roleList;
+    }
+
+
+
 
 
     /**
@@ -1246,6 +1295,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         } else if (i == R.id.change_voice) {
             if (voiceTypeDialog != null) voiceTypeDialog.show();
+
+        } else if (i == R.id.change_role) {
+            if (roleDialog != null) roleDialog.show();
 
         }
         else if (i == R.id.log_report) {

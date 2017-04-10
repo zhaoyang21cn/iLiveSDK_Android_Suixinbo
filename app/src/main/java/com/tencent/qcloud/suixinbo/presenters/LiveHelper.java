@@ -15,7 +15,6 @@ import com.tencent.TIMGroupSystemElem;
 import com.tencent.TIMGroupSystemElemType;
 import com.tencent.TIMMessage;
 import com.tencent.TIMTextElem;
-import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
@@ -768,4 +767,20 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         }
 
     }
+
+    public void changeRole(final String role) {
+        ILiveRoomManager.getInstance().changeRole(role, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                Toast.makeText(mContext, "change "+ role +" succ !!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(mContext, "change "+ role +"   failed  : " + errCode +" msg " +errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }
