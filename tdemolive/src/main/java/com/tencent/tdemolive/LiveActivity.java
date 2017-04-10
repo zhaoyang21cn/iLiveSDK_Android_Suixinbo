@@ -99,7 +99,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
         Log.i(TAG, "onCreate: initSdk ");
         //初始化SDK
-        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400013700, 7285);
+        ILiveSDK.getInstance().initSdk(getApplicationContext(), 1400028096, 11851);
 
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
         // 关闭IM群组
