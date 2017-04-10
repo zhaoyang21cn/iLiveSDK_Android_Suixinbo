@@ -15,22 +15,18 @@
 <pre>
 build.gradle 的dependency中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.3'
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.5'
 </pre>
-2：判断当前系统 Opengl ES 版本；（**因为ilivefilter 只支持 Opengl ES 3.0**）
+2：判断当前Android系统版本；（**因为ilivefilter 对Android系统版本要求为 Android API level 17或以上**）
 <pre>
 TILFilter mUDFilter = null;
 
-ActivityManager am = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
-// 获取 Opengl ES 版本
-ConfigurationInfo info = am.getDeviceConfigurationInfo();
-
-if (info.reqGlEsVersion > 0x00020000){
-    Log.i(TAG, "Opengl ES 3.0");
-    // 当前为 Opengl ES 3.0; 可以正常使用
+// >= 17
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    Log.i(TAG, "Android API level " + Build.VERSION.SDK_INT + " ilivefilter support!!");
     mUDFilter = new TILFilter(this);
 }else{
-    Log.e(TAG, "SDK not support Opengl ES " + info.reqGlEsVersion);
+    Log.i(TAG, "Android API level " + Build.VERSION.SDK_INT + " ilivefilter don't support!!");
 }
 </pre>
 3：设置 AVSDK相机数据回调（**设置回调，一定要在进入房间成功后，才有效！！**;顺序可与 4步骤 互换）
