@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
+import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.ilivefilter.TILFilter;
@@ -24,6 +25,7 @@ import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.ilivesdk.core.ILiveRecordOption;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.livesdk.ILVChangeRoleRes;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LiveActivity extends Activity implements View.OnClickListener {
-    Button createBtn, joinbtn, switchBtn, backBtn, sendBtn, inviteBtn, closeMemBtn, beautyBtn;
+    Button createBtn, joinbtn, switchBtn, backBtn, sendBtn, inviteBtn, closeMemBtn, beautyBtn, recordBtn;
     AVRootView avRootView;
     Button logoutBtn, loginLive, registLive;
     EditText roomNum, roomNumJoin, textInput, memId, hostIdInput, myId, myPwd;
@@ -49,6 +51,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
     private int mCurCameraId;
     private TILFilter mUDFilter; //美颜处理器
     boolean isbeauty = false;
+    boolean isRecording = false;
 
     private boolean bLogin = false, bEnterRoom = false;
 
@@ -65,6 +68,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         inviteBtn = (Button) findViewById(R.id.invite);
         closeMemBtn = (Button) findViewById(R.id.close_mem);
         beautyBtn = (Button) findViewById(R.id.beauty);
+        recordBtn = (Button) findViewById(R.id.record);
 
         loginLive = (Button) findViewById(R.id.login_live);
         registLive = (Button) findViewById(R.id.register_live);
@@ -94,6 +98,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
         registLive.setOnClickListener(this);
         switchBtn.setOnClickListener(this);
         beautyBtn.setOnClickListener(this);
+        recordBtn.setOnClickListener(this);
         checkPermission();
 
 
@@ -146,6 +151,7 @@ public class LiveActivity extends Activity implements View.OnClickListener {
 
                             }
                         });
+
                         break;
                     case ILVLiveConstants.ILVLIVE_CMD_INTERACT_AGREE:
                         break;
@@ -487,6 +493,41 @@ public class LiveActivity extends Activity implements View.OnClickListener {
                 isbeauty = false;
             }
 
+        }
+
+        if (view.getId() == R.id.record) {
+            if (isRecording == false) {
+                ILiveRecordOption option = new ILiveRecordOption();
+                option.fileName("Demo_" + ILiveLoginManager.getInstance().getMyUserId() + "_" + "Test");
+                option.recordType(TIMAvManager.RecordType.VIDEO);
+                ILiveRoomManager.getInstance().startRecordVideo(option, new ILiveCallBack() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        isRecording = true;
+                        recordBtn.setText("stopRe");
+                        Toast.makeText(LiveActivity.this, "start record succ !!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        Toast.makeText(LiveActivity.this, "start record failed !!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                ILiveRoomManager.getInstance().stopRecordVideo(new ILiveCallBack<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        isRecording = false;
+                        recordBtn.setText("startRe");
+                        Toast.makeText(LiveActivity.this, "stop record succ !!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        Toast.makeText(LiveActivity.this, "stop record failed !!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     }
 

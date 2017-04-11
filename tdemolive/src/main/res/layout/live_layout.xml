@@ -141,6 +141,8 @@
                 android:textColor="@color/white"/>
 
 
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -187,6 +189,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="beauty"
+                android:layout_gravity="bottom|center"
+                android:textColor="@color/white"
+                android:visibility="visible"/>
+
+
+        <Button
+                android:id="@+id/record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="startRe"
                 android:layout_gravity="bottom|center"
                 android:textColor="@color/white"
                 android:visibility="visible"/>
