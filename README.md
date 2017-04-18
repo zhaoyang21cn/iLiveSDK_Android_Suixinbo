@@ -30,7 +30,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.3.4'
 2、简单直播
 
   简单直播是一个基于ILiveSDK开发的入门级示例，
-[简单直播](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo.git) 
+[简单直播](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.git) 
 
 ## API文档
 [API文档(1.3.4)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
