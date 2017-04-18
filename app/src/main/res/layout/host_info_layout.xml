@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_host_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/tv_host_name"
+        android:layout_alignParentTop="true"
+        android:text="host"
+        android:textSize="@dimen/h12"
+        android:textColor="@color/colorTextBlack"
+        android:layout_toRightOf="@id/iv_host_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/iv_report"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/iv_host_sign"
+        android:text="@string/host_sign"
+        android:textColor="@color/colorGray4"
+        android:layout_toRightOf="@id/iv_host_icon"
+        android:layout_below="@id/tv_host_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_host_lbs"
+        android:drawableLeft="@drawable/position_gray"
+        android:drawablePadding="5dp"
+        android:layout_toRightOf="@id/iv_host_icon"
+        android:layout_below="@id/iv_host_sign"
+        android:textColor="@color/colorGray4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_host_phone"
+        android:text="@string/host_phone"
+        android:textColor="@color/colorGray4"
+        android:drawableLeft="@drawable/iphone_gray"
+        android:drawablePadding="5dp"
+        android:layout_toRightOf="@id/tv_host_lbs"
+        android:layout_below="@id/iv_host_sign"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_funs"
+        android:layout_toRightOf="@id/iv_host_icon"
+        android:layout_below="@id/tv_host_phone"
+        android:textColor="@color/colorTextBlack"
+        android:text="@string/host_funs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_follows"
+        android:layout_toRightOf="@id/tv_funs"
+        android:layout_below="@id/tv_host_phone"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorTextBlack"
+        android:text="@string/host_funs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_admires"
+        android:layout_toRightOf="@id/tv_follows"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/tv_host_phone"
+        android:textColor="@color/colorTextBlack"
+        android:text="@string/host_admire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
