@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">ILiveSDKDemo</string>
-
-    <string name="tip_menu_title">ILiveSDK Demo示例</string>
-
-    <string name="tip_welcome">欢迎使用基于ILiveSDK的示例程序, 该示例程序用于在安卓手机上演示ILiveSDK的功能\n\n在使用之前，请输入一个用户标识(为避免冲突，建议使用自己的手机号)，该用户标识将为唯一标识</string>
-
-</resources>
