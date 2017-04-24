@@ -78,12 +78,12 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 | 参数类型| 说明 |
 |---------|---------|
 | int | 房间id 房间唯一标识 建议由业务方后台统一分配  |
-| ILiveRoomOption | 房间配置项 可以设置角色 权限 主播ID 摄像头参数等 具体参考类ILiveRoomOption |
+| ILVLiveRoomOption | 房间配置项 可以设置角色 权限 主播ID 摄像头参数等 具体参考类ILVLiveRoomOption |
 | ILiveCallBack | 创建房间回调接口。通知创建房间是否成功 |
 
 ```java            
   //创建房间配置项
-            ILiveRoomOption hostOption = new ILiveRoomOption(null)
+            ILVLiveRoomOption hostOption = new ILVLiveRoomOption(null)
                     .controlRole(Constants.HOST_ROLE)//角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)//权限设置
                     .cameraId(ILiveConstants.FRONT_CAMERA)//摄像头前置后置
@@ -121,7 +121,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 
 
            //加入房间配置项
-            ILiveRoomOption memberOption = new ILiveRoomOption(hostId)
+            ILVLiveRoomOption memberOption = new ILVLiveRoomOption(hostId)
                     .autoCamera(false) //是否自动打开摄像头
                     .controlRole(Constants.NORMAL_MEMBER_ROLE) //角色设置
                     .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO |              AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO) //权限设置
