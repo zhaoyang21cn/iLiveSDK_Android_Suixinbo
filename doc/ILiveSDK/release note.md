@@ -2,7 +2,7 @@
 
 ### V1.4.0(2017-04-25)
  - 添加跨房[连麦功能](https://github.com/zhaoyang21cn/ILiveSDK_iOS_Demos/blob/master/doc/%E8%B7%A8%E6%88%BF%E8%BF%9E%E9%BA%A6.md)
- - 添加更多[特色功能](https://github.com/zhaoyang21cn/ILiveSDK_iOS_Demos/blob/master/doc/%E7%89%B9%E8%89%B2%E5%8A%9F%E8%83%BD.md)(滤镜、挂件、日志上报)
+ - 添加更多[特色功能](https://github.com/zhaoyang21cn/ILiveSDK_iOS_Demos/blob/master/doc/%E7%89%B9%E8%89%B2%E5%8A%9F%E8%83%BD.md)(滤镜、挂件、变声，动态角色，日志上报等)
  - 添加分开[渲染](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos/blob/master/doc/ILiveSDK/AndroidRenderIntr.md)支持
  - 优化登录逻辑等，修复切换房间异常等问题
 ---
