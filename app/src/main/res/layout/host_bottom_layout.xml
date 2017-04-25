@@ -11,11 +11,12 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/fullscreen_btn"
+        android:id="@+id/host_message_input"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_fullscreen" />
+        android:background="@drawable/icon_message"
+        />
 
     <View
         android:layout_width="0dp"
@@ -23,7 +24,7 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/switch_cam"
+        android:id="@+id/host_switch_cam"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -35,31 +36,7 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/beauty_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@drawable/icon_beauty_drawable" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
-
-    <TextView
-        android:id="@+id/white_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@drawable/icon_white_drawable" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
-
-    <TextView
-        android:id="@+id/mic_btn"
+        android:id="@+id/host_mic_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -71,7 +48,19 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/menu_more"
+        android:id="@+id/host_beauty_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_beauty_drawable" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/host_menu_more"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -83,11 +72,11 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/send_good"
+        android:id="@+id/host_fullscreen_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_like" />
+        android:background="@drawable/icon_fullscreen" />
 
     <View
         android:layout_width="0dp"

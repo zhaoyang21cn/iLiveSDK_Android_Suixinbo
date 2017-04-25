@@ -43,7 +43,7 @@ public class SpeedTestDialog {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case MSG_START:
-                    pd = new ProgressDialog(context);
+                    pd = new ProgressDialog(context.getApplicationContext());
                     pd.setTitle(context.getString(R.string.ping_ing));
                     pd.setCancelable(false);
                     pd.setMessage(context.getString(R.string.ping_start));
@@ -60,7 +60,8 @@ public class SpeedTestDialog {
                     pd.setMessage(pdMsg);
                     break;
                 case MSG_END:
-                    pd.dismiss();
+                    if (null != pd && pd.isShowing())
+                        pd.dismiss();
                     StringBuilder resultStr = new StringBuilder();
                     for (PingResult result : results){
                         resultStr.append(serverInfoToString(result.getServer()));

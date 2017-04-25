@@ -49,25 +49,6 @@ public class FragmentList extends Fragment implements TabHost.OnTabChangeListene
 //        updateTab(tabHost);
     }
 
-    /**
-     * 更新Tab标签的颜色，和字体的颜色
-     * @param tabHost
-     */
-    private void updateTab(final TabHost tabHost) {
-        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-            View view = tabHost.getTabWidget().getChildAt(i);
-            //view.setPadding(0, 0, 0, 20);
-            view.setBackgroundColor(getResources().getColor(R.color.btn_red_hover));
-            TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-            tv.setTextSize(18);
-            if (tabHost.getCurrentTab() == i) {//选中
-                tv.setTextColor(Color.WHITE);
-            } else {//不选中
-                tv.setTextColor(Color.GRAY);
-            }
-        }
-    }
-
     private View getTabView(String title) {
         View tabView = LayoutInflater.from(getContext()).inflate(R.layout.toptab_layout, null);
         ImageView tabImageView = (ImageView) tabView.findViewById(R.id.tab_image);

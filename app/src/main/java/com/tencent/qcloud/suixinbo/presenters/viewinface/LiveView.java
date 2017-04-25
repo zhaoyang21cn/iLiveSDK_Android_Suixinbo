@@ -24,7 +24,7 @@ public interface LiveView extends MvpView {
 
     void refreshThumbUp();
 
-    void refreshUI(String id);
+    void changeCtrlView(boolean bVideoMember);
 
     boolean showInviteView(String id);
 
@@ -49,4 +49,8 @@ public interface LiveView extends MvpView {
     void hostBack(String id, String name);
 
     void refreshMember(ArrayList<MemberID> memlist);
+
+    void linkRoomReq(String id, String name);
+
+    void linkRoomAccept(String id, String strRoomId);
 }

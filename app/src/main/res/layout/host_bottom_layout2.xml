@@ -61,11 +61,35 @@
             android:layout_height="40dp" />
 
     <TextView
-            android:id="@+id/back_primary"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:background="@drawable/back" />
+        android:id="@+id/tv_filter"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_filter" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/tv_magic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_magic" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/back_primary"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/back" />
 
     <View
             android:layout_width="0dp"

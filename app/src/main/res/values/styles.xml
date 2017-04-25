@@ -80,4 +80,8 @@
         <item name="android:textSize">12sp</item>
         <item name="android:padding">5dp</item>
     </style>
+    <style name="common_dlg" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
 </resources>

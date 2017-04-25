@@ -11,7 +11,56 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/close_member_video"
+        android:id="@+id/vmember_message_input"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_message"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/vmember_switch_cam"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_switch_camera" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/vmember_mic_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_mic_open" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/vmember_beauty_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_beauty_drawable" />
+    
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/vmember_close_member_video"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
@@ -23,11 +72,11 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/camera_controll"
+        android:id="@+id/vmember_send_good"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/camera_switch" />
+        android:background="@drawable/icon_like" />
 
     <View
         android:layout_width="0dp"
@@ -35,11 +84,23 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/mic_controll"
+        android:id="@+id/vmember_menu_more"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/mic_switch" />
+        android:background="@drawable/menumore" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/vmember_fullscreen_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_fullscreen" />
 
     <View
         android:layout_width="0dp"

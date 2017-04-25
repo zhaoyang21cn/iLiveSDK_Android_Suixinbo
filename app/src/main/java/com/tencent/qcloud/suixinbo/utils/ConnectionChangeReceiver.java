@@ -29,13 +29,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             //获取移动数据连接的信息
             NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
-//                Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
-            } else if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
-//                Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
-            } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
-//                Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
-            } else {
+            if ((null == wifiNetworkInfo || !wifiNetworkInfo.isConnected())
+                    && (null == dataNetworkInfo || !dataNetworkInfo.isConnected())){
                 Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
             }
 //API大于23时使用下面的方式进行网络监听

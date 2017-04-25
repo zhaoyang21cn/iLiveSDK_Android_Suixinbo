@@ -27,6 +27,7 @@ public class Constants {
 
     public static final String LIVE_ANIMATOR = "live_animator";
     public static final String LOG_LEVEL = "log_level";
+    public static final String BEAUTY_TYPE = "beauty_type";
 
 //    //
 //    public static final int ACCOUNT_TYPE = 792;

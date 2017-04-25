@@ -12,6 +12,7 @@ import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.model.RecordInfo;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,45 +38,28 @@ public class UserServerHelper {
     private static final String TAG = UserServerHelper.class.getSimpleName();
     private static UserServerHelper instance = null;
 
-//    public static final String REGISTER = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=regist";
-//    public static final String LOGIN = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=login";
-//    public static final String LOGOUT = "https://sxb.qcloud.com/sxb/index.php?svc=account&cmd=logout";
-//    public static final String APPLY_CREATE_ROOM ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=create";
-//    public static final String REPORT_ROOM_INFO ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportroom";
-//    public static final String HEART_BEAT =" https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=heartbeat";
-//    public static final String STOP_ILIVE ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=exitroom";
-//    public static final String GET_ROOMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomlist";
-//    public static final String REPORT_ME ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportmemid";
-//    public static final String GET_MEMLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=roomidlist";
-//    public static final String REPORT_RECORD ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=reportrecord";
-//    public static final String GET_REOCORDLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=recordlist";
-//    public static final String GET_PLAYERLIST ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=livestreamlist";
-//    public static final String GET_ROOM_PLAYURL ="https://sxb.qcloud.com/sxb/index.php?svc=live&cmd=getroomplayurl";
-//    public static final String GET_COS_SIG = "https://sxb.qcloud.com/sxb/index.php?svc=cos&cmd=get_sign";
+    public static final String SERVER = "https://sxb.qcloud.com/sxb_new/index.php?";
 
-
-
-    public static final String REGISTER = "https://sxb.qcloud.com/sxb_new/index.php?svc=account&cmd=regist";
-    public static final String LOGIN = "https://sxb.qcloud.com/sxb_new/index.php?svc=account&cmd=login";
-    public static final String LOGOUT = "https://sxb.qcloud.com/sxb_new/index.php?svc=account&cmd=logout";
-    public static final String APPLY_CREATE_ROOM ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=create";
-    public static final String REPORT_ROOM_INFO ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=reportroom";
-    public static final String HEART_BEAT =" https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=heartbeat";
-    public static final String STOP_ILIVE ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=exitroom";
-    public static final String GET_ROOMLIST ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=roomlist";
-    public static final String REPORT_ME ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=reportmemid";
-    public static final String GET_MEMLIST ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=roomidlist";
-    public static final String REPORT_RECORD ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=reportrecord";
-    public static final String GET_REOCORDLIST ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=recordlist";
-    public static final String GET_PLAYERLIST ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=livestreamlist";
-    public static final String GET_ROOM_PLAYURL ="https://sxb.qcloud.com/sxb_new/index.php?svc=live&cmd=getroomplayurl";
-    public static final String GET_COS_SIG = "https://sxb.qcloud.com/sxb_new/index.php?svc=cos&cmd=get_sign";
+    public static final String REGISTER             = SERVER+"svc=account&cmd=regist";
+    public static final String LOGIN                = SERVER+"svc=account&cmd=login";
+    public static final String LOGOUT               = SERVER+"svc=account&cmd=logout";
+    public static final String APPLY_CREATE_ROOM    = SERVER+"svc=live&cmd=create";
+    public static final String REPORT_ROOM_INFO     = SERVER+"svc=live&cmd=reportroom";
+    public static final String HEART_BEAT           = SERVER+"svc=live&cmd=heartbeat";
+    public static final String STOP_ILIVE           = SERVER+"svc=live&cmd=exitroom";
+    public static final String GET_ROOMLIST         = SERVER+"svc=live&cmd=roomlist";
+    public static final String REPORT_ME            = SERVER+"svc=live&cmd=reportmemid";
+    public static final String GET_MEMLIST          = SERVER+"svc=live&cmd=roomidlist";
+    public static final String REPORT_RECORD        = SERVER+"svc=live&cmd=reportrecord";
+    public static final String GET_REOCORDLIST      = SERVER+"svc=live&cmd=recordlist";
+    public static final String GET_PLAYERLIST       = SERVER+"svc=live&cmd=livestreamlist";
+    public static final String GET_ROOM_PLAYURL     = SERVER+"svc=live&cmd=getroomplayurl";
+    public static final String GET_COS_SIG          = SERVER+"svc=cos&cmd=get_sign";
+    public static final String GET_LINK_SIG         = SERVER+"svc=live&cmd=linksig";
 
 
     private String token = ""; //后续使用唯一标示
     private String Sig = ""; //登录唯一标示
-//    private int avRoom;
-//    private String groupID;
 
     public class RequestBackInfo {
 
@@ -598,26 +582,6 @@ public class UserServerHelper {
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public String getCosSig() {
         try {
             String response = UserServerHelper.getInstance().post(GET_COS_SIG, "");
@@ -638,5 +602,29 @@ public class UserServerHelper {
         return null;
     }
 
+    public String getGetLinkSig(String id, String roomid) {
+        try {
+            JSONObject jasonPacket = new JSONObject();
+            jasonPacket.put("token", MySelfInfo.getInstance().getToken());
+            jasonPacket.put("id", id);
+            jasonPacket.put("roomnum", Integer.valueOf(roomid));
+            String json = jasonPacket.toString();
+            String response = post(GET_LINK_SIG, json);
+            SxbLog.d(TAG, "getGetLinkSig->rsp:"+response);
 
+            JSONTokener jsonParser = new JSONTokener(response);
+            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
+            int ret = reg_response.getInt("errorCode");
+            if (ret == 0) {
+                JSONObject data = reg_response.getJSONObject("data");
+                String sign = data.getString("linksig");
+                return sign;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -7,10 +7,37 @@
     android:layout_marginBottom="30dp"
     android:visibility="gone"
     android:orientation="vertical"
+    android:background="#30000000"
     android:gravity="center" >
+
+    <TextView
+        android:text="@string/str_qav_beauty"
+        android:textColor="@color/btn_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <SeekBar
         android:id="@+id/qav_beauty_progress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:maxHeight="3dp"
+        android:minHeight="3dp"
+        android:progressDrawable="@drawable/qav_beauty_seekbar"
+        android:thumb="@drawable/seekbar_spot"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        />
+
+    <TextView
+        android:text="@string/str_qav_white"
+        android:textColor="@color/btn_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/qav_white_progress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

@@ -43,6 +43,15 @@
         app:canNav="true"
         />
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_beauty_type"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:onClick="onClick"
+        app:name="@string/str_beauty_type"
+        app:isBottom="true"
+        app:canNav="true"
+        />
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:id="@+id/lcv_set_version"
         android:layout_width="match_parent"
         android:layout_height="40dp"

@@ -49,7 +49,7 @@
 
     <string name="live_host_leave">主播可能暂时离开</string>
 
-    <string name="live_btn_par">par</string>
+    <string name="live_btn_par">房间信息</string>
     <string name="live_btn_record">录制</string>
     <string name="live_btn_push">开启推流</string>
     <string name="live_btn_stop_push">关闭推流</string>
@@ -148,4 +148,26 @@
     <string name="str_push_title">推流地址</string>
     <string name="str_push_copy">复制地址</string>
     <string name="str_push_share">分享</string>
+    <string name="live_btn_link">主播串门</string>
+    <string name="live_btn_unlink">取消串门</string>
+    <string name="live_link_title">邀请主播</string>
+    <string name="str_dlg_link_tips">请输入主播id</string>
+    <string name="str_link_start_tips">已同意您的跨房连麦邀请，是否现在开始跨房连麦?</string>
+    <string name="str_link_req_tips">邀请您跨房连麦，是否同意?</string>
+    <string name="str_link_refuse_tips">已拒绝您的跨房连麦邀请!</string>
+    <string name="str_qav_beauty">美颜</string>
+    <string name="str_qav_white">美白</string>
+    <string name="str_btn_link">跨房连麦</string>
+    <string name="str_dt_change_role">切分辨率</string>
+    <string name="str_dt_filter">滤镜</string>
+    <string name="str_dt_magic">挂件</string>
+    <string name="str_dt_voice">变声</string>
+    <string name="str_beauty_type">美颜类型</string>
+    <string name="str_link_limit">已达到跨房连麦上限</string>
+    <string name="str_title_logupload">上报日志</string>
+    <string name="str_log_upload_hit">0-当天，1-昨天，2-前天，以此类推</string>
+    <string name="str_log_upload_tips">输入要上报的日志的日期</string>
+    <string name="str_btn_log_upload">上报</string>
+    <string name="str_tips_link_limit">已经达到跨房连麦上限</string>
+    <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
 </resources>

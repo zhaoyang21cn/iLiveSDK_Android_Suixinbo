@@ -121,17 +121,19 @@ public class LoginHelper extends Presenter {
             @Override
             public void run() {
                 final UserServerHelper.RequestBackInfo result = UserServerHelper.getInstance().registerId(id, psw);
-                ((Activity) mContext).runOnUiThread(new Runnable() {
-                    public void run() {
+                if (null != mContext) {
+                    ((Activity) mContext).runOnUiThread(new Runnable() {
+                        public void run() {
 
-                        if (result != null && result.getErrorCode() == 0) {
-                            standardLogin(id, psw);
-                        } else if (result != null) {
-                            //
-                            Toast.makeText(mContext, "  " + result.getErrorCode() + " : " + result.getErrorInfo(), Toast.LENGTH_SHORT).show();
+                            if (result != null && result.getErrorCode() == 0) {
+                                standardLogin(id, psw);
+                            } else if (result != null) {
+                                //
+                                Toast.makeText(mContext, "  " + result.getErrorCode() + " : " + result.getErrorInfo(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }).start();
     }
