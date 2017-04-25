@@ -1,5 +1,9 @@
 ﻿## Release Note
  
+### V1.1.1(2017-04-25)
+ - 添加跨房连麦业务逻辑
+ - 优化内部信令处理
+
 ### V1.1.0(2017-03-06)
  - 增加Live层配置类ILVLiveRoomOption
  - 增加上麦返回类 ILVChangeRoleRes
