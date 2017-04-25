@@ -103,7 +103,8 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onDestroy() {
-        mLiveListViewHelper.onDestory();
+        if (null != mLiveListViewHelper)
+            mLiveListViewHelper.onDestory();
         super.onDestroy();
     }
 

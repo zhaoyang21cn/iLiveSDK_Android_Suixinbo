@@ -131,6 +131,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void loginFail(String mode,int code ,String errorinfo) {
         Toast.makeText(LoginActivity.this, "login fail" + MySelfInfo.getInstance().getId() + " : "+errorinfo, Toast.LENGTH_SHORT).show();
+        initView();
     }
 
     void checkPermission() {

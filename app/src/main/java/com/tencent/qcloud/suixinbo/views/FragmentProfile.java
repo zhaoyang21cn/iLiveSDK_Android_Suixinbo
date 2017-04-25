@@ -99,7 +99,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void onDestroy() {
-        mLoginHeloper.onDestory();
+        if (null != mLoginHeloper)
+            mLoginHeloper.onDestory();
         super.onDestroy();
     }
 
@@ -136,19 +137,15 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         int i = view.getId();
         if (i == R.id.profile_set) {
             enterSetProfile();
-
         } else if (i == R.id.edit_profile) {
             enterEditProfile();
-
         } else if (i == R.id.logout) {
-            mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
-
+            if (null != mLoginHeloper)
+                mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
         } else if (i == R.id.version) {
             showSDKVersion();
-
         } else if (i == R.id.profile_speed_test) {
             new SpeedTestDialog(getContext()).start();
-
         }
     }
 
@@ -195,6 +192,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void updateProfileInfo(TIMUserProfile profile) {
+        if (null != getContext()){
+            return;
+        }
         if (TextUtils.isEmpty(profile.getNickName())) {
             MySelfInfo.getInstance().setNickName(profile.getIdentifier());
         } else {
@@ -207,7 +207,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             mProfileInfo.setText(profile.getSelfSignature());
         }
         if (TextUtils.isEmpty(profile.getFaceUrl())) {
-            Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), R.drawable.default_avatar);
+            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_avatar);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             mAvatar.setImageBitmap(cirBitMap);
         } else {

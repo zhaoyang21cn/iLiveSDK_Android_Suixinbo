@@ -78,10 +78,12 @@ public class UploadHelper extends Presenter {
                 SxbLog.d(TAG, "handleMessage id:" + msg.what);
                 switch (msg.what) {
                     case MAIN_CALL_BACK:
-                        mView.onUploadResult(msg.arg1, (String) msg.obj);
+                        if (null != mView)
+                            mView.onUploadResult(msg.arg1, (String) msg.obj);
                         break;
                     case MAIN_PROCESS:
-                        mView.onUploadProcess(msg.arg1);
+                        if (null != mView)
+                            mView.onUploadProcess(msg.arg1);
                         break;
                     default:
                         break;

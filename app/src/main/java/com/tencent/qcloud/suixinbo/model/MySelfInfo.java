@@ -31,6 +31,7 @@ public class MySelfInfo {
 
     private boolean bLiveAnimator;  // 渐隐动画
     private SxbLog.SxbLogLevel logLevel;           // 日志等级
+    private int beautyType;     // 美颜类型 0: ILiveSDK  1: AVSDK
 
 
     private int id_status;
@@ -116,19 +117,30 @@ public class MySelfInfo {
         this.logLevel = logLevel;
     }
 
+    public int getBeautyType() {
+        return beautyType;
+    }
+
+    public void setBeautyType(int beautyType) {
+        this.beautyType = beautyType;
+    }
+
     public void writeToCache(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(Constants.USER_INFO, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(Constants.USER_ID, id);
-        editor.putString(Constants.USER_SIG, userSig);
-        editor.putString(Constants.USER_TOKEN, token);
-        editor.putString(Constants.USER_NICK, nickName);
-        editor.putString(Constants.USER_AVATAR, avatar);
-        editor.putString(Constants.USER_SIGN, sign);
-        editor.putInt(Constants.USER_ROOM_NUM, myRoomNum);
-        editor.putBoolean(Constants.LIVE_ANIMATOR, bLiveAnimator);
-        editor.putInt(Constants.LOG_LEVEL, logLevel.ordinal());
-        editor.commit();
+        if (null != context) {
+            SharedPreferences settings = context.getSharedPreferences(Constants.USER_INFO, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(Constants.USER_ID, id);
+            editor.putString(Constants.USER_SIG, userSig);
+            editor.putString(Constants.USER_TOKEN, token);
+            editor.putString(Constants.USER_NICK, nickName);
+            editor.putString(Constants.USER_AVATAR, avatar);
+            editor.putString(Constants.USER_SIGN, sign);
+            editor.putInt(Constants.USER_ROOM_NUM, myRoomNum);
+            editor.putBoolean(Constants.LIVE_ANIMATOR, bLiveAnimator);
+            editor.putInt(Constants.LOG_LEVEL, logLevel.ordinal());
+            editor.putInt(Constants.BEAUTY_TYPE, beautyType);
+            editor.commit();
+        }
     }
 
     public void clearCache(Context context) {
@@ -148,6 +160,7 @@ public class MySelfInfo {
         avatar = sharedata.getString(Constants.USER_AVATAR, null);
         sign = sharedata.getString(Constants.USER_SIGN, null);
         bLiveAnimator = sharedata.getBoolean(Constants.LIVE_ANIMATOR, false);
+        beautyType = sharedata.getInt(Constants.BEAUTY_TYPE, 1);
         int level = sharedata.getInt(Constants.LOG_LEVEL, SxbLog.SxbLogLevel.INFO.ordinal());
         if (level < SxbLog.SxbLogLevel.OFF.ordinal() || level > SxbLog.SxbLogLevel.INFO.ordinal()) {
             logLevel = SxbLog.SxbLogLevel.INFO;

@@ -29,8 +29,6 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
         TextView tvName;
         TextView tvUser;
         TextView tvTime;
-        TextView tvVideoId;
-        TextView tvUrl;
     }
 
     public RecordAdapter(Activity activity, int resource, ArrayList<RecordInfo> objects) {
@@ -53,8 +51,6 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
             holder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
             holder.tvUser = (TextView) convertView.findViewById(R.id.tv_user);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
-            holder.tvVideoId = (TextView) convertView.findViewById(R.id.tv_videoid);
-            holder.tvUrl = (TextView) convertView.findViewById(R.id.tv_url);
 
             convertView.setTag(holder);
         }
@@ -73,8 +69,6 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
             holder.tvUser.setText(data.getStrUser());
         if (!TextUtils.isEmpty(data.getStrCreateTime()))
             holder.tvTime.setText( data.getStrCreateTime());
-        holder.tvVideoId.setText(data.getStrVideoId());
-        holder.tvUrl.setText(data.getPlayUrl());
 
         return convertView;
     }

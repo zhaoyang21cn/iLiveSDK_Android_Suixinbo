@@ -45,16 +45,18 @@ public class UIUtils {
 
     // 字符串截断
     public static String getLimitString(String source, int length){
-        if (null!=source && source.length()>length){
-            int reallen = 0;
-            return source.substring(0, length)+"...";
+        if (null == source){
+            return "";
+        }else if (source.length()>length){
+            return source.substring(0, length).replace('\n', ' ')+"...";
+        }else {
+            return source.replace('\n', ' ');
         }
-        return source;
     }
 
     // 获取Uri
     public static Uri getUriFromFile(Context context, File file){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && null != context){
             return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
         }else {
             return Uri.fromFile(file);

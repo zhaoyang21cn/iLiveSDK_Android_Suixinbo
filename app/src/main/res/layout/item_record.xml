@@ -4,10 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:src="@drawable/cover_background"
+        android:scaleType="fitXY" />
+
     <TextView
         android:id="@+id/tv_name"
         android:text="@string/str_rec_nobody"
         android:textColor="@color/colorThemeActive"
+        android:textSize="@dimen/h10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
@@ -18,15 +26,6 @@
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/tv_videoid"
-        android:paddingLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/tv_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

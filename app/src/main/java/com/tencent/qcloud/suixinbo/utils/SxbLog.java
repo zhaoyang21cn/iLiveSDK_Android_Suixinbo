@@ -44,6 +44,10 @@ public class SxbLog {
         w("Log", "change log level: " + newLevel);
     }
 
+    static public SxbLogLevel getLogLevel(){
+        return level;
+    }
+
     public static void v(String strTag, String strInfo) {
         Log.v(strTag, strInfo);
         if (level.ordinal() >= SxbLogLevel.INFO.ordinal()) {

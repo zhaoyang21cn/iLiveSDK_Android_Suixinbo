@@ -69,8 +69,8 @@ public class GetMemberListHelper extends Presenter {
 
         }
 
-        mMembersDialogView.showMembersList(mDialogMembers);
-
+        if (null != mMembersDialogView)
+            mMembersDialogView.showMembersList(mDialogMembers);
     }
 
 

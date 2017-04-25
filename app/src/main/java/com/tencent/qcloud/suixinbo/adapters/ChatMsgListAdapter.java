@@ -22,6 +22,7 @@ import com.tencent.qcloud.suixinbo.model.ChatEntity;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
+import com.tencent.qcloud.suixinbo.utils.UIUtils;
 import com.tencent.qcloud.suixinbo.views.customviews.CustomTextView;
 
 import java.util.ArrayList;
@@ -146,24 +147,27 @@ public class ChatMsgListAdapter extends BaseAdapter implements AbsListView.OnScr
         }
 
         ChatEntity item = listMessage.get(position);
+        if (null == item){
+            return convertView;
+        }
 
         if (mCreateAnimator && MySelfInfo.getInstance().isbLiveAnimator()) {
             playViewAnimator(convertView, position, item);
         }
 
-        spanString = new SpannableString(item.getSenderName() + "  " + item.getContext());
+        String name = UIUtils.getLimitString(item.getSenderName(), 10);
+        spanString = new SpannableString(name + "  " + item.getContext());
         if (item.getType() != Constants.TEXT_TYPE) {
             // 设置名称为粗体
             StyleSpan boldStyle = new StyleSpan(Typeface.BOLD_ITALIC);
-            spanString.setSpan(boldStyle, 0, item.getSenderName().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanString.setSpan(boldStyle, 0, name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.textItem.setBackgroundResource(R.drawable.img_chat_black);
             holder.sendContext.setTextColor(context.getResources().getColor(R.color.colorTextWhite));
         } else {
             // 根据名称计算颜色
             holder.textItem.setBackgroundResource(R.drawable.img_chat_white);
-            if (!item.getSenderName().isEmpty())
-                spanString.setSpan(new ForegroundColorSpan(calcNameColor(item.getSenderName())),
-                        0, item.getSenderName().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            spanString.setSpan(new ForegroundColorSpan(calcNameColor(name)),
+                    0, name.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             holder.sendContext.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
         }
         holder.sendContext.setText(spanString);

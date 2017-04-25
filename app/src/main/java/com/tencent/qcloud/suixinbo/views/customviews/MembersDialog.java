@@ -2,8 +2,10 @@ package com.tencent.qcloud.suixinbo.views.customviews;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.tencent.qcloud.suixinbo.R;
@@ -35,6 +37,7 @@ public class MembersDialog extends Dialog implements MembersDialogView {
         Window window = getWindow();
         window.setGravity(Gravity.TOP);
         setCanceledOnTouchOutside(true);
+        applyCompat();
     }
 
     @Override
@@ -66,4 +69,12 @@ public class MembersDialog extends Dialog implements MembersDialogView {
         mMembersAdapter.notifyDataSetChanged();
     }
 
+    private void applyCompat() {
+        if (Build.VERSION.SDK_INT < 19) {
+            return;
+        }
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
 }

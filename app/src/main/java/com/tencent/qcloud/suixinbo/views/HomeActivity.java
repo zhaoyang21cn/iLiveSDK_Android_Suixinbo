@@ -1,6 +1,7 @@
 package com.tencent.qcloud.suixinbo.views;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -92,15 +93,14 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
                     CurLiveInfo.setHostName(MySelfInfo.getInstance().getId());
                     CurLiveInfo.setHostAvator("");
                     CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
-//                    CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
-//                    CurLiveInfo.setAdmires(item.getInfo().getThumbup());
-//                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }
             }, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    SharedPreferences.Editor editor = getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+                    editor.putBoolean("living", false);
+                    editor.apply();
                 }
             });
         }

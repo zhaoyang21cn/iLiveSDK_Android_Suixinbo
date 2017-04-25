@@ -11,24 +11,11 @@
         android:layout_height="40dp" />
 
     <TextView
-        android:id="@+id/message_input"
+        android:id="@+id/member_message_input"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:background="@drawable/icon_message"
-        />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
-
-    <TextView
-        android:id="@+id/clean_screen"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@drawable/icon_nomal"
         />
 
     <View
@@ -43,6 +30,31 @@
         android:layout_gravity="center"
         android:background="@drawable/icon_like"
         />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/member_menu_more"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/menumore" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/member_fullscreen_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icon_fullscreen" />
 
     <View
         android:layout_width="0dp"
