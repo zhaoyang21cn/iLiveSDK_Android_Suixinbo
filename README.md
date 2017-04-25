@@ -16,9 +16,9 @@ iLiveSDK在Android Studio上开发。
 
 
 直播业务功能       
-compile 'com.tencent.livesdk:livesdk:1.1.0'      
+compile 'com.tencent.livesdk:livesdk:1.1.1'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.3.4'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.4.0'      
             
 
 ## DEMO
@@ -50,11 +50,13 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.3.4'
 -dontwarn qalsdk.**
 ```
 ## 直播外延
-[音视频预处理](https://www.qcloud.com/document/product/268/7645)        
-[如何旋转和裁剪画面](https://www.qcloud.com/document/product/268/7647)       
-[画面对焦](https://www.qcloud.com/document/product/268/7646)    
+
+[音视频预处理](https://www.qcloud.com/document/product/268/7645)<br/>
+[如何渲染](doc/ILiveSDK/AndroidRenderIntr.md)<br/>
+[如何旋转和裁剪画面](https://www.qcloud.com/document/product/268/7647)<br/>
+[画面对焦](https://www.qcloud.com/document/product/268/7646)<br/>
 [美颜包](/doc/ILiveSDK/ilivefilter.md)<br/>
-[大咖模式](/doc/ILiveSDK/bigstar.md)     
+[大咖模式](/doc/ILiveSDK/bigstar.md)<br/>
 
 ## 已知问题
 由于目前只支持armeabi架构(1.0.5版本之后支持arm-v7a)，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
