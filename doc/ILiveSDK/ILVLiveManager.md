@@ -1,4 +1,4 @@
-#LiveSDK直播基础接口简介
+# LiveSDK直播基础接口简介
 ## 概述
 
 LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)，实现直播业务功能封装，方便开发者快速搭建自己的直播服务平台
@@ -14,12 +14,12 @@ compile 'com.tencent.livesdk:livesdk:1.1.1'
 ```
 
 
-##简单直播流程示例
+## 简单直播流程示例
 
 ![](../../raw/process.png)
 
 
-###1 初始化 
+### 1 初始化 
 | 接口名|  接口描述  |
 |---------|---------|
 | **initSDK** | iLiveSDK的部分类的预初始化，是所有行为的第一步，告知身份appId|
@@ -31,7 +31,7 @@ compile 'com.tencent.livesdk:livesdk:1.1.1'
 | int | 传入业务方appid |
 | int | 传入业务方 accounttype |
 
-*示例
+* 示例
   
 ```java 
 //iLiveSDK初始化
@@ -42,7 +42,7 @@ ILVLiveManager.getInstance().init(liveConfig);
 ```  
 
 
-###2 账号登录
+### 2 账号登录
 | 接口名|  接口描述  |
 |---------|---------|
 | **iLiveLogin** | 使用托管方式或独立模式，在获取到用户的sig后，使用登录接口，告知后台音视频模块上线了（包括avsdk）|
@@ -53,7 +53,7 @@ ILVLiveManager.getInstance().init(liveConfig);
 | String | 鉴权的密钥Sig 如果是独立登录方式，是业务方后台计算生成后下发的|
 | ILiveCallBack | 帐号登录回调接口。通知上线是否成功 |
 <br/>
-*示例
+* 示例
     
 ```java     
 ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(), "123456", new ILiveCallBack() {
@@ -69,7 +69,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
                 }
             });
 ```      
-###3 创建房间
+### 3 创建房间
 
 | 接口名| 接口描述 |
 |---------|---------|
@@ -103,7 +103,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
                 }
             });
 ```
-###4 加入房间
+### 4 加入房间
 | 接口名|  接口描述  |
 |---------|---------|
 | **joinRoom** | 观众角色调用加入房间接口|
@@ -145,7 +145,7 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 ```            
             
             
-###设置渲染层
+### 设置渲染层
 > 渲染层级示例图 在界面层xml插入一个AVRootView,音视频数据最终是通过AVRootView渲染出来。考虑多屏互动情况，AVRootView实际上不是一层View而是多层AVVideoView的叠加。直播业务默认主播在第0层默认最大，其他互动观众分别在1，2，3层。每层大小都可以动态调节。
 > 
 ![](../../raw/UiLayers.png)
@@ -166,6 +166,6 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
         
 [信令及上麦参见](./ILVLiveSenior.md)        
 
-##API文档
+## API文档
 [API文档1.1.1](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
 
