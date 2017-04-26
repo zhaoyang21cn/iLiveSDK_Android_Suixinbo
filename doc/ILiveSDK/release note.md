@@ -1,5 +1,8 @@
 ## Release Note
 
+### V1.4.1(2017-04-26)
+ - 修复无法指定IM群组问题
+
 ### V1.4.0(2017-04-25)
  - 更新AVSDK 1.9.0.10
  - 添加跨房[连麦功能](https://github.com/zhaoyang21cn/ILiveSDK_iOS_Demos/blob/master/doc/%E8%B7%A8%E6%88%BF%E8%BF%9E%E9%BA%A6.md)
