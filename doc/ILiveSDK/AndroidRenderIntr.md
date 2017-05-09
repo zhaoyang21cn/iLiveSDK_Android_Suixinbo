@@ -66,7 +66,7 @@ AVVideoView支持动态布局
 |autoLayout|刷新显示|
 
 ## 分开渲染
-在采用统一渲染时，使用的渲染控件是ILiveRootView
+在采用分开渲染时，使用的渲染控件是ILiveRootView
 ### 使用步骤:
 #### 1、定义一个ILiveRootView
 ```
