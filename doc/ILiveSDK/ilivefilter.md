@@ -15,7 +15,7 @@
 <pre>
 build.gradle 的dependency中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.8'
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.9'
 </pre>
 2：判断当前Android系统版本；（**因为ilivefilter 对Android系统版本要求为 Android API level 17或以上**）
 <pre>
