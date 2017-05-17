@@ -32,6 +32,7 @@ public class MySelfInfo {
     private boolean bLiveAnimator;  // 渐隐动画
     private SxbLog.SxbLogLevel logLevel;           // 日志等级
     private int beautyType;     // 美颜类型 0: ILiveSDK  1: AVSDK
+    private String guestRole = "";           // 观看质量
 
 
     private int id_status;
@@ -139,6 +140,7 @@ public class MySelfInfo {
             editor.putBoolean(Constants.LIVE_ANIMATOR, bLiveAnimator);
             editor.putInt(Constants.LOG_LEVEL, logLevel.ordinal());
             editor.putInt(Constants.BEAUTY_TYPE, beautyType);
+            editor.putString(Constants.VIDEO_QULITY, guestRole);
             editor.commit();
         }
     }
@@ -161,6 +163,7 @@ public class MySelfInfo {
         sign = sharedata.getString(Constants.USER_SIGN, null);
         bLiveAnimator = sharedata.getBoolean(Constants.LIVE_ANIMATOR, false);
         beautyType = sharedata.getInt(Constants.BEAUTY_TYPE, 1);
+        guestRole = sharedata.getString(Constants.VIDEO_QULITY, null);
         int level = sharedata.getInt(Constants.LOG_LEVEL, SxbLog.SxbLogLevel.INFO.ordinal());
         if (level < SxbLog.SxbLogLevel.OFF.ordinal() || level > SxbLog.SxbLogLevel.INFO.ordinal()) {
             logLevel = SxbLog.SxbLogLevel.INFO;
@@ -185,5 +188,13 @@ public class MySelfInfo {
 
     public void setJoinRoomWay(boolean isCreateRoom) {
         this.isCreateRoom = isCreateRoom;
+    }
+
+    public String getGuestRole() {
+        return guestRole;
+    }
+
+    public void setGuestRole(String guestRole) {
+        this.guestRole = guestRole;
     }
 }

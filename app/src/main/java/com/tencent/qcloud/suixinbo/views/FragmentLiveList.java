@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.tencent.qcloud.suixinbo.presenters.LiveListViewHelper;
 import com.tencent.qcloud.suixinbo.presenters.UserServerHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.tencent.qcloud.suixinbo.utils.SxbLog;
+import com.tencent.qcloud.suixinbo.views.customviews.RadioGroupDialog;
 
 import java.util.ArrayList;
 
@@ -73,7 +76,6 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
                     startActivity(intent);
                 }else{
-                    Intent intent = new Intent(getActivity(), LiveActivity.class);
                     MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
                     CurLiveInfo.setHostID(item.getHostId());
@@ -83,7 +85,7 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                     CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
                     CurLiveInfo.setAdmires(item.getInfo().getThumbup());
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
-                    startActivity(intent);
+                    checkJoinLive();
                 }
             }
         });
@@ -133,5 +135,30 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
     @Override
     public void onRefresh() {
         mLiveListViewHelper.getPageData();
+    }
+
+    private void checkJoinLive() {
+        if (TextUtils.isEmpty(MySelfInfo.getInstance().getGuestRole())) {
+            final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
+            final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
+
+            RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
+
+            roleDialog.setTitle(R.string.str_video_qulity);
+            roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    SxbLog.d(TAG, "showVideoQulity->onClick item:" + position);
+                    MySelfInfo.getInstance().setGuestRole(values[position]);
+                    MySelfInfo.getInstance().writeToCache(getContext());
+                    Intent intent = new Intent(getActivity(), LiveActivity.class);
+                    startActivity(intent);
+                }
+            });
+            roleDialog.show();
+        }else{
+            Intent intent = new Intent(getActivity(), LiveActivity.class);
+            startActivity(intent);
+        }
     }
 }

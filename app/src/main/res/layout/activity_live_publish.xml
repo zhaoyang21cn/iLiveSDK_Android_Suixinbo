@@ -144,6 +144,15 @@
             app:canNav="true"
             android:onClick="onClick"
             />
+        <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+            android:id="@+id/lcv_role"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:name="@string/str_dt_change_role"
+            app:isBottom="true"
+            app:canNav="true"
+            android:onClick="onClick"
+            />
 
 
         <RelativeLayout

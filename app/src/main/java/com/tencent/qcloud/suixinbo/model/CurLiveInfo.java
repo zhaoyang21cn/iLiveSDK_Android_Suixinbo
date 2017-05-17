@@ -1,6 +1,8 @@
 package com.tencent.qcloud.suixinbo.model;
 
 
+import com.tencent.qcloud.suixinbo.utils.Constants;
+
 /**
  * 当前直播信息页面
  */
@@ -12,6 +14,7 @@ public class CurLiveInfo {
     private static double long1;
     private static String address = "";
     private static String coverurl = "";
+    private static String curRole = Constants.HD_ROLE;  // 默认为高清
 
     private static RecordInfo mRecordInfo;
 
@@ -139,5 +142,13 @@ public class CurLiveInfo {
 
     public static void setRecordInfo(RecordInfo RecordInfo) {
         mRecordInfo = RecordInfo;
+    }
+
+    public static String getCurRole() {
+        return curRole;
+    }
+
+    public static void setCurRole(String role) {
+        CurLiveInfo.curRole = role;
     }
 }

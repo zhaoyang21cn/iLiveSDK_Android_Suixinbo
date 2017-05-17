@@ -420,7 +420,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             findViewById(R.id.host_switch_cam).setOnClickListener(this);
             findViewById(R.id.host_beauty_btn).setOnClickListener(this);
             findViewById(R.id.host_menu_more).setOnClickListener(this);
-            BtnMic.setOnClickListener(this);
             mVideoChat.setOnClickListener(this);
             inviteView1 = (TextView) findViewById(R.id.invite_view1);
             inviteView2 = (TextView) findViewById(R.id.invite_view2);
@@ -476,6 +475,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mHostLayout = (LinearLayout) findViewById(R.id.head_up_layout);
             mHostLayout.setOnClickListener(this);
         }
+        BtnMic.setOnClickListener(this);
+
         BtnNormal = (TextView) findViewById(R.id.normal_btn);
         BtnNormal.setOnClickListener(this);
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
@@ -710,9 +711,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private RadioGroupDialog roleDialog;
     private int curRole = 0;
     private void initRoleDialog() {
-        final String[] roles = new String[]{ "高清(960*540)","标清(640*368)", "流畅(320*240)"};
-        final String[] values = new String[]{"HD", "SD", "LD"};
+        final String[] roles = new String[]{ "高清(960*540,25fps)","标清(640*368,20fps)", "流畅(640*368,15fps)"};
+        final String[] values = new String[]{Constants.HD_ROLE, Constants.SD_ROLE, Constants.LD_ROLE};
+        final String[] guestValues = new String[]{Constants.HD_GUEST_ROLE, Constants.SD_GUEST_ROLE, Constants.LD_GUEST_ROLE};
+        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST){
+            if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)){
+                curRole = 1;
+            }else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)){
+                curRole = 2;
+            }
+        }
         roleDialog = new RadioGroupDialog(this, roles);
+
         roleDialog.setTitle(R.string.str_dt_change_role);
         roleDialog.setSelected(curRole);
         roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
@@ -720,7 +730,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onItemClick(int position) {
                 SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
                 curRole = position;
-                mLiveHelper.changeRole(values[curRole]);
+                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+                    mLiveHelper.changeRole(values[curRole]);
+                }else{
+                    mLiveHelper.changeRole(guestValues[curRole]);
+                }
             }
         });
     }
@@ -1533,6 +1547,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 // 更新控制栏
                 changeCtrlView(true);
                 inviteDg.dismiss();
+
+                if (roleDialog != null) roleDialog.show();
             }
         });
 

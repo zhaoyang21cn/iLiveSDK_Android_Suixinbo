@@ -35,6 +35,8 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.utils.UIUtils;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.CustomSwitch;
+import com.tencent.qcloud.suixinbo.views.customviews.LineControllerView;
+import com.tencent.qcloud.suixinbo.views.customviews.RadioGroupDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
 
 import java.io.File;
@@ -56,6 +58,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     private TextView tvLBS;
     private TextView tvTitle;
     private CustomSwitch btnLBS;
+    private LineControllerView lcvRole;
     private static final int CAPTURE_IMAGE_CAMERA = 100;
     private static final int IMAGE_STORE = 200;
     private static final String TAG = PublishLiveActivity.class.getSimpleName();
@@ -78,12 +81,17 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
         cover = (ImageView) findViewById(R.id.cover);
         tvLBS = (TextView) findViewById(R.id.address);
         btnLBS = (CustomSwitch) findViewById(R.id.btn_lbs);
+        lcvRole = (LineControllerView)findViewById(R.id.lcv_role);
         cover.setOnClickListener(this);
         BtnBack.setOnClickListener(this);
         BtnPublish.setOnClickListener(this);
         btnLBS.setOnClickListener(this);
+        lcvRole.setOnClickListener(this);
+
+        lcvRole.setContent(getRoleShow(CurLiveInfo.getCurRole()));
 
         initPhotoDialog();
+        initRoleDialog();
         // 提前更新sig
         mPublishLivePresenter.updateSig();
 
@@ -138,7 +146,42 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
         } else if (i == R.id.speed_test) {
             new SpeedTestDialog(this).start();
+        } else if (i == R.id.lcv_role){
+            if (roleDialog != null) roleDialog.show();
+        }
+    }
 
+    // 角色对话框
+    private RadioGroupDialog roleDialog;
+    private void initRoleDialog() {
+        final String[] roles = new String[]{ "高清(960*540,25fps)","标清(640*368,20fps)", "流畅(640*368,15fps)"};
+        final String[] values = new String[]{Constants.HD_ROLE, Constants.SD_ROLE, Constants.LD_ROLE};
+        roleDialog = new RadioGroupDialog(this, roles);
+        roleDialog.setTitle(R.string.str_dt_change_role);
+        if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)){
+            roleDialog.setSelected(1);
+        }else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)){
+            roleDialog.setSelected(2);
+        }else {
+            roleDialog.setSelected(0);
+        }
+        roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
+                CurLiveInfo.setCurRole(values[position]);
+                lcvRole.setContent(getRoleShow(CurLiveInfo.getCurRole()));
+            }
+        });
+    }
+
+    private String getRoleShow(String role){
+        if (role.equals(Constants.HD_ROLE)){
+            return getString(R.string.str_dt_hd);
+        }else if (role.equals(Constants.SD_ROLE)){
+            return getString(R.string.str_dt_sd);
+        }else{
+            return getString(R.string.str_dt_ld);
         }
     }
 
