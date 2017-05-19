@@ -351,12 +351,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                           boolean fromUser) {
                 Log.i(TAG, "onProgressChanged " + progress);
                 mBeautyRate = progress;
-                if (MySelfInfo.getInstance().getBeautyType()==0){
+                if (MySelfInfo.getInstance().getBeautyType()==1){
                     initILiveBeauty();
                     mUDFilter.setBeauty(progress*7/100);
-                }else {
-                    if (null != ILiveSDK.getInstance().getAvVideoCtrl())
-                        ILiveSDK.getInstance().getAvVideoCtrl().inputBeautyParam(getBeautyProgress(progress));//美颜
+                }else {//美颜
+                    ILiveRoomManager.getInstance().enableBeauty(getBeautyProgress(progress));
                 }
             }
         });
@@ -378,12 +377,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                           boolean fromUser) {
                 Log.i(TAG, "onProgressChanged " + progress);
                 mWhiteRate = progress;
-                if (MySelfInfo.getInstance().getBeautyType()==0){
+                if (MySelfInfo.getInstance().getBeautyType()==1){
                     initILiveBeauty();
                     mUDFilter.setWhite(progress*9/100);
-                }else {
-                    if (null != ILiveSDK.getInstance().getAvVideoCtrl())
-                        ILiveSDK.getInstance().getAvVideoCtrl().inputWhiteningParam(getBeautyProgress(progress));//美白
+                }else {//美白
+                    ILiveRoomManager.getInstance().enableWhite(getBeautyProgress(progress));
                 }
             }
         });
@@ -877,7 +875,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             finish();
         }
 
-        if (null != mUDFilter && MySelfInfo.getInstance().getBeautyType() == 0) {
+        if (null != mUDFilter && MySelfInfo.getInstance().getBeautyType() == 1) {
             SxbLog.d(TAG, "FILTER->destory");
             mUDFilter.setFilter(-1);
             mUDFilter.destroyFilter();

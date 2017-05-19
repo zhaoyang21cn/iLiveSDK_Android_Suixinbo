@@ -25,26 +25,28 @@ import com.tencent.TIMManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVContext;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLog;
+import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.qalsdk.QALSDKManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LogoutView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.GlideCircleTransform;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.utils.UIUtils;
+import com.tencent.qcloud.suixinbo.views.customviews.CustomSwitch;
 import com.tencent.qcloud.suixinbo.views.customviews.LineControllerView;
+import com.tencent.qcloud.suixinbo.views.customviews.RadioGroupDialog;
 import com.tencent.qcloud.suixinbo.views.customviews.SpeedTestDialog;
 
 import java.util.List;
 
-//import com.tencent.TIMValueCallBack;
-//import com.tencent.av.PingResult;
-//import com.tencent.av.ServerInfo;
-//import com.tencent.av.TIMAvManager;
-//import com.tencent.av.TIMPingCallBack;
 
 
 /**
@@ -52,17 +54,13 @@ import java.util.List;
  */
 public class FragmentProfile extends Fragment implements View.OnClickListener, LogoutView, ProfileView {
     private static final String TAG = "FragmentLiveList";
-    private ImageView mAvatar;
-    private TextView mProfileName;
-    private TextView mProfileId;
-    private TextView mProfileInfo;
-    private ImageView mEditProfile;
+    private final String beautyTypes[] = new String[]{"内置美颜", "插件美颜"};
+    private TextView mProfileName, mProfileId;
+    private ImageView mAvatar, mEditProfile;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView mBtnLogout;
-    private LineControllerView mBtnSet;
-    private LineControllerView mVersion;
-    private LineControllerView mSpeedTest;
+    private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvQulity;
+    private CustomSwitch csAnimator;
 
 
     public FragmentProfile() {
@@ -78,22 +76,40 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profileframent_layout, container, false);
+
+        view.findViewById(R.id.tv_logout).setOnClickListener(this);
         mAvatar = (ImageView) view.findViewById(R.id.profile_avatar);
         mProfileName = (TextView) view.findViewById(R.id.profile_name);
         mProfileId = (TextView) view.findViewById(R.id.profile_id);
         mEditProfile = (ImageView) view.findViewById(R.id.edit_profile);
-        mProfileInfo = (TextView) view.findViewById(R.id.profile_info);
-        mBtnSet = (LineControllerView) view.findViewById(R.id.profile_set);
-        mBtnLogout = (LineControllerView) view.findViewById(R.id.logout);
         mSpeedTest = (LineControllerView) view.findViewById(R.id.profile_speed_test);
         mVersion = (LineControllerView) view.findViewById(R.id.version);
-        mBtnSet.setOnClickListener(this);
-        mBtnLogout.setOnClickListener(this);
         mEditProfile.setOnClickListener(this);
         mVersion.setOnClickListener(this);
         mSpeedTest.setOnClickListener(this);
+
+        csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
+        lcvLog = (LineControllerView) view.findViewById(R.id.lcv_set_log_level);
+        lcvBeauty = (LineControllerView) view.findViewById(R.id.lcv_beauty_type);
+        lcvQulity = (LineControllerView) view.findViewById(R.id.lcv_video_qulity);
+        csAnimator.setOnClickListener(this);
+        lcvLog.setOnClickListener(this);
+        lcvBeauty.setOnClickListener(this);
+        lcvQulity.setOnClickListener(this);
+
+        lcvLog.setContent(MySelfInfo.getInstance().getLogLevel().toString());
+        lcvBeauty.setContent(beautyTypes[MySelfInfo.getInstance().getBeautyType() & 0x1]);
+
+        lcvQulity.setContent(Constants.SD_GUEST.equals(
+                MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
+
+        csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), false);
+
         mLoginHeloper = new LoginHelper(getActivity().getApplicationContext(), this);
         mProfileHelper = new ProfileInfoHelper(this);
+
+        updateUserInfo(ILiveLoginManager.getInstance().getMyUserId(),
+                ILiveLoginManager.getInstance().getMyUserId(), null);
         return view;
     }
 
@@ -107,7 +123,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     @Override
     public void onResume() {
         super.onResume();
-        if (null != mProfileInfo) {
+        if (null != mProfileHelper) {
             mProfileHelper.getMyProfile();
         }
     }
@@ -122,11 +138,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         super.onStop();
     }
 
-    private void enterSetProfile() {
-        Intent intent = new Intent(getContext(), SetActivity.class);
-        startActivity(intent);
-    }
-
     private void enterEditProfile() {
         Intent intent = new Intent(getContext(), EditProfileActivity.class);
         startActivity(intent);
@@ -134,24 +145,39 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.profile_set) {
-            enterSetProfile();
-        } else if (i == R.id.edit_profile) {
-            enterEditProfile();
-        } else if (i == R.id.logout) {
-            if (null != mLoginHeloper)
-                mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
-        } else if (i == R.id.version) {
-            showSDKVersion();
-        } else if (i == R.id.profile_speed_test) {
-            new SpeedTestDialog(getContext()).start();
+        switch (view.getId()) {
+            case R.id.edit_profile:
+                enterEditProfile();
+                break;
+            case R.id.cs_animator:
+                MySelfInfo.getInstance().setbLiveAnimator(!MySelfInfo.getInstance().isbLiveAnimator());
+                MySelfInfo.getInstance().writeToCache(getContext());
+                csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), true);
+                break;
+            case R.id.lcv_set_log_level:
+                changeLogLevel();
+                break;
+            case R.id.lcv_beauty_type:
+                changeBeautyType();
+                break;
+            case R.id.version:
+                showSDKVersion();
+                break;
+            case R.id.lcv_video_qulity:
+                showVideoQulity();
+                break;
+            case R.id.tv_logout:
+                if (null != mLoginHeloper)
+                    mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
+                break;
+            case R.id.profile_speed_test:
+                new SpeedTestDialog(getContext()).start();
+                break;
         }
     }
 
 
     private void showSDKVersion() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("IM SDK: " + TIMManager.getInstance().getVersion() + "\r\n"
                 + "AV SDK: " + AVContext.getVersion()+ "\r\n"
@@ -192,7 +218,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     @Override
     public void updateProfileInfo(TIMUserProfile profile) {
-        if (null != getContext()){
+        if (null == getContext()){
             return;
         }
         if (TextUtils.isEmpty(profile.getNickName())) {
@@ -200,27 +226,88 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         } else {
             MySelfInfo.getInstance().setNickName(profile.getNickName());
         }
-        mProfileName.setText(MySelfInfo.getInstance().getNickName());
-        mProfileId.setText("ID:" + MySelfInfo.getInstance().getId());
-        if (TextUtils.isEmpty(profile.getRemark())) {
-            MySelfInfo.getInstance().setSign(profile.getSelfSignature());
-            mProfileInfo.setText(profile.getSelfSignature());
-        }
-        if (TextUtils.isEmpty(profile.getFaceUrl())) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_avatar);
-            Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
-            mAvatar.setImageBitmap(cirBitMap);
-        } else {
-            SxbLog.d(TAG, "profile avator: " + profile.getFaceUrl());
+        if (!TextUtils.isEmpty(profile.getFaceUrl())) {
             MySelfInfo.getInstance().setAvatar(profile.getFaceUrl());
-            RequestManager req = Glide.with(getActivity());
-            req.load(profile.getFaceUrl()).transform(new GlideCircleTransform(getActivity())).into(mAvatar);
         }
         MySelfInfo.getInstance().writeToCache(getContext());
+        updateUserInfo(ILiveLoginManager.getInstance().getMyUserId(), MySelfInfo.getInstance().getNickName(),
+                MySelfInfo.getInstance().getAvatar());
     }
 
     @Override
     public void updateUserInfo(int reqid, List<TIMUserProfile> profiles) {
 
+    }
+
+    private void changeLogLevel() {
+        RadioGroupDialog voiceTypeDialog = new RadioGroupDialog(getContext(), SxbLog.getStringValues());
+        voiceTypeDialog.setTitle(R.string.set_log_level);
+        voiceTypeDialog.setSelected(SxbLog.getLogLevel().ordinal());
+        voiceTypeDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                SxbLog.d(TAG, "changeLogLevel->onClick item:" + position);
+                MySelfInfo.getInstance().setLogLevel(SxbLog.SxbLogLevel.values()[position]);
+                SxbLog.setLogLevel(MySelfInfo.getInstance().getLogLevel());
+                lcvLog.setContent(MySelfInfo.getInstance().getLogLevel().toString());
+                MySelfInfo.getInstance().writeToCache(getContext());
+            }
+        });
+        voiceTypeDialog.show();
+    }
+
+    private void changeBeautyType() {
+        RadioGroupDialog beautyTypeDialog = new RadioGroupDialog(getContext(), beautyTypes);
+        beautyTypeDialog.setTitle(R.string.str_beauty_type);
+        beautyTypeDialog.setSelected(MySelfInfo.getInstance().getBeautyType());
+        beautyTypeDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                SxbLog.d(TAG, "changeBeautyType->onClick item:" + position);
+                MySelfInfo.getInstance().setBeautyType(position);
+                MySelfInfo.getInstance().writeToCache(getContext());
+                lcvBeauty.setContent(beautyTypes[MySelfInfo.getInstance().getBeautyType() & 0x1]);
+            }
+        });
+        beautyTypeDialog.show();
+    }
+
+    private void showVideoQulity() {
+        final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
+        final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
+
+        RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
+
+        roleDialog.setTitle(R.string.str_video_qulity);
+        if (Constants.SD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())) {
+            roleDialog.setSelected(0);
+        } else if (Constants.LD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())){
+            roleDialog.setSelected(1);
+        }
+        roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                SxbLog.d(TAG, "showVideoQulity->onClick item:" + position);
+                MySelfInfo.getInstance().setGuestRole(values[position]);
+                MySelfInfo.getInstance().writeToCache(getContext());
+                lcvQulity.setContent(Constants.SD_GUEST.equals(
+                        MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
+            }
+        });
+        roleDialog.show();
+    }
+
+    private void updateUserInfo(String id, String name, String url){
+        mProfileName.setText(name);
+        mProfileId.setText("ID:" + id);
+        if (TextUtils.isEmpty(url)) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_avatar);
+            Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
+            mAvatar.setImageBitmap(cirBitMap);
+        } else {
+            SxbLog.d(TAG, "profile avator: " + url);
+            RequestManager req = Glide.with(getActivity());
+            req.load(url).transform(new GlideCircleTransform(getActivity())).into(mAvatar);
+        }
     }
 }

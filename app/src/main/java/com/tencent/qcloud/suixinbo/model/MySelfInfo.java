@@ -31,7 +31,7 @@ public class MySelfInfo {
 
     private boolean bLiveAnimator;  // 渐隐动画
     private SxbLog.SxbLogLevel logLevel;           // 日志等级
-    private int beautyType;     // 美颜类型 0: ILiveSDK  1: AVSDK
+    private int beautyType;     // 美颜类型 0: 内置美颜  1: 插件美颜
     private String guestRole = "";           // 观看质量
 
 

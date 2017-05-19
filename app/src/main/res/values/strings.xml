@@ -78,7 +78,7 @@
     <!-- set -->
     <string name="set_live_animator">渐隐动画</string>
     <string name="set_log_level">日志等级</string>
-    <string name="set_sdk_version">SDK版本</string>
+    <string name="set_sdk_version">版本号</string>
 
     <!-- edit -->
     <string name="edit_error">修改失败</string>
@@ -165,7 +165,7 @@
     <string name="str_dt_filter">滤镜</string>
     <string name="str_dt_magic">挂件</string>
     <string name="str_dt_voice">变声</string>
-    <string name="str_beauty_type">美颜类型</string>
+    <string name="str_beauty_type">美颜方案</string>
     <string name="str_video_qulity">观看模式</string>
     <string name="str_video_sd">清晰</string>
     <string name="str_video_ld">流畅</string>
@@ -176,4 +176,5 @@
     <string name="str_btn_log_upload">上报</string>
     <string name="str_tips_link_limit">已经达到跨房连麦上限</string>
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
+    <string name="str_exit">退出登录</string>
 </resources>

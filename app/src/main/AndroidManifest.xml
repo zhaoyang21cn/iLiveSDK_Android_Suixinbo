@@ -72,9 +72,6 @@
         <activity android:name=".views.EditActivity"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".views.SetActivity"
-            android:screenOrientation="portrait"
-            />
 
 
         <activity android:name=".views.ActivityReplay"
@@ -98,6 +95,7 @@
 			<intent-filter>
 				<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
 				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 
@@ -107,46 +105,6 @@
 			android:configChanges="keyboardHidden|orientation|screenSize"
 			android:exported="true"
 			android:screenOrientation="portrait" />
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="com.tencent.qcloud.suixinbo.fileProvider"-->
-            <!--android:grantUriPermissions="true"-->
-            <!--android:exported="false">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/file_paths" />-->
-        <!--</provider>-->
-
-
-        <!--&lt;!&ndash;TLS Qal 一些服务 &ndash;&gt;-->
-        <!--<service-->
-            <!--android:name="com.tencent.qalsdk.service.QalService"-->
-            <!--android:exported="false"-->
-            <!--android:process=":QALSERVICE" />-->
-
-        <!--<receiver-->
-            <!--android:name="com.tencent.qalsdk.QALBroadcastReceiver"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.tencent.qalsdk.broadcast.qal" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--<receiver-->
-            <!--android:name="com.tencent.qalsdk.core.NetConnInfoCenter"-->
-            <!--android:process=":QALSERVICE">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.TIME_SET" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.TIMEZONE_CHANGED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
     </application>
 
 </manifest>
