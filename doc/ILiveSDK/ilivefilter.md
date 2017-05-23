@@ -6,7 +6,7 @@
 | **int setFilter(int number)** | 切换滤镜|number: 滤镜编号 <=0：原始滤镜 1：美颜 2：浪漫 3：清新 4：唯美 5：粉嫩 6: 怀旧 7:蓝调  8: 清凉 9: 日系|-1：失败 0：成功|
 | **void setBeauty(int blur)** | 设置美颜级别|blur: 美颜级别（0~7； 如果设置高于7，使用默认值7）|无|
 | **void setWhite(int white)** | 设置美白级别|white: 美白级别（（0~9； 如果设置高于9，使用默认值9）||
-| **int processData(byte[] data, int len, int width, int height, int type)** | 数据预处理|data：原始数据（预处理后，数据仍然通过data返回） len：数据长度 width：视频宽 height：视频高 type：视频格式（暂时未使用；目前只支持I420）|-1： 失败 0：成功|
+| **int processData(byte[] inOutData, int len, int width, int height, int type)** | 数据预处理|inOutData：原始数据（预处理后，数据仍然通过data返回） len：数据长度 width：视频宽 height：视频高 type：输入视频格式 1：I420 2：NV12 3：NV21（处理后输出数据固定为 I420）|-1： 失败 0：成功|
 | **void destroyFilter()** | 销毁滤镜资源；在退出房间quitRoom 时，一定要调用此函数销毁滤镜资源；否则下次调用 setFilter无效|无|无|
 
 ### 使用代码范例：
@@ -15,19 +15,12 @@
 <pre>
 build.gradle 的dependency中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.9'
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.10'
 </pre>
-2：判断当前Android系统版本；（**因为ilivefilter 对Android系统版本要求为 Android API level 17或以上**）
+2：创建预处理类
 <pre>
-TILFilter mUDFilter = null;
+TILFilter mUDFilter = new TILFilter(this);
 
-// >= 17
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
-    Log.i(TAG, "Android API level " + Build.VERSION.SDK_INT + " ilivefilter support!!");
-    mUDFilter = new TILFilter(this);
-}else{
-    Log.i(TAG, "Android API level " + Build.VERSION.SDK_INT + " ilivefilter don't support!!");
-}
 </pre>
 3：设置 AVSDK相机数据回调（**设置回调，一定要在进入房间成功后，才有效！！**;顺序可与 4步骤 互换）
 <pre>
