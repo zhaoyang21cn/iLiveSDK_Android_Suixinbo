@@ -12,7 +12,7 @@ iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能�
 ## iLiveSDK导入
 
 iLiveSDK在Android Studio上开发。
-导入只需要在gradle里增加两行（后面是版本号）, 查看 [版本更新说明](doc/ILiveSDK/release%20note.md)
+导入只需要在gradle里增加两行（后面是版本号）
 
 
 直播业务功能       
@@ -20,6 +20,15 @@ compile 'com.tencent.livesdk:livesdk:1.1.1'
 核心功能     
 compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'      
             
+## SDK最近更新说明
+
+###### V1.5.0(2017-06-05)
+ - 优化旋转功能(支持横屏)
+ - 新增视频数上限为10路
+ - 更新AVSDK到1.9.1.17
+
+[更多版本更新信息](doc/ILiveSDK/release%20note.md)
+
 
 ## DEMO
 1、随心播
