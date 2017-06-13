@@ -260,24 +260,24 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
     /**
      * 打开闪光灯
      */
-    public void toggleFlashLight() {
+    public boolean toggleFlashLight() {
         AVVideoCtrl videoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
         if (null == videoCtrl) {
-            return;
+            return false;
         }
 
         final Object cam = videoCtrl.getCamera();
         if ((cam == null) || (!(cam instanceof Camera))) {
-            return;
+            return false;
         }
         final Camera.Parameters camParam = ((Camera) cam).getParameters();
         if (null == camParam) {
-            return;
+            return false;
         }
 
         Object camHandler = videoCtrl.getCameraHandler();
         if ((camHandler == null) || (!(camHandler instanceof Handler))) {
-            return;
+            return false;
         }
 
         //对摄像头的操作放在摄像头线程
@@ -307,6 +307,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 }
             });
         }
+        return true;
     }
 
     public void startRecord(ILiveRecordOption option) {

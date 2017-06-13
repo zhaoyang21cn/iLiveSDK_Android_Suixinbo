@@ -2,6 +2,7 @@ package com.tencent.qcloud.suixinbo.views;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import com.bumptech.glide.RequestManager;
 import com.tencent.TIMManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.sdk.AVContext;
+import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
@@ -59,7 +62,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private ImageView mAvatar, mEditProfile;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvQulity;
+    private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvQulity, lcvReport;
     private CustomSwitch csAnimator;
 
 
@@ -90,12 +93,14 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
         csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
         lcvLog = (LineControllerView) view.findViewById(R.id.lcv_set_log_level);
+        lcvReport = (LineControllerView)view.findViewById(R.id.lcv_set_upload_log);
         lcvBeauty = (LineControllerView) view.findViewById(R.id.lcv_beauty_type);
         lcvQulity = (LineControllerView) view.findViewById(R.id.lcv_video_qulity);
         csAnimator.setOnClickListener(this);
         lcvLog.setOnClickListener(this);
-        lcvBeauty.setOnClickListener(this);
         lcvQulity.setOnClickListener(this);
+        lcvBeauty.setOnClickListener(this);
+        lcvReport.setOnClickListener(this);
 
         lcvLog.setContent(MySelfInfo.getInstance().getLogLevel().toString());
         lcvBeauty.setContent(beautyTypes[MySelfInfo.getInstance().getBeautyType() & 0x1]);
@@ -143,6 +148,44 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         startActivity(intent);
     }
 
+    private void showLogDialog(){
+        final Dialog dialog = new Dialog(getContext(), R.style.common_dlg);
+        dialog.setContentView(R.layout.dialog_log_upload);
+
+        dialog.setTitle(R.string.str_title_logupload);
+
+        final EditText etDate = (EditText)dialog.findViewById(R.id.et_date);
+        dialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.btn_upload).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int date = 0;
+                try{
+                    date = Integer.valueOf(etDate.getText().toString());
+                }catch (NumberFormatException e){
+                }
+                ILiveSDK.getInstance().uploadLog("report log", date,  new ILiveCallBack(){
+                    @Override
+                    public void onSuccess(Object data) {
+                        Toast.makeText(getContext(), "Log report succ!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        Toast.makeText(getContext(), "failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -156,6 +199,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 break;
             case R.id.lcv_set_log_level:
                 changeLogLevel();
+                break;
+            case R.id.lcv_set_upload_log:
+                showLogDialog();
                 break;
             case R.id.lcv_beauty_type:
                 changeBeautyType();

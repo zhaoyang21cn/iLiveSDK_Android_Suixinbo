@@ -4,32 +4,12 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
 
-
-    signingConfigs{
-        release{
-            storeFile file("$System.env.KEYSTORE_PATH")
-            storePassword "$System.env.STOREPASS"
-            keyAlias "$System.env.ALIAS"
-            keyPassword "$System.env.KEYPASS"
-        }
-    }
-
-    packagingOptions{
-        exclude '*.apk'
-    }
-
-    buildTypes{
-        release{
-            signingConfig signingConfigs.release
-        }
-    }
-
     defaultConfig {
         applicationId "com.tencent.qcloud.suixinbo"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 0
-        versionName "$System.env.MajorVersion-$System.env.MinorVersion-$System.env.FixVersion-$System.env.BuildNo"
+//        versionCode 1
+//        versionName "1.0"
     }
 
     signingConfigs{
@@ -39,6 +19,10 @@ android {
             keyAlias "tencent"
             keyPassword "tencent.com"
         }
+    }
+
+    packagingOptions{
+        exclude '*.apk'
     }
     dexOptions {
         jumboMode true
@@ -71,11 +55,11 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.tencent.ilivesdk:ilivesdk:1.4.0'
-    compile 'com.tencent.livesdk:livesdk:1.1.1'
+    compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'
+    compile 'com.tencent.livesdk:livesdk:1.1.0.5'
     compile 'com.tencent.rtmpsdk:rtmpsdk:1.0.1'
     compile 'com.tencent.ilivefilter:ilivefilter:1.1.10'
-    compile 'com.tencent.iliveptufilter:iliveptufilter:1.0.0'
+    compile 'com.tencent.iliveptufilter:iliveptufilter:1.0.2'
     compile files('libs/MobCommons-2017.0216.1054.jar')
     compile files('libs/MobTools-2017.0216.1054.jar')
 }

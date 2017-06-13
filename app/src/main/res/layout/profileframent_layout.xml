@@ -93,6 +93,14 @@
         app:isBottom="true"
         app:canNav="true"
         />
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_set_upload_log"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/str_title_logupload"
+        app:isBottom="true"
+        app:canNav="true"
+        />
 
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:id="@+id/profile_speed_test"

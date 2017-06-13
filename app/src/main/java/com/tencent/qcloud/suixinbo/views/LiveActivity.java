@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -1362,7 +1363,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 }
                 break;
             case R.id.flash_btn:        // 闪光
-                switch (ILiveRoomManager.getInstance().getCurCameraId()) {
+                if (!mLiveHelper.toggleFlashLight()){
+                    Toast.makeText(LiveActivity.this, "toggle flash light failed!", Toast.LENGTH_SHORT).show();
+                }
+/*                switch (ILiveRoomManager.getInstance().getCurCameraId()) {
                     case ILiveConstants.FRONT_CAMERA:
                         Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
                         break;
@@ -1372,7 +1376,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     default:
                         Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
                         break;
-                }
+                }*/
                 break;
             case R.id.btn_back:
                 quiteLiveByPurpose();
@@ -1428,6 +1432,41 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mLiveHelper.sendGroupCmd(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, "" + inviteView3.getTag());
                 break;
         }
+    }
+
+    private String getParams(String src, String title, String key){
+        int pos = src.indexOf(key);
+        if (-1 != pos){
+            pos += key.length()+2;
+            int endPos = src.indexOf(",", pos);
+            return title+": "+src.substring(pos, endPos)+"\n";
+        }
+
+        return "";
+    }
+
+    // 补充房间信息
+    private String expandTips(String tips){
+
+        // 获取是否开启硬件编解码
+        if (null != ILiveSDK.getInstance().getAVContext().getRoom()){
+            String videoTips = ILiveSDK.getInstance().getAVContext().getRoom().getQualityParam();
+            tips += getParams(videoTips, "大画面硬编解", "qos_big_hw");
+        }
+
+        if (null != ILiveSDK.getInstance().getAvVideoCtrl()) {
+            // 输出采集支持分辨率
+            Camera camera = (Camera) ILiveSDK.getInstance().getAvVideoCtrl().getCamera();
+            if (null != camera) {
+                tips += "摄像头支持分辨率: \n";
+                Camera.Parameters parameters = camera.getParameters();
+                List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+                for (Camera.Size size : supportedPreviewSizes) {
+                    tips += "\t"+size.width + "*" + size.height+"\n";
+                }
+            }
+        }
+        return tips;
     }
 
     //for 测试获取测试参数

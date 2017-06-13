@@ -69,7 +69,7 @@ public class Constants {
     public static final int HOST_LEAVE = 3;
     public static final int HOST_BACK = 4;
 
-    public static final int VOD_MODE = 1;       // 默认是直播码模式(0:直播码 1:频道)
+    public static final int VOD_MODE = 0;       // 默认是直播码模式(0:直播码 1:频道)
 
     public static final String ROOT_DIR = "/sdcard/Suixinbo/";
 
