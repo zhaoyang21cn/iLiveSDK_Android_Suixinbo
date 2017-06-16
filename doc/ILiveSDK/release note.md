@@ -2,7 +2,7 @@
 
 ### V1.5.1(2017-06-16)
  - 优化静默模式
- - ILiveRoomOption中添加旋转校正setLocalRotationFix(本地)和setRemoteRotationFix(远程)【对一些非常规机器，旋转方案不能匹配的，优先校正远程】
+ - ILiveRoomOption中添加旋转校正setLocalRotationFix(本地)和setRemoteRotationFix(远程)*【对一些非常规机器，旋转方案不能匹配的，优先校正远程】*
  
 ### V1.5.0(2017-06-05)
  - 优化旋转功能(支持横屏)
