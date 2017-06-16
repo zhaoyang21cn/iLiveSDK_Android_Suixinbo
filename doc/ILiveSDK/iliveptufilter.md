@@ -1,6 +1,5 @@
 # iliveptufilter 使用说明
 
-与ptu 视频处理相关的 AVVideoEffect 接口（单例）
 | 接口名|  接口描述  |参数定义|返回值|
 |---------|---------|---------|---------|
 | **void init(Context var0, String var1)**| 初始化|var0：当前Activity的this指针 var1：从p图申请的licence文件名（assets根目录下）|无|
