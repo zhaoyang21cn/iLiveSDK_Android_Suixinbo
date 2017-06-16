@@ -22,10 +22,10 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'
             
 ## SDK最近更新说明
 
-###### V1.5.0(2017-06-05)
- - 优化旋转功能(支持横屏)
- - 新增视频数上限为10路
- - 更新AVSDK到1.9.1.17
+### V1.5.1(2017-06-16)
+ - 优化静默模式
+ - ILiveRoomOption中添加旋转校正setLocalRotationFix(本地)和setRemoteRotationFix(远程)*【对一些非常规机器，旋转方案不能匹配的，优先校正远程】*
+ 
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
