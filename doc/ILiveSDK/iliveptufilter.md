@@ -17,8 +17,8 @@ compile 'com.tencent.iliveptufilter:iliveptufilter:1.0.2'
 </pre>
 2：初始化p图资源
 <pre>
-// ilive.licence 为从p图申请的licence文件名字；默认在 assets目录
-AVVideoEffect.getInstance(LiveActivity.this).init(this, "ilive.licence");
+// ptusdk_opensdk_test.licence 为从p图申请的licence文件名字；默认在 assets目录
+AVVideoEffect.getInstance(LiveActivity.this).init(this, "ptusdk_opensdk_test.licence");
 </pre>
 3：绑定p图 与 AVSDK （要求AVSDK 1.9或以上版本）
 <pre>
