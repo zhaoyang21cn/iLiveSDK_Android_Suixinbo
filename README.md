@@ -24,7 +24,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'
 
 ### V1.5.1(2017-06-16)
  - 优化静默模式
- - ILiveRoomOption中添加旋转校正setLocalRotationFix(本地)和setRemoteRotationFix(远程)*【对一些非常规机器，旋转方案不能匹配的，优先校正远程】*
+ - AVRootView中添加旋转校正setLocalRotationFix(本地)和setRemoteRotationFix(远程)*【对一些非常规机器，旋转方案不能匹配的，优先校正远程】*
  
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
