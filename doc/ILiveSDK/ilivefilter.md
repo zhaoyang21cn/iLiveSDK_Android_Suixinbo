@@ -15,7 +15,7 @@
 <pre>
 build.gradle 的dependency中添加
 
-compile 'com.tencent.ilivefilter:ilivefilter:1.1.10'
+compile 'com.tencent.ilivefilter:ilivefilter:1.1.13'
 </pre>
 2：创建预处理类
 <pre>
