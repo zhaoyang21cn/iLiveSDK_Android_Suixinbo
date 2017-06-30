@@ -37,7 +37,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.2'
 2、[简单直播(非常简单演示了一个直播的基本流程)](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.git)
 
 ## API文档
-[API文档(1.4.0)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+[API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
 
 ## 异常事件
 [异常事件](/doc/ILiveSDK/exception.md)
