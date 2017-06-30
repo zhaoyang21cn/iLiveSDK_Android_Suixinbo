@@ -1,7 +1,7 @@
 # iLiveSDK
 iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能，顺利的话一天之内即可集成音视频能力。
 
-![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/ilivesdk_construction.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/ilivesdk_construction.png)
 
 支持以下场景     
 >* [视频直播类]
