@@ -1,7 +1,7 @@
 # iLiveSDK
 iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能，顺利的话一天之内即可集成音视频能力。
 
-![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/ilivesdk_construction.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/ilivesdk_construction.png)
 
 支持以下场景     
 >* [视频直播类]
@@ -18,14 +18,13 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.1'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.5.2'      
             
 ## SDK最近更新说明
 
-###### V1.5.0(2017-06-05)
- - 优化旋转功能(支持横屏)
- - 新增视频数上限为10路
- - 更新AVSDK到1.9.1.17
+### V1.5.2(2017-06-21)
+ - 修复横屏旋转与前后置摄像头的兼容问题
+ 
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
@@ -38,7 +37,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.0'
 2、[简单直播(非常简单演示了一个直播的基本流程)](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.git)
 
 ## API文档
-[API文档(1.4.0)](https://zhaoyang21cn.github.io/ilivesdk_help/android_help/)
+[API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
 
 ## 异常事件
 [异常事件](/doc/ILiveSDK/exception.md)

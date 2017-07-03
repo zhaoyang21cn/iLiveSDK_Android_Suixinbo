@@ -2,7 +2,7 @@
 ## 概述
 
 LiveSDK基于[ILiveSDK](https://github.com/zhaoyang21cn/ILiveSDK_Android_Demos)，实现直播业务功能封装，方便开发者快速搭建自己的直播服务平台
-![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/ilivesdk_construction.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/ilivesdk_construction.png)
 
 
 
@@ -167,5 +167,5 @@ ILiveLoginManager.getInstance().iLiveLogin(ILiveSDK.getInstance().getMyUserId(),
 [信令及上麦参见](./ILVLiveSenior.md)        
 
 ## API文档
-[API文档1.1.1](https://zhaoyang21cn.github.io/ilivesdk_help/livesdk/)
+[API文档1.1.1](https://zhaoyang21cn.github.io/iLiveSDK_Help/livesdk/)
 
