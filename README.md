@@ -40,7 +40,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.2'
 [API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
 
 ## 直播术语解释
-[专有名词](/doc/ILiveSDK/name.md)
+[房间，房间生命周期](/doc/ILiveSDK/Name.md)
 
 ## 异常事件
 [异常事件](/doc/ILiveSDK/exception.md)
