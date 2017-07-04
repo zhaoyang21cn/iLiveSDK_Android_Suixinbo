@@ -37,4 +37,4 @@
 
 ### 直播房间生命周期
 正常情况下，退出房间主动退出音视频AVROOM，会主动结束掉聊天室AVChatRoom。    
-异常情况下，例如主播Crash 音视频AVROOM房间内无上下行流量超过30S AVROOM会被系统回收。聊天室AVChatRoom主播Crash不会主动回收房间。（如果需要配置回收需要找腾讯后台申请配置，一般不推荐）
+异常情况下，例如主播Crash 音视频AVROOM房间内无上下行流量超过30S AVROOM会被系统回收。聊天室AVChatRoom主播Crash不会主动回收房间。
