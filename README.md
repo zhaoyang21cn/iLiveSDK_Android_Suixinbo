@@ -69,6 +69,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.2'
 [美颜包](/doc/ILiveSDK/ilivefilter.md)<br/>
 [大咖模式](/doc/ILiveSDK/bigstar.md)<br/>
 [如何录制混流视频](/doc/ILiveSDK/MixStream.md)<br/>
+[如何计算跨房连麦密钥](/doc/ILiveSDK/cross_sign.md)<br />
 
 ## 已知问题
 由于目前只支持armeabi架构(1.0.5版本之后支持arm-v7a)，如果工程(或依赖库)中有多架构，需要在build.gradle中添加以下配置
