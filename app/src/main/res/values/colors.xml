@@ -93,6 +93,9 @@
     <!--gray6-->
     <color name="colorGray6">#141414</color>
 
+    <!-- Tab背景 -->
+    <color name="sxbtheme">#E35762</color>
+
 
     <color name="colorSendName">#9966cc</color>
     <color name="colorSendName1">#FF3163</color>

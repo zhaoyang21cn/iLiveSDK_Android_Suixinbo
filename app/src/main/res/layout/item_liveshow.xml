@@ -4,10 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
+<!--    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#1A000000" />
+        android:background="#1A000000" />-->
 
     <RelativeLayout
         android:layout_width="match_parent"

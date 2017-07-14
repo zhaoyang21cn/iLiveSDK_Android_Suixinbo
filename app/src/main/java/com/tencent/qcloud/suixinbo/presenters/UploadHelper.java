@@ -31,7 +31,7 @@ import java.io.InputStream;
 public class UploadHelper extends Presenter {
     private final String TAG = "PublishHelper";
     private final String bucket = "sxbbucket";
-    private final String appid = "1251659802";
+    private final String appid = "1253488539";
 
     private final static int THREAD_GET_SIG = 1;
     private final static int THREAD_UPLAOD = 2;
@@ -157,7 +157,7 @@ public class UploadHelper extends Presenter {
         //创建COSClientConfig对象，根据需要修改默认的配置参数
         final COSClientConfig config = new COSClientConfig();
         //设置园区
-        config.setEndPoint(COSEndPoint.COS_TJ);
+        config.setEndPoint(COSEndPoint.COS_GZ);
 
         //创建COSlient对象，实现对象存储的操作
         COSClient cos = new COSClient(mContext, appid, config, null);

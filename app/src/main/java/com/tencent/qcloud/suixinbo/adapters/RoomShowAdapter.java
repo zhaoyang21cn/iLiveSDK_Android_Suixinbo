@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
+import com.tencent.qcloud.suixinbo.utils.GlideCircleTransform;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.utils.UIUtils;
 
@@ -77,14 +78,14 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
             holder.ivCover.setImageResource(R.drawable.cover_background);
         }
 
-        if (null == data.getHostId() || TextUtils.isEmpty("")){
+        if (null == data.getHostId() || TextUtils.isEmpty(data.getFaceUrl())){
             // 显示默认图片
             Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), R.drawable.default_avatar);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             holder.ivAvatar.setImageBitmap(cirBitMap);
         }else{
-//            RequestManager req = Glide.with(mActivity);
-//            req.load(data.getHost().getAvatar()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
+            RequestManager req = Glide.with(mActivity);
+            req.load(data.getFaceUrl()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
         }
 
         holder.tvTitle.setText(UIUtils.getLimitString(data.getInfo().getTitle(), 10));

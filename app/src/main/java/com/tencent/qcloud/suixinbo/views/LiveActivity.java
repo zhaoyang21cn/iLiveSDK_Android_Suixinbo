@@ -512,7 +512,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
                     final int index = i;
                     AVVideoView avVideoView = mRootView.getViewByIndex(index);
-                    avVideoView.setRotate(true);
+                    avVideoView.setRotate(false);
                     avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -523,7 +523,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     });
                 }
 
-                mRootView.getViewByIndex(0).setRotate(true);
+                mRootView.getViewByIndex(0).setRotate(false);
                 mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -1499,6 +1499,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                 }
                             }
 
+                            tips += expandTips(tips);
                             tips += '\n';
                             tips += getQualityTips(ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips());
                             tvTipsMsg.getBackground().setAlpha(125);

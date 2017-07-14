@@ -3,8 +3,10 @@ package com.tencent.qcloud.suixinbo.presenters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.tencent.TIMManager;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -69,6 +71,7 @@ public class LoginHelper extends Presenter {
         ILiveLoginManager.getInstance().iLiveLogin(id, sig, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
+                Log.d("ILVB_LINK", "iLiveLogin->env: "+ TIMManager.getInstance().getEnv());
                 if (mLoginView != null)
                     mLoginView.loginSucc();
             }

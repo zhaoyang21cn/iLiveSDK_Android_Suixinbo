@@ -142,7 +142,7 @@
     <string name="ping_NJ">南京</string>
     <string name="ping_HZ">杭州</string>
     <string name="ping_GZ">广州</string>
-    <string name="str_record">录制</string>
+    <string name="str_record">录制回放</string>
     <string name="str_loading_record">正在努力获取录制视频列表。。。</string>
     <string name="str_rec_nobody">未知</string>
     <string name="str_push_title">推流地址</string>
@@ -177,4 +177,7 @@
     <string name="str_tips_link_limit">已经达到跨房连麦上限</string>
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
     <string name="str_exit">退出登录</string>
+
+    <string name="str_search_key">用户名</string>
+    <string name="str_search_size">数量</string>
 </resources>
