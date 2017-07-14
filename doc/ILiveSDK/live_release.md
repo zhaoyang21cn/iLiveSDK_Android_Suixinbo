@@ -1,5 +1,8 @@
 ﻿## Release Note
  
+### V1.1.2(2017-07-14)
+ - 修复取消跨房连麦无回调问题
+
 ### V1.1.1(2017-04-25)
  - 添加[跨房连麦](https://github.com/zhaoyang21cn/ILiveSDK_iOS_Demos/blob/master/doc/%E8%B7%A8%E6%88%BF%E8%BF%9E%E9%BA%A6.md)业务逻辑
  - 优化内部信令处理
