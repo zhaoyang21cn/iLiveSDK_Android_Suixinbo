@@ -92,3 +92,8 @@ Android Studio在google支持度，编译便利性等多方面远超eclipse。�
 ## 日志
 [关键路径LOG 请遇到问题先自行对比](/doc/ILiveSDK/Logs.md)
 
+## 联系我们
+
+技术支持QQ群：594923937 207177891
+
+技术需求反馈：[https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/issues](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/issues)
