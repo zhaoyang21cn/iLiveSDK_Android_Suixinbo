@@ -36,7 +36,7 @@ SDK下载路径：http://dldir1.qq.com/hudongzhibo/ILiveSDK/iliveFilterSdk-1.2.2
 2： 在工程中添加配置，引入 TXCVideoPreprocessor 
 <pre>
 build.gradle 的dependency中添加
-compile(name:'ilivefilter-1.2.2', ext:'aar')
+compile(name:'iliveFilterSdk-1.2.2', ext:'aar')
 ／／ 因为目前该升级库，只支持 armeabi 架构；所以需要在 build.gradle 中指定；防止出现找不到 *.so 库
 defaultConfig{
     ....
@@ -99,7 +99,7 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
 2： 在工程中添加配置，引入 TXCVideoPreprocessor 
 <pre>
 build.gradle 的dependency中添加
-compile(name:'ilivefilter-1.2.2', ext:'aar')
+compile(name:'iliveFilterSdk-1.2.2', ext:'aar')
 </pre>
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
