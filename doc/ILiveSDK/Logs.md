@@ -1,4 +1,4 @@
-#关键路径的LOG 
+# 关键路径的LOG 
 
 ## 获取日志
 在遇到无法解决的问题时，请提供相关日志文件，ILiveSDK的日志文件分三个模块:
@@ -16,7 +16,7 @@ AVSDK|tencent/imsdklogs/包名/QAVSDK_YYYYMMDD.log
 *在ILiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到创建房间加入房间的关键路径*
 <br/>
 
-##创建一个房间  流程正确LOG如下
+## 创建一个房间  流程正确LOG如下
 
 ![](../../raw/rightProcess.png)
 
@@ -59,7 +59,7 @@ ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true
 
 
 
-##加入一个房间  流程正确LOG如下
+## 加入一个房间  流程正确LOG如下
 
 ![](../../raw/joinRoomProcess.png)
 
