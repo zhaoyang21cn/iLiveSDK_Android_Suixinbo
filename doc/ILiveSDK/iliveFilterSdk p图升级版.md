@@ -7,7 +7,7 @@
    
 3，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
 
-SDK下载路径：http://dldir1.qq.com/hudongzhibo/ILiveSDK/iliveFilterSdk-1.2.2.aar
+SDK下载路径：	http://dldir1.qq.com/hudongzhibo/ILiveSDK/iliveFilterSdk-1.2.3.aar
 
 | 接口名|  接口描述  |参数定义|返回值|
 |---------|---------|---------|---------|
