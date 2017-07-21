@@ -35,11 +35,13 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.3'
 ## DEMO
 1、随心播
  
-  本工程为随心播的源码，随心播是基于ILiveSDK开发的一款示例性产品，用于演示互动直播的能力 <br />
-  ![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/suixinbo.png)
+  本工程为随心播的源码，随心播是基于ILiveSDK开发的一款示例性产品，用于演示互动直播的能力 <br />  
+<br />
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/suixinbo.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/livedemo.png)
 <br />
 2、[简单直播(非常简单演示了一个直播的基本流程)](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.g    it)
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/livedemo.png)
+
 
 ## API文档
 [API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
