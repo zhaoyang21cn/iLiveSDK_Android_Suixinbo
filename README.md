@@ -40,7 +40,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.3'
 ![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/suixinbo.png)
 ![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/livedemo.png)
 <br />
-2、[简单直播(非常简单演示了一个直播的基本流程)](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.g    it)
+2、[简单直播(非常简单演示了一个直播的基本流程)](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.git)
 
 
 ## API文档
