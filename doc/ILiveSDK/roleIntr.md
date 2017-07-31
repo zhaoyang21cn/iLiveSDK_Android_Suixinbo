@@ -35,13 +35,13 @@ sponsorConfig.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
 
 MacOS
 ```
-    ILiveRoomOption *option = [ILiveRoomOption defaultHostLiveOption];
-    option.controlRole = @"LiveMaster";//角色字符串来自腾讯云控制台spear配置
-    [[ILiveRoomManager getInstance] createRoom:(int)_item.info.roomnum option:option succ:^{
-        NSLog(@"create room succ");
-    } failed:^(NSString *module, int errId, NSString *errMsg) {
-        NSLog(@"createRoom fail,module=%@,code=%d,msg=%@",module,errId,errMsg);
-    }];
+ILiveRoomOption *option = [ILiveRoomOption defaultHostLiveOption];
+option.controlRole = @"LiveMaster";//角色字符串来自腾讯云控制台spear配置
+[[ILiveRoomManager getInstance] createRoom:(int)_item.info.roomnum option:option succ:^{
+    NSLog(@"create room succ");
+} failed:^(NSString *module, int errId, NSString *errMsg) {
+    NSLog(@"createRoom fail,module=%@,code=%d,msg=%@",module,errId,errMsg);
+}];
 ```
 
 ### 如何切换角色
@@ -77,7 +77,8 @@ ILiveRoomManager *manager = [ILiveRoomManager getInstance];
 
 MacOS
 ```
-NSString *role = @"LiveMaster";//角色字符串来自腾讯云控制台spear配置
+// 切换角色为 LiveGuest
+NSString *role = @"LiveGuest";
 [[ILiveRoomAVManager getInstance] changeRole:role succ:^{
     NSLog(@"change role succ");
 } failed:^(NSString *module, int errId, NSString *errMsg) {
