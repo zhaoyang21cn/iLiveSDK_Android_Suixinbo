@@ -110,7 +110,7 @@ sdk.changeRole("LiveGuest", function() {
 function(err){
 //切换角色失败
 }
-）；
+);
 ```
 
 ### 角色的高阶应用
