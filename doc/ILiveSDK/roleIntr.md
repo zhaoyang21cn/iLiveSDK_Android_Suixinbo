@@ -86,6 +86,32 @@ NSString *role = @"LiveGuest";
 }];
 ```
 
+PC
+```c++
+// 切换角色为 LiveGuest
+void Live::OnChangeRoleSuc( void* data )
+{
+//切换角色成功
+}
+
+void Live::OnChangeRoleErr( int code, const char *desc, void* data )
+{
+//切换角色失败
+}
+GetILive()->changeRole("LiveGuest", OnChangeRoleSuc, OnChangeRoleErr, NULL);
+```
+
+IE
+```js
+// 切换角色为 LiveGuest
+sdk.changeRole("LiveGuest", function() {
+//切换角色成功
+},
+function(err){
+//切换角色失败
+}
+）；
+```
 
 ### 角色的高阶应用
 根据网络状态调整动态当前的视频质量：
