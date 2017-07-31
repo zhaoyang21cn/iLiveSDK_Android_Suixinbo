@@ -35,7 +35,7 @@ sponsorConfig.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
 
 MacOS
 ```
-NSString *role = @"LiveMaster";
+NSString *role = @"LiveMaster";//角色字符串来自腾讯云控制台spear配置
 [[ILiveRoomAVManager getInstance] changeRole:role succ:^{
     NSLog(@"change role succ");
 } failed:^(NSString *module, int errId, NSString *errMsg) {
