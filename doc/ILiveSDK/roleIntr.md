@@ -26,6 +26,12 @@ iOS
 TILLiveRoomOption *hostOption = [TILLiveRoomOption defaultHostLiveOption];
 hostOption.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
 ```
+    
+```
+//TILCallSDK（通话SDK）
+TILCallSponsorConfig *sponsorConfig = [[TILCallSponsorConfig alloc] init];
+sponsorConfig.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
+```
 
 MacOS
 ```
@@ -35,12 +41,6 @@ NSString *role = @"LiveMaster";
 } failed:^(NSString *module, int errId, NSString *errMsg) {
     NSLog(@"change role fail");
 }];
-```
-    
-```
-//TILCallSDK（通话SDK）
-TILCallSponsorConfig *sponsorConfig = [[TILCallSponsorConfig alloc] init];
-sponsorConfig.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
 ```
 
 ### 如何切换角色
