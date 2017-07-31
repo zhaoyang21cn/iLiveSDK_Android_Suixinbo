@@ -20,12 +20,23 @@ ILVLiveRoomOption hostOption = new ILVLiveRoomOption(hostId)
                 .controlRole("LiveMaster");     // 使用 LiveMaster 角色
 ```
 
-IOS
+iOS
 ```
 //TILLiveSDK（直播SDK）
 TILLiveRoomOption *hostOption = [TILLiveRoomOption defaultHostLiveOption];
 hostOption.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
 ```
+
+MacOS
+```
+NSString *role = @"LiveMaster";
+[[ILiveRoomAVManager getInstance] changeRole:role succ:^{
+    NSLog(@"change role succ");
+} failed:^(NSString *module, int errId, NSString *errMsg) {
+    NSLog(@"change role fail");
+}];
+```
+    
 ```
 //TILCallSDK（通话SDK）
 TILCallSponsorConfig *sponsorConfig = [[TILCallSponsorConfig alloc] init];
