@@ -69,6 +69,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.3'
 ```
 ## 直播外延
 
+[角色配置](/doc/ILiveSDK/roleIntr.md)<br />
 [音视频预处理](https://www.qcloud.com/document/product/268/7645)<br/>
 [如何渲染](doc/ILiveSDK/AndroidRenderIntr.md)<br/>
 [如何旋转和裁剪画面](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/rotate.md)<br/>
