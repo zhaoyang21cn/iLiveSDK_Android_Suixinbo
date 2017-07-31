@@ -5,11 +5,15 @@
 
 ### 如何配置角色
 用户可以在腾讯云后台，配置角色
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_config.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_config.png 
+
+)
 
 ### 如何定制角色
 用户可以根据自己的需求定制自己的角色
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_detail.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_detail.png 
+
+)
 
 ### 如何使用角色
 用户可以在进房间的option中配置要使用的角色
@@ -20,6 +24,17 @@ ILVLiveRoomOption hostOption = new ILVLiveRoomOption(hostId)
                 .controlRole("LiveMaster");     // 使用 LiveMaster 角色
 ```
 
+IOS
+```
+//TILLiveSDK（直播SDK）
+TILLiveRoomOption *hostOption = [TILLiveRoomOption defaultHostLiveOption];
+hostOption.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
+```
+```
+//TILCallSDK（通话SDK）
+TILCallSponsorConfig *sponsorConfig = [[TILCallSponsorConfig alloc] init];
+sponsorConfig.controlRole = @"LiveMaster";   // 使用 LiveMaster 角色
+```
 
 ### 如何切换角色
 用户在进进入房间后，仍然可以根据需求调整角色
@@ -38,6 +53,18 @@ ILiveRoomManager.getInstance().changeRole("LiveGuest", new ILiveCallBack() {
                 //...
             }
         });
+```
+
+
+IOS:
+```
+// 切换角色为 LiveGuest
+ILiveRoomManager *manager = [ILiveRoomManager getInstance];
+[manager changeRole:@"LiveGuest" succ:^ {
+        NSLog(@"角色改变成功");
+    } failed:^(NSString *module, int errId, NSString *errMsg) {
+        NSLog(@"角色改变失败");
+    }];
 ```
 
 
