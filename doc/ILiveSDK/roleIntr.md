@@ -5,15 +5,11 @@
 
 ### 如何配置角色
 用户可以在腾讯云后台，配置角色
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_config.png 
-
-)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_config.png)
 
 ### 如何定制角色
 用户可以根据自己的需求定制自己的角色
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_detail.png 
-
-)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/role_detail.png)
 
 ### 如何使用角色
 用户可以在进房间的option中配置要使用的角色
