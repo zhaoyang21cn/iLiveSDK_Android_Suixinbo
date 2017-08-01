@@ -51,16 +51,16 @@ Android:
 ```
 // 切换角色为 LiveGuest
 ILiveRoomManager.getInstance().changeRole("LiveGuest", new ILiveCallBack() {
-            @Override
-            public void onSuccess(Object data) {
-                //...
-            }
+    @Override
+    public void onSuccess(Object data) {
+        //...
+    }
 
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                //...
-            }
-        });
+    @Override
+    public void onError(String module, int errCode, String errMsg) {
+        //...
+    }
+});
 ```
 
 
@@ -69,10 +69,10 @@ IOS:
 // 切换角色为 LiveGuest
 ILiveRoomManager *manager = [ILiveRoomManager getInstance];
 [manager changeRole:@"LiveGuest" succ:^ {
-        NSLog(@"角色改变成功");
-    } failed:^(NSString *module, int errId, NSString *errMsg) {
-        NSLog(@"角色改变失败");
-    }];
+    NSLog(@"角色改变成功");
+} failed:^(NSString *module, int errId, NSString *errMsg) {
+    NSLog(@"角色改变失败");
+}];
 ```
 
 MacOS
