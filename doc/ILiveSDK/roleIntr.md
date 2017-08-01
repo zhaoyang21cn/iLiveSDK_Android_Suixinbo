@@ -44,6 +44,20 @@ option.controlRole = @"LiveMaster";//角色字符串来自腾讯云控制台spea
 }];
 ```
 
+PC
+```c++
+iLiveRoomOption roomOption;
+roomOption.controlRole = "LiveMaster"; // 使用LiveMaster角色
+```
+
+IE
+```js
+sdk.createRoom(roomid, "LiveMaster", // 使用LiveMaster角色
+    function () {
+    }, function (errMsg) {
+    }, false);
+```
+
 ### 如何切换角色
 用户在进进入房间后，仍然可以根据需求调整角色
 
