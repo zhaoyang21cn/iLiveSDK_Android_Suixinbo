@@ -25,7 +25,7 @@ ERR_ALREADY_IN_ROOM     |8010|已在房间中
 ERR_BUSY_HERE           |8011|内部忙(上一请求未完成)
 ERR_NET_UNDEFINE        |8012|网络未识别或网络不可达
 ERR_SDK_FAILED          |8020|iLiveSDK处理失败(通用)
-ERR_INVALID_PARAM       |8021|无效的参数
+ERR_INVALID_PARAM       |8021|接口传入无效的参数(如创建或加入房间时option为空)
 ERR_NOT_FOUND           |8022|无法找到目标
 ERR_NOT_SUPPORT         |8023|请求不支持
 ERR_ALREADY_STATE       |8024|状态已到位(一般为重复调用引起)
