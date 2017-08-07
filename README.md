@@ -22,12 +22,11 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.5.3'
             
 ## SDK最近更新说明
 
-### V1.5.3(2017-07-12)
- - 优化平板、分开渲染等相关的旋转问题
- - 添加PC播片支持
- - ILiveRoomOption中添加屏幕分享的获取模式配置接口screenRecvMode
- - 修复概率注销无回调问题
- - 修复房间被回收时摄像头未关闭问题
+### V1.6.0(2017-08-07)
+ - 优化iLiveSDK登录及进出房间流程
+ - 格式化iLiveSDK日志(统一配置IMSDK,AVSDK日志)
+ - 绑定视频与view时添加不清除最后一帧配置
+ - 更新AVSDK 1.9.2.13
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
