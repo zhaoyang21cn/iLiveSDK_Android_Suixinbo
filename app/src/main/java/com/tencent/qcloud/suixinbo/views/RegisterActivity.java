@@ -15,6 +15,8 @@ import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LoginView;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 
+import java.util.regex.Pattern;
+
 /**
  * 注册账号类
  */
@@ -55,9 +57,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             String userPW2 = mRepassword.getText().toString();
 
 
-            if (userId.length() < 4 || userId.length() > 24) {
+            if (userId.length() < 4 || userId.length() > 24 || Pattern.compile("^[0-9]*$").matcher(userId).matches()
+                    || !Pattern.compile("^[a-zA-Z0-9_]*$").matcher(userId).matches()) {
                 Log.i(TAG, "onClick " + userId.length());
-                Toast.makeText(RegisterActivity.this, "用户名不符合格式", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, R.string.str_hint_account, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -72,8 +75,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 return;
             }
 
-            if (userPW.length() < 8) {
-                Toast.makeText(RegisterActivity.this, "密码的长度不能小于8个字符", Toast.LENGTH_SHORT).show();
+            if (userPW.length() < 8 || userPW.length() > 16) {
+                Toast.makeText(RegisterActivity.this, R.string.str_hint_pwd, Toast.LENGTH_SHORT).show();
                 return;
             }
 

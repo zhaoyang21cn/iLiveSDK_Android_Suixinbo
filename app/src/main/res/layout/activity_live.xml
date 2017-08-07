@@ -24,6 +24,20 @@
         android:layout_alignRight="@id/quality_circle"
         android:textColor="#FFFFFF" />
 
+    <ListView
+        android:id="@+id/im_msg_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="100dp"
+        android:cacheColorHint="#00000000"
+        android:divider="#3c421b1b"
+        android:scrollbarStyle="outsideOverlay"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -163,20 +177,6 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/cross_icon"
             android:onClick="onClick" />
-
-        <ListView
-            android:id="@+id/im_msg_listview"
-            android:layout_width="250dp"
-            android:layout_height="0dp"
-            android:layout_gravity="left|bottom"
-            android:layout_marginBottom="60dp"
-            android:layout_marginTop="50dp"
-            android:cacheColorHint="#00000000"
-            android:divider="#3c421b1b"
-            android:scrollbarStyle="outsideOverlay"
-            android:stackFromBottom="true"
-            android:transcriptMode="normal" />
-
 
         <include
             layout="@layout/member_bottom_layout"

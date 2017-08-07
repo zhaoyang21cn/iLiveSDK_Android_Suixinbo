@@ -331,6 +331,7 @@ public class UserServerHelper {
             jasonPacket.put("type", "live");
             jasonPacket.put("index", 0);
             jasonPacket.put("size", 20);
+            jasonPacket.put("isIOS", 1);
             jasonPacket.put("appid", Constants.SDK_APPID);
             String json = jasonPacket.toString();
             String res = post(GET_ROOMLIST, json);

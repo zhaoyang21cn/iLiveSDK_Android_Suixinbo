@@ -752,7 +752,8 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 mLiveView.hideInviteDialog();
                 break;
             case Constants.AVIMCMD_EXITLIVE:
-                startExitRoom();
+                //startExitRoom();
+                mLiveView.roomDiscuss();
                 break;
             case ILVLiveConstants.ILVLIVE_CMD_LINKROOM_REQ:     // 跨房邀请
                 mLiveView.linkRoomReq(identifier, nickname);

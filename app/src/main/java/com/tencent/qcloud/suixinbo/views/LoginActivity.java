@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 登录类
@@ -74,12 +77,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             finish();
         }
         if (view.getId() == R.id.btn_login) {//登录账号系统TLS
-            if (mUserName.getText().equals("")) {
+            String strUser = mUserName.getText().toString();
+            String strPwd = mPassWord.getText().toString();
+            if (TextUtils.isEmpty(strUser)) {
                 Toast.makeText(LoginActivity.this, "name can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (mPassWord.getText().equals("")) {
+            if (TextUtils.isEmpty(strPwd)) {
                 Toast.makeText(LoginActivity.this, "password can not be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (strUser.length() < 4 || strUser.length() > 24 || Pattern.compile("^[0-9]*$").matcher(strUser).matches()
+                    || !Pattern.compile("^[a-zA-Z0-9_]*$").matcher(strUser).matches()) {
+                Toast.makeText(LoginActivity.this, R.string.str_hint_account, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (strPwd.length() < 8 || strPwd.length() > 16) {
+                Toast.makeText(LoginActivity.this, R.string.str_hint_pwd, Toast.LENGTH_SHORT).show();
                 return;
             }
             mLoginHeloper.standardLogin(mUserName.getText().toString(), mPassWord.getText().toString());
@@ -87,13 +101,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initView() {
-        setContentView(R.layout.activity_independent_login);
-        mBtnLogin = (TextView) findViewById(R.id.btn_login);
-        mUserName = (EditText) findViewById(R.id.username);
-        mPassWord = (EditText) findViewById(R.id.password);
-        mBtnRegister = (TextView) findViewById(R.id.registerNewUser);
-        mBtnRegister.setOnClickListener(this);
-        mBtnLogin.setOnClickListener(this);
+        if (null == mBtnLogin) {
+            setContentView(R.layout.activity_independent_login);
+            mBtnLogin = (TextView) findViewById(R.id.btn_login);
+            mUserName = (EditText) findViewById(R.id.username);
+            mPassWord = (EditText) findViewById(R.id.password);
+            mBtnRegister = (TextView) findViewById(R.id.registerNewUser);
+            mBtnRegister.setOnClickListener(this);
+            mBtnLogin.setOnClickListener(this);
+        }else{  // 登录失败清空密码
+            mPassWord.setText("");
+        }
     }
 
 

@@ -103,9 +103,13 @@ public class FragmentRecordList extends Fragment implements SwipeRefreshLayout.O
     }
 
     private void freshRecordList() {
-        int size = Integer.valueOf(etSize.getText().toString());
-        if (size < 0 || size > 30){     // 列表不能超过30
-            size = 30;
+        int size = 0;
+        try {
+            size = Integer.valueOf(etSize.getText().toString());
+        }catch (Exception e){
+        }
+        if (size <= 0 || size > 30){     // 列表不能超过30
+            size = 15;
         }
         showWaitDlalog(getString(R.string.str_loading_record));
         recHelper.refresh(etKey.getText().toString(), size);

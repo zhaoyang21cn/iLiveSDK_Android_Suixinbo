@@ -45,6 +45,7 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.extra.effect.AVVideoEffect;
+import com.tencent.av.opengl.ui.GLView;
 import com.tencent.av.sdk.AVAudioCtrl;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
@@ -500,6 +501,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         ILVLiveManager.getInstance().setAvVideoView(mRootView);
 
 
+        mRootView.setBackground(R.mipmap.renderback);
         mRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
         mRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         mRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
@@ -524,6 +526,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 }
 
                 mRootView.getViewByIndex(0).setRotate(false);
+                mRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
                 mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -535,7 +538,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             }
                             switchRoom();
                         }
-
                         return false;
                     }
                 });
@@ -626,6 +628,30 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             clearOldData();
             finish();
         }
+    }
+
+    @Override
+    public void roomDiscuss() {
+        if (isDestroyed() || isFinishing()) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.str_tips_title)
+                .setMessage(R.string.str_room_discuss)
+                .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .create();
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                callExitRoom();
+            }
+        });
+        alertDialog.show();
     }
 
     /**
@@ -803,8 +829,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         AVVideoEffect.getInstance(this).setFilter(null);
         // 重置脸萌
         AVVideoEffect.getInstance(this).setPendant(null);
+        // 重置美颜
+        ILiveRoomManager.getInstance().enableBeauty(0);
+        ILiveRoomManager.getInstance().enableWhite(0);
 
-        mRootView.getViewByIndex(0).setRotate(true);
+        mRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
+
+        //mRootView.getViewByIndex(0).setRotate(true);
 //        mRootView.getViewByIndex(0).setDiffDirectionRenderMode(AVVideoView.ILiveRenderMode.BLACK_TO_FILL);
         bInAvRoom = true;
         bDelayQuit = true;
@@ -1288,7 +1319,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 break;
             case R.id.host_switch_cam:
             case R.id.vmember_switch_cam:
-                ILiveRoomManager.getInstance().enableCamera(1-ILiveRoomManager.getInstance().getCurCameraId(), true);
+                ILiveRoomManager.getInstance().switchCamera(1-ILiveRoomManager.getInstance().getCurCameraId());
                 break;
             case R.id.host_mic_btn:
             case R.id.vmember_mic_btn:
@@ -1366,17 +1397,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 if (!mLiveHelper.toggleFlashLight()){
                     Toast.makeText(LiveActivity.this, "toggle flash light failed!", Toast.LENGTH_SHORT).show();
                 }
-/*                switch (ILiveRoomManager.getInstance().getCurCameraId()) {
-                    case ILiveConstants.FRONT_CAMERA:
-                        Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ILiveConstants.BACK_CAMERA:
-                        mLiveHelper.toggleFlashLight();
-                        break;
-                    default:
-                        Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
-                        break;
-                }*/
                 break;
             case R.id.btn_back:
                 quiteLiveByPurpose();
@@ -1402,8 +1422,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             case R.id.tv_filter:        // 滤镜
                 if (filterDialog != null) filterDialog.show();
                 break;
-            case R.id.tv_magic:         // 美颜
-                if (filterDialog != null) magicDialog.show();
+            case R.id.tv_magic:         // 挂件
+                if (magicDialog != null) magicDialog.show();
                 break;
             case R.id.log_report:
                 showLogDialog();
@@ -1486,20 +1506,20 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                             String tips = "";
                             ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
                             if (null != qData) {
-                                tips += "FPS:\t" + qData.getUpFPS() + "\n\n";
+                                tips += "FPS:\t" + qData.getUpFPS() + "\n";
                                 tips += "Send:\t" + qData.getSendKbps() + "Kbps\t";
-                                tips += "Recv:\t" + qData.getRecvKbps() + "Kbps\n\n";
+                                tips += "Recv:\t" + qData.getRecvKbps() + "Kbps\n";
                                 tips += "SendLossRate:\t" + qData.getSendLossRate() + "%\t";
-                                tips += "RecvLossRate:\t" + qData.getRecvLossRate() + "%\n\n";
+                                tips += "RecvLossRate:\t" + qData.getRecvLossRate() + "%\n";
                                 tips += "AppCPURate:\t" + qData.getAppCPURate() + "%\t";
-                                tips += "SysCPURate:\t" + qData.getSysCPURate() + "%\n\n";
+                                tips += "SysCPURate:\t" + qData.getSysCPURate() + "%\n";
                                 Map<String, LiveInfo> userMaps = qData.getLives();
                                 for (Map.Entry<String, LiveInfo> entry : userMaps.entrySet()) {
                                     tips += "\t" + entry.getKey() + "-" + entry.getValue().getWidth() + "*" + entry.getValue().getHeight() + "\n";
                                 }
                             }
 
-                            tips += expandTips(tips);
+                            //tips = expandTips(tips);
                             tips += '\n';
                             tips += getQualityTips(ILiveSDK.getInstance().getAVContext().getRoom().getQualityTips());
                             tvTipsMsg.getBackground().setAlpha(125);

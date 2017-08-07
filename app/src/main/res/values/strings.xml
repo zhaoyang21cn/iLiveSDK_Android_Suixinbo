@@ -178,6 +178,12 @@
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
     <string name="str_exit">退出登录</string>
 
+    <string name="str_tips_title">提示</string>
+    <string name="str_offline_msg">您的帐号已在其它地方登陆</string>
+    <string name="str_room_discuss">主播已离开房间，是否退出?</string>
+
     <string name="str_search_key">用户名</string>
     <string name="str_search_size">数量</string>
+    <string name="str_hint_account">用户名为4~24个字符(不包含特殊字符)，不能为纯数字</string>
+    <string name="str_hint_pwd">密码长度为8~16个字符</string>
 </resources>

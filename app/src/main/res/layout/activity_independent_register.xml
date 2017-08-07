@@ -55,7 +55,7 @@
             android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
             android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
             android:singleLine="true"
-            android:hint="用户名为4~24个字符，不能为纯数字"/>
+            android:hint="@string/str_hint_account"/>
 
         <EditText
             android:id="@+id/password"
@@ -66,7 +66,7 @@
             android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:hint="密码长度为8~16个字符"/>
+            android:hint="@string/str_hint_pwd"/>
 
         <EditText
             android:id="@+id/repassword"
