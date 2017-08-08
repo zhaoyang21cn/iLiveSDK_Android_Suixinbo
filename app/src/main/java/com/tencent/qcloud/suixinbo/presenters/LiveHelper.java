@@ -8,13 +8,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.tencent.TIMConversationType;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
 import com.tencent.TIMGroupSystemElem;
 import com.tencent.TIMGroupSystemElemType;
 import com.tencent.TIMMessage;
-import com.tencent.TIMTextElem;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
@@ -47,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -443,7 +442,8 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
 
         // 过滤非当前群组消息
         if (currMsg.getConversation() != null && currMsg.getConversation().getPeer() != null){
-            if (!CurLiveInfo.getChatRoomId().equals(currMsg.getConversation().getPeer())) {
+            if (currMsg.getConversation().getType()== TIMConversationType.Group
+                    && !CurLiveInfo.getChatRoomId().equals(currMsg.getConversation().getPeer())) {
                 return;
             }
         }
@@ -454,11 +454,34 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
             TIMElem elem = currMsg.getElement(j);
             TIMElemType type = elem.getType();
 
+            SxbLog.d(TAG, "LiveHelper->otherMsg type:"+type);
+
             //系统消息
             if (type == TIMElemType.GroupSystem) {  // 群组解散消息
                 if (TIMGroupSystemElemType.TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE == ((TIMGroupSystemElem) elem).getSubtype()) {
                     if (null != mLiveView)
                         mLiveView.hostLeave("host", null);
+                }
+            }else if (type == TIMElemType.Custom) {
+                try {
+                    final String strMagic = "__ACTION__";
+                    String customText = new String(((TIMCustomElem) elem).getData(), "UTF-8");
+                    if (!customText.startsWith(strMagic))   // 检测前缀
+                        continue;
+                    JSONTokener jsonParser = new JSONTokener(customText.substring(strMagic.length()+1));
+                    JSONObject json = (JSONObject) jsonParser.nextValue();
+                    String action = json.optString("action", "");
+                    if (action.equals("force_exit_room") || action.equals("force_disband_room")){
+                        JSONObject objData = json.getJSONObject("data");
+                        String strRoomNum = objData.optString("room_num", "");
+                        SxbLog.d(TAG, "processOtherMsg->action:"+action+", room_num:"+strRoomNum);
+                        if (strRoomNum.equals(String.valueOf(ILiveRoomManager.getInstance().getRoomId()))){
+                            if (null != mLiveView){
+                                mLiveView.forceQuitRoom(mContext.getString(R.string.str_tips_force_exit));
+                            }
+                        }
+                    }
+                }catch (Exception e){
                 }
             }
         }
@@ -753,7 +776,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 break;
             case Constants.AVIMCMD_EXITLIVE:
                 //startExitRoom();
-                mLiveView.roomDiscuss();
+                mLiveView.forceQuitRoom(mContext.getString(R.string.str_room_discuss));
                 break;
             case ILVLiveConstants.ILVLIVE_CMD_LINKROOM_REQ:     // 跨房邀请
                 mLiveView.linkRoomReq(identifier, nickname);

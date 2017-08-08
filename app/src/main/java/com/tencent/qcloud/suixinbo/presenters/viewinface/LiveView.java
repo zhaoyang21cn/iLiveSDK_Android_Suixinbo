@@ -54,5 +54,5 @@ public interface LiveView extends MvpView {
 
     void linkRoomAccept(String id, String strRoomId);
 
-    void roomDiscuss();
+    void forceQuitRoom(String strMessage);
 }

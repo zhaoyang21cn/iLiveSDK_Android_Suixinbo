@@ -631,13 +631,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     @Override
-    public void roomDiscuss() {
+    public void forceQuitRoom(String strMessage) {
         if (isDestroyed() || isFinishing()) {
             return;
         }
+        ILiveRoomManager.getInstance().onPause();
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.str_tips_title)
-                .setMessage(R.string.str_room_discuss)
+                .setMessage(strMessage)
                 .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
