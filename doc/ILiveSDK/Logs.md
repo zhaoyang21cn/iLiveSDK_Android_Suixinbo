@@ -97,11 +97,13 @@ AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,10
 
 ```
 
-## 退出一个房间  流程正确的 LOG 如下
+## 退出一个房间 流程正确的 LOG 如下
 
 ![](../../raw/quitRoomProcess.jpg)
 
-```
+- 具体包括了 6 个步骤，解释如下：
+
+```C
 1. 开始退出房间
 ILVBRoom: Key_Procedure|quitRoom->entered with status:true/false
 
