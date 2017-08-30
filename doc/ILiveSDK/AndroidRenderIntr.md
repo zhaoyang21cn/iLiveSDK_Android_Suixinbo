@@ -39,14 +39,14 @@ ILVCallManager.getInstance().initAvView(avRootView);
 ```
 
 ### 视频模型:
-![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/AVRootViewLayers.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/AVRootViewLayers.png)
 
 ### 视频布局:
 通过模型图可以看到，实际视频画面在AVVideoView上渲染，所以视频布局由AVVideoView的布局决定
 
 * 初始布局
  AVRootView中可设置AVVideoView的默认布局
-![](https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/AVVideoView.png)
+![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/AVVideoView.png)
 ```
 avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_LEFT);
 avRootView.setSubMarginX(10);
