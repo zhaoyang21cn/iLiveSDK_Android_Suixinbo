@@ -93,7 +93,7 @@ AVVideoView支持动态布局
         android:layout_height="128dp" />
 </RelativeLayout>
 ```
-#### 2、查找到AVRootView:
+#### 2、查找到ILiveRootView:
 ```
 rootViews = new ILiveRootView[3];
 rootViews[0] = (ILiveRootView)findViewById(R.id.ilrv_x);
