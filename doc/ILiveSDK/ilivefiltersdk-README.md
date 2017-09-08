@@ -172,8 +172,10 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
 });
 </pre>
 ### 有 OpenglGL 环境（如自定义采集，使用GLSurfaceView建立了OpenGL 环境或其他场景）使用代码范例：
-1，同上1
-2，同上2
+1，同（无 OpenglGL 环境 1）
+
+2，同（无 OpenglGL 环境 2）
+
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
 /*
@@ -194,8 +196,10 @@ static public class FrameFormat {
 boolean bGLContext = true;     // 有GL环境，则应设置当前为有 OpenGL 环境
 TXCVideoPreprocessor mTxcFilter = new TXCVideoPreprocessor(this, bGLContext);
 </pre>
-4，同上4
-5，同上5
+4，同（无 OpenglGL 环境 4）
+
+5，同（无 OpenglGL 环境 5）
+
 6，设置数据输出回调
 <pre>
 mTxcFilter.setListener(new TXIVideoPreprocessorListener(){
