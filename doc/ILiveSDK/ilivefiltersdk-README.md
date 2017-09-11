@@ -11,12 +11,14 @@
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
 
-3，“p图收费版” 只支持 armeabi 架构的库
-   “非p图普通版” 同时支持 armeabi 和 armeabi-v7a 架构
+3，“p图收费版” 只支持 armeabi 架构的库，
+  “非p图普通版” 同时支持 armeabi 和 armeabi-v7a 架构
 
-4，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
+4，“p图收费版” 需要申请手机 READ_PHONE_STATE（访问电话状态） 权限；否则p图功能会无效
 
-5，老版本的 ilivefilter 插件美颜sdk，已经升到新版TXMVideoPreprocessor；建议老用户，切换到TXMVideoPreprocessor；功能更多，使用更方便
+5，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
+
+6，老版本的 ilivefilter 插件美颜sdk，已经升到新版TXMVideoPreprocessor；建议老用户，切换到TXMVideoPreprocessor；功能更多，使用更方便
 
 ### 费用说明
 
