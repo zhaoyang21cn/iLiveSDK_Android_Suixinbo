@@ -52,7 +52,7 @@ public class BaseFragmentActivity extends FragmentActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(Constants.BD_EXIT_APP)){
-                    finish();
+                    onRequireLogin();
                 }
             }
         };
@@ -98,13 +98,21 @@ public class BaseFragmentActivity extends FragmentActivity {
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                editor.putBoolean("living", false);
-                editor.apply();
-                MySelfInfo.getInstance().clearCache(getBaseContext());
-                getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+                requiredLogin();
             }
         });
         alertDialog.show();
+    }
+
+    public void requiredLogin(){
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
+        MySelfInfo.getInstance().clearCache(getBaseContext());
+        getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+    }
+
+    protected void onRequireLogin(){
+        finish();
     }
 }

@@ -2,8 +2,6 @@
 
 buildscript {
     repositories {
-        //maven { url 'http://maven.oa.com/nexus/content/repositories/android' }
-        //maven { url 'http://maven.oa.com/nexus/service/local/repositories/jcenter/content'}
         jcenter()
     }
     dependencies {
@@ -16,9 +14,6 @@ buildscript {
 
 allprojects {
     repositories {
-        //maven { url 'http://maven.oa.com/nexus/service/local/repositories/thirdparty/content/'}
-        //maven { url 'http://maven.oa.com/nexus/content/repositories/android' }
-        //maven { url 'http://maven.oa.com/nexus/service/local/repositories/jcenter/content'}
         jcenter()
     }
 }

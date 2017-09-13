@@ -277,8 +277,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             SxbLog.d(TAG, "FILTER->created");
             mUDFilter = new TILFilter(this);
             mUDFilter.setFilter(1);
-            mUDFilter.setBeauty(0);
-            mUDFilter.setWhite(0);
+            mUDFilter.setBeauty(5);     // 默认开启美颜
+            mUDFilter.setWhite(3);
             ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
                 @Override
@@ -830,9 +830,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         AVVideoEffect.getInstance(this).setFilter(null);
         // 重置脸萌
         AVVideoEffect.getInstance(this).setPendant(null);
-        // 重置美颜
-        ILiveRoomManager.getInstance().enableBeauty(0);
-        ILiveRoomManager.getInstance().enableWhite(0);
+
+        mBeautyBar.setProgress(72);
+        mWhiteBar.setProgress(33);
 
         mRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
 

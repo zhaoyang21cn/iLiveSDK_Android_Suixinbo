@@ -150,4 +150,10 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
     @Override
     public void updateUserInfo(int reqid, List<TIMUserProfile> profiles) {
     }
+
+    @Override
+    protected void onRequireLogin() {
+        startActivity(new Intent(this, LoginActivity.class));
+        super.onRequireLogin();
+    }
 }

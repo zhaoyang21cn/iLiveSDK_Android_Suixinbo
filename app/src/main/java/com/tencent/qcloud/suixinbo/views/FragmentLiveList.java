@@ -26,6 +26,7 @@ import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveListView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
+import com.tencent.qcloud.suixinbo.views.customviews.BaseFragmentActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.RadioGroupDialog;
 
 import java.util.ArrayList;
@@ -124,6 +125,9 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
     public void showRoomList(UserServerHelper.RequestBackInfo info , ArrayList<RoomInfoJson> roomlist) {
         if(info.getErrorCode()!=0){
             Toast.makeText(getContext(), "error "+info.getErrorCode()+" info " +info.getErrorInfo(), Toast.LENGTH_SHORT).show();
+            if (Constants.ERR_TOKEN_EXPIRED == info.getErrorCode()){    // token过期
+                ((BaseFragmentActivity)getActivity()).requiredLogin();
+            }
             return ;
         }
 

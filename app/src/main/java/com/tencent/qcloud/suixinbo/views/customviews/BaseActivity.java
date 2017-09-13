@@ -53,7 +53,7 @@ public class BaseActivity extends Activity{
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(Constants.BD_EXIT_APP)){
                     SxbLog.d("BaseActivity", LogConstants.ACTION_HOST_KICK + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "on force off line");
-                    finish();
+                    onRequireLogin();
                 }
             }
         };
@@ -100,13 +100,21 @@ public class BaseActivity extends Activity{
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                editor.putBoolean("living", false);
-                editor.apply();
-                MySelfInfo.getInstance().clearCache(getBaseContext());
-                getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+                requiredLogin();
             }
         });
         alertDialog.show();
+    }
+
+    protected void requiredLogin(){
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
+        MySelfInfo.getInstance().clearCache(getBaseContext());
+        getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+    }
+
+    protected void onRequireLogin(){
+        finish();
     }
 }

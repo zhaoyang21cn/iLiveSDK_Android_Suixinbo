@@ -1,6 +1,7 @@
 package com.tencent.qcloud.suixinbo.views;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
 /**
  * 登录类
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginView {
+public class LoginActivity extends Activity implements View.OnClickListener, LoginView {
     TextView mBtnLogin, mBtnRegister;
     EditText mPassWord, mUserName;
     private static final String TAG = LoginActivity.class.getSimpleName();

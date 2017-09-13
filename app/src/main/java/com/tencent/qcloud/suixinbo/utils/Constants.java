@@ -71,6 +71,8 @@ public class Constants {
 
     public static final int VOD_MODE = 0;       // 默认是直播码模式(0:直播码 1:频道)
 
+    public static final int ERR_TOKEN_EXPIRED = 10009;
+
     public static final String ROOT_DIR = "/sdcard/Suixinbo/";
 
 
