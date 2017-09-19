@@ -64,7 +64,7 @@ setNoseScale->setNoseSlimLevel</br>
 | **void setWhitenessLevel(int level)** | 设置美白级别|level: 美白级别（0~9）|无|
 | **void setRuddyLevel(int level)** | 设置红润级别|level: 红润级别（0~9）|无|
 | **滤镜相关接口** | 
-| **int setFilterType(int type)** | 切换滤镜|type: 滤镜编号 0：无 1：浪漫 2：清新 3：唯美 4：粉嫩 5：怀旧 6: 蓝调 7:清凉  8: 日系|-1：失败 0：成功|
+| **int setFilterType(int type)** | 切换滤镜|type: 滤镜编号 1:无  2：浪漫 3：清新 4：唯美 5：粉嫩 6：怀旧 7: 蓝调 8:清凉  9: 日系|-1：失败 0：成功|
 | **void setFilterImage(Bitmap bmp)** | 设置滤镜图片|bmp: 滤镜图片|无|
 | **void setFilterImage(String imagePath)** | 设置滤镜图片路径|imagePath：滤镜文件路径|无|
 | **void setFilterMixLevel(final float specialValue)** | 设置滤镜程度|specialValue：滤镜程度（0.0 ～ 1.0）|无|
