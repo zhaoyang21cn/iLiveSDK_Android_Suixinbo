@@ -30,18 +30,21 @@ p图收费版：
 最新版本说明
 
 > V1.1.16(2017-09-19)</br>
-(1) ilivefiler更名为TXMVideoPreprocessor
-(2) 以回调函数方式返回处理结果
-(3) 增加多套美颜方案（光滑、自然、朦胧）
-(4) 增加红润、水印、裁剪、缩放、旋转、镜像、v脸、短脸、下巴、瘦鼻功能
+(1) ilivefiler更名为TXMVideoPreprocessor</br>
+(2) 以回调函数方式返回处理结果</br>
+(3) 增加多套美颜方案（光滑、自然、朦胧）</br>
+(4) 增加红润、水印、裁剪、缩放、旋转、镜像、v脸、短脸、下巴、瘦鼻功能</br>
 (5) TXCVideoPreprocessor 兼容 老版本 ilivefilter</br>
 (6) 增加设置多个水印接口 setWaterMarkList</br>
-(7) 接口名字调整
-setFaceShortenLevel->setFaceShortLevel
-setChinSlim->setChinLevel
-setNoseScale->setNoseSlimLevel
+(7) 接口名字调整</br>
+setFaceShortenLevel->setFaceShortLevel</br>
+setChinSlim->setChinLevel</br>
+setNoseScale->setNoseSlimLevel</br>
+
 </br>
-[查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md)
+
+[查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md
+)
 
 </br>
 
