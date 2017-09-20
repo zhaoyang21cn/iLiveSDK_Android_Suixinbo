@@ -172,7 +172,7 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
         // 回调的数据，传递给 ilivefilter processFrame 接口处理;
         // avsdk回调函数，默认为 I420 格式
-        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXCVideoPreprocessor.FrameFormat.I420, TXCVideoPreprocessor.FrameFormat.I420);
+        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, FrameFormat.I420, FrameFormat.I420);
     }
 });
 </pre>
@@ -256,14 +256,14 @@ mTxcFilter.setListener(new TXIVideoPreprocessorListener(){
 所以mPreviewAngle代表图像应该旋转多少度，才能为正
 */
 // 纹理输入；纹理输入-->纹理输出
-textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXCVideoPreprocessor.FrameFormat.TEXTURE, TXCVideoPreprocessor.FrameFormat.TEXTURE);
+textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.TEXTURE, FrameFormat.TEXTURE);
 if (textureId &lt; 0) {
     Log.e(TAG, "processTexture failed!");
     return;
 }
 
 // 原始数据输入；此处演示 nv21数据输入--》textureId 输出
-textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXCVideoPreprocessor.FrameFormat.NV21, TXCVideoPreprocessor.FrameFormat.TEXTURE);
+textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.NV21, FrameFormat.TEXTURE);
 if (textureId &lt; 0){
     Log.e(TAG, "process Data failed!");
     return;
