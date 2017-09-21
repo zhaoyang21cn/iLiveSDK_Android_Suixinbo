@@ -72,7 +72,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'
 [如何渲染](doc/ILiveSDK/AndroidRenderIntr.md)<br/>
 [如何旋转和裁剪画面](https://github.com/zhaoyang21cn/suixinbo_doc/blob/master/doc2/rotate.md)<br/>
 [画面对焦](https://www.qcloud.com/document/product/268/7646)<br/>
-[美颜包](/doc/ILiveSDK/ilivefilter.md)<br/>
+[美颜包](/doc/ILiveSDK/ilivefiltersdk-README.md)<br/>
 [大咖模式](/doc/ILiveSDK/bigstar.md)<br/>
 [如何录制混流视频](/doc/ILiveSDK/MixStream.md)<br/>
 [如何计算跨房连麦密钥](/doc/ILiveSDK/cross_sign.md)<br />

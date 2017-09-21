@@ -1,12 +1,12 @@
-# TXMVideoPreprocessor 使用说明
+# TXCVideoPreprocessor(ilivefilter) 使用说明
 
 ## 使用前说明（重要）：
+1，TXCVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
+p图收费版：
+> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.16'
 
-1，TXMVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
-
-[点击此处下载TXMVideoPreprocessor(p图收费版）](http://dldir1.qq.com/hudongzhibo/ILiveSDK/TXMVideoPreprocessor-ptu-sdk-2.1.0.aar)
-
-[点击此处下载TXMVideoPreprocessor(非p图普通版）](http://dldir1.qq.com/hudongzhibo/ILiveSDK/TXMVideoPreprocessor-sdk-2.1.0.aar)
+非p图普通版：
+> compile 'com.tencent.ilivefilter:liteav_normal:1.1.16'
 
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
@@ -18,7 +18,10 @@
 
 5，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
 
-6，老版本的 ilivefilter 插件美颜sdk，已经升到新版TXMVideoPreprocessor；建议老用户，切换到TXMVideoPreprocessor；功能更多，使用更方便
+6，新版TXCVideoPreprocessor，同时兼容老版的 ilivefilter；
+只需要将类名TXCVideoPreprocessor ，改为 TILFilter；即可；
+[点击跳转老版 ilivefilter 使用文档](https://github.com/zhaoyang21cn/TILFilterSdk/blob/master/README.md
+)
 
 ### 费用说明
 
@@ -26,12 +29,22 @@
 
 最新版本说明
 
-> V2.1.0(2017-09-05)</br>
+> V1.1.16(2017-09-19)</br>
 (1) ilivefiler更名为TXMVideoPreprocessor</br>
 (2) 以回调函数方式返回处理结果</br>
 (3) 增加多套美颜方案（光滑、自然、朦胧）</br>
 (4) 增加红润、水印、裁剪、缩放、旋转、镜像、v脸、短脸、下巴、瘦鼻功能</br>
-[查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md)
+(5) TXCVideoPreprocessor 兼容 老版本 ilivefilter</br>
+(6) 增加设置多个水印接口 setWaterMarkList</br>
+(7) 接口名字调整</br>
+setFaceShortenLevel->setFaceShortLevel</br>
+setChinSlim->setChinLevel</br>
+setNoseScale->setNoseSlimLevel</br>
+
+</br>
+
+[查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md
+)
 
 </br>
 
@@ -51,7 +64,7 @@
 | **void setWhitenessLevel(int level)** | 设置美白级别|level: 美白级别（0~9）|无|
 | **void setRuddyLevel(int level)** | 设置红润级别|level: 红润级别（0~9）|无|
 | **滤镜相关接口** | 
-| **int setFilterType(int type)** | 切换滤镜|type: 滤镜编号 0：无 1：浪漫 2：清新 3：唯美 4：粉嫩 5：怀旧 6: 蓝调 7:清凉  8: 日系|-1：失败 0：成功|
+| **int setFilterType(int type)** | 切换滤镜|type: 滤镜编号 1:无  2：浪漫 3：清新 4：唯美 5：粉嫩 6：怀旧 7: 蓝调 8:清凉  9: 日系|-1：失败 0：成功|
 | **void setFilterImage(Bitmap bmp)** | 设置滤镜图片|bmp: 滤镜图片|无|
 | **void setFilterImage(String imagePath)** | 设置滤镜图片路径|imagePath：滤镜文件路径|无|
 | **void setFilterMixLevel(final float specialValue)** | 设置滤镜程度|specialValue：滤镜程度（0.0 ～ 1.0）|无|
@@ -61,13 +74,14 @@
 | **void setOutputFrameSize(int width, int height)** | 设置输出长宽|width：输出数据宽 height：输出数据高 |无|
 | **void setMirror(boolean enable)** | 设置输出图像左右镜像|enable：true：开启左右镜像 false：不开启左右镜像 |无|
 | **void setWaterMark(Bitmap bitmap, float x, float y, float width)** | 设置水印（位置以左上角为原点）|bitmap: 水印图片BitMap x：(0.0~1.0)归一化坐标，左上角x轴偏移 y：(0.0~1.0)归一化坐标，左上角y轴偏移 width：(0.0~1.0)归一化宽度；左上角x轴宽度|无|
+| **void setWaterMarkList(final List< WaterMakeTag> markList)** | 设置多个水印（setWaterMark 的加强版）|markList：多个水印 WaterMakeTag 链表|无|
 | **p图升级版相关接口** | 
 | **void setFaceSlimLevel(int level)** | 设置瘦脸级别|level: 瘦脸级别（0~9）|无|
 | **void setEyeScaleLevel(int level)** | 设置大眼级别|level: 大眼级别（0~9）|无|
 | **void setFaceVLevel(int level)** | 设置V脸级别|level: V脸级别（0~9）|无|
-| **void setFaceShortenLevel(int level)** | 设置短脸级别|level: 短脸级别（0~9）|无|
-| **void setChinSlim(int level)** | 设置长下巴级别|level: 长下巴级别（0~9）|无|
-| **void setNoseScale(int level)** | 设置小鼻级别|level: 小鼻级别（0~9）|无|
+| **void setFaceShortLevel(int level)** | 设置短脸级别|level: 短脸级别（0~9）|无|
+| **void setChinLevel(int level)** | 设置长下巴级别|level: 长下巴级别（0~9）|无|
+| **void setNoseSlimLevel(int level)** | 设置小鼻级别|level: 小鼻级别（0~9）|无|
 | **void setMotionTmpl(String tmplPath)** | 设置动态贴纸路径|tmplPath: 动态贴纸路径|无|
 | **boolean setGreenScreenFile(String path)** | 设置绿幕文件路径|path: 绿幕文件路径|无|
 ### 无 OpenglGL 环境（AVSDK/iLiveSDK，或其他无 OpenglGL 环境场景）使用代码范例：
@@ -77,7 +91,11 @@
 2： 在工程中添加配置，引入 TXCVideoPreprocessor 
 <pre>
 build.gradle 的dependency中添加
-compile(name:'TXMVideoPreprocessor-2.1.0', ext:'aar')
+// p图版
+compile 'com.tencent.ilivefilter:liteav_pitu:1.1.16'
+// 非 p图版
+compile 'com.tencent.ilivefilter:liteav_normal:1.1.16'
+
 defaultConfig{
     ....
     ndk {
@@ -154,7 +172,7 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
         // 回调的数据，传递给 ilivefilter processFrame 接口处理;
         // avsdk回调函数，默认为 I420 格式
-        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXCVideoPreprocessor.FrameFormat.I420, TXCVideoPreprocessor.FrameFormat.I420);
+        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, FrameFormat.I420, FrameFormat.I420);
     }
 });
 </pre>
@@ -238,14 +256,14 @@ mTxcFilter.setListener(new TXIVideoPreprocessorListener(){
 所以mPreviewAngle代表图像应该旋转多少度，才能为正
 */
 // 纹理输入；纹理输入-->纹理输出
-textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXCVideoPreprocessor.FrameFormat.TEXTURE, TXCVideoPreprocessor.FrameFormat.TEXTURE);
+textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.TEXTURE, FrameFormat.TEXTURE);
 if (textureId &lt; 0) {
     Log.e(TAG, "processTexture failed!");
     return;
 }
 
 // 原始数据输入；此处演示 nv21数据输入--》textureId 输出
-textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXCVideoPreprocessor.FrameFormat.NV21, TXCVideoPreprocessor.FrameFormat.TEXTURE);
+textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.NV21, FrameFormat.TEXTURE);
 if (textureId &lt; 0){
     Log.e(TAG, "process Data failed!");
     return;
