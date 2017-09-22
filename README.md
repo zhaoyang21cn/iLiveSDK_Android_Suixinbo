@@ -22,9 +22,12 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'
             
 ## SDK最近更新说明
 
-### V1.7.0(2017-09-22)
+预发布声明
+### V1.7.0(2017-09-25)
  - 更新AVSDK 1.9.5.9
  - 优化旋转切换前后置闪屏问题
+ - 添加进房前摄像头预览分辨率及FPS设置
+ - 添加进房后摄像头预览接口
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
