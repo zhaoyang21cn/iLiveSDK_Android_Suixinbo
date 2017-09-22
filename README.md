@@ -22,10 +22,9 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'
             
 ## SDK最近更新说明
 
-### V1.6.3(2017-09-13)
- - 更新AVSDK 1.9.2.57(修复部分crash)
- - 添加设置AVRootView自动渲染机制
- - 封装IMSDK消息类型(不再暴露IM原生类)
+### V1.7.0(2017-09-22)
+ - 更新AVSDK 1.9.5.9
+ - 优化旋转切换前后置闪屏问题
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
