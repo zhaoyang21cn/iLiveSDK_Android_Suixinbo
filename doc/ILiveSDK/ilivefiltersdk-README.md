@@ -170,7 +170,7 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
         // 回调的数据，传递给 ilivefilter processFrame 接口处理;
         // avsdk回调函数，默认为 I420 格式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
+            mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
         }
     }
 });
