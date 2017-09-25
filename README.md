@@ -18,7 +18,7 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.7.0'      
             
 ## SDK最近更新说明
 
