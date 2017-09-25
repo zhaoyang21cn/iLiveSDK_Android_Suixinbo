@@ -22,7 +22,6 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'
             
 ## SDK最近更新说明
 
-预发布声明
 ### V1.7.0(2017-09-25)
  - 更新AVSDK 1.9.5.9
  - 优化旋转切换前后置闪屏问题
