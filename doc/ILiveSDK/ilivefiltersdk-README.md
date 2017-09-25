@@ -104,7 +104,7 @@ defaultConfig{
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
 /*
-static public class FrameFormat {
+static public class TXEFrameFormat {
         static public final int TEXTURE = 0;        // 纹理格式
         static public final int I420 = 1;           // I420格式
         static public final int RGBA = 2;           // RGBA格式
@@ -170,7 +170,7 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
         // 回调的数据，传递给 ilivefilter processFrame 接口处理;
         // avsdk回调函数，默认为 I420 格式
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, FrameFormat.I420, FrameFormat.I420);
+        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
         }
     }
 });
@@ -198,7 +198,7 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
 /*
-static public class FrameFormat {
+static public class TXEFrameFormat {
         static public final int TEXTURE = 0;        // 纹理格式
         static public final int I420 = 1;           // I420格式
         static public final int RGBA = 2;           // RGBA格式
@@ -256,7 +256,7 @@ mTxcFilter.setListener(new TXIVideoPreprocessorListener(){
 */
 // 纹理输入；纹理输入-->纹理输出
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-    textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.TEXTURE, FrameFormat.TEXTURE);
+    textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXEFrameFormat.TEXTURE, TXEFrameFormat.TEXTURE);
     if (textureId &lt; 0) {
         Log.e(TAG, "processTexture failed!");
         return;
@@ -265,7 +265,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 
 // 原始数据输入；此处演示 nv21数据输入--》textureId 输出
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-    textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.NV21, FrameFormat.TEXTURE);
+    textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXEFrameFormat.NV21, TXEFrameFormat.TEXTURE);
     if (textureId &lt; 0){
         Log.e(TAG, "process Data failed!");
         return;
