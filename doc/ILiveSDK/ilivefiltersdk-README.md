@@ -3,10 +3,10 @@
 ## 使用前说明（重要）：
 1，TXCVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
 p图收费版：
-> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.16'
+> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.17'
 
 非p图普通版：
-> compile 'com.tencent.ilivefilter:liteav_normal:1.1.16'
+> compile 'com.tencent.ilivefilter:liteav_normal:1.1.17'
 
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
@@ -18,7 +18,9 @@ p图收费版：
 
 5，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
 
-6，新版TXCVideoPreprocessor，同时兼容老版的 ilivefilter；
+6, 美颜、滤镜和p图功能，只支持Android API Level >=  17（Android 4.2和以上系统）
+
+7，新版TXCVideoPreprocessor，同时兼容老版的 ilivefilter；
 只需要将类名TXCVideoPreprocessor ，改为 TILFilter；即可；
 [点击跳转老版 ilivefilter 使用文档](https://github.com/zhaoyang21cn/TILFilterSdk/blob/master/README.md
 )
@@ -29,17 +31,9 @@ p图收费版：
 
 最新版本说明
 
-> V1.1.16(2017-09-19)</br>
-(1) ilivefiler更名为TXMVideoPreprocessor</br>
-(2) 以回调函数方式返回处理结果</br>
-(3) 增加多套美颜方案（光滑、自然、朦胧）</br>
-(4) 增加红润、水印、裁剪、缩放、旋转、镜像、v脸、短脸、下巴、瘦鼻功能</br>
-(5) TXCVideoPreprocessor 兼容 老版本 ilivefilter</br>
-(6) 增加设置多个水印接口 setWaterMarkList</br>
-(7) 接口名字调整</br>
-setFaceShortenLevel->setFaceShortLevel</br>
-setChinSlim->setChinLevel</br>
-setNoseScale->setNoseSlimLevel</br>
+> V1.1.17(2017-09-25)</br>
+(1) 开放 TXEFrameFormat 数据类型类</br>
+(2) 美颜、滤镜、p图功能，添加 Android API Level >=  17（Android 4.2和以上系统）限制
 
 </br>
 
@@ -110,7 +104,7 @@ defaultConfig{
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
 /*
-static public class FrameFormat {
+static public class TXEFrameFormat {
         static public final int TEXTURE = 0;        // 纹理格式
         static public final int I420 = 1;           // I420格式
         static public final int RGBA = 2;           // RGBA格式
@@ -130,19 +124,22 @@ TXCVideoPreprocessor mTxcFilter = new TXCVideoPreprocessor(this, bGLContext);
 4，设置参数
 <pre>
 ／／ 根据自己的需要，在适当的地方设置参数
-mTxcFilter.setBeautyStyle(0);           // 设置美颜风格，0: 光滑 1: 自然 2: 朦胧
-mTxcFilter.setBeautyLevel(5);           // 设置美颜级别,范围 0～10
-mTxcFilter.setWhitenessLevel(3);        // 设置美白级别,范围 0～10
-mTxcFilter.setRuddyLevel(2);
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 
-// p 图版本
-mTxcFilter.setFaceSlimLevel(5);         // 设置小脸级别,范围 0～10
-mTxcFilter.setEyeScaleLevel(5);         // 设置大眼级别,范围 0～10
-mTxcFilter.setFaceVLevel(5)             // 设置 V脸级别,范围 0～10
-mTxcFilter.setFaceShortenLevel(5)       // 设置短脸级别,范围 0～10
-mTxcFilter.setChinSlim(5)               // 设置长下巴级别,范围 0～10
-mTxcFilter.setNoseScale(5)              // 设置小鼻级别,范围 0～10
-mTxcFilter.setMotionTmpl(mMotionTmplPath);  ／／ 设置动效文件路径
+    mTxcFilter.setBeautyStyle(0);           // 设置美颜风格，0: 光滑 1: 自然 2: 朦胧
+    mTxcFilter.setBeautyLevel(5);           // 设置美颜级别,范围 0～10
+    mTxcFilter.setWhitenessLevel(3);        // 设置美白级别,范围 0～10
+    mTxcFilter.setRuddyLevel(2);
+    
+    // p 图版本
+    mTxcFilter.setFaceSlimLevel(5);         // 设置小脸级别,范围 0～10
+    mTxcFilter.setEyeScaleLevel(5);         // 设置大眼级别,范围 0～10
+    mTxcFilter.setFaceVLevel(5)             // 设置 V脸级别,范围 0～10
+    mTxcFilter.setFaceShortenLevel(5)       // 设置短脸级别,范围 0～10
+    mTxcFilter.setChinSlim(5)               // 设置长下巴级别,范围 0～10
+    mTxcFilter.setNoseScale(5)              // 设置小鼻级别,范围 0～10
+    mTxcFilter.setMotionTmpl(mMotionTmplPath);  ／／ 设置动效文件路径
+}
 </pre>
 5，设置事件回调
 <pre>
@@ -172,7 +169,9 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
         // 回调的数据，传递给 ilivefilter processFrame 接口处理;
         // avsdk回调函数，默认为 I420 格式
-        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, FrameFormat.I420, FrameFormat.I420);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
+        }
     }
 });
 </pre>
@@ -199,7 +198,7 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
 3：创建和初始化 预处理类 和 初始化参数
 <pre>
 /*
-static public class FrameFormat {
+static public class TXEFrameFormat {
         static public final int TEXTURE = 0;        // 纹理格式
         static public final int I420 = 1;           // I420格式
         static public final int RGBA = 2;           // RGBA格式
@@ -256,17 +255,21 @@ mTxcFilter.setListener(new TXIVideoPreprocessorListener(){
 所以mPreviewAngle代表图像应该旋转多少度，才能为正
 */
 // 纹理输入；纹理输入-->纹理输出
-textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.TEXTURE, FrameFormat.TEXTURE);
-if (textureId &lt; 0) {
-    Log.e(TAG, "processTexture failed!");
-    return;
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+    textureId = mTxcFilter.processFrame(textureId, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXEFrameFormat.TEXTURE, TXEFrameFormat.TEXTURE);
+    if (textureId &lt; 0) {
+        Log.e(TAG, "processTexture failed!");
+        return;
+    }
 }
 
 // 原始数据输入；此处演示 nv21数据输入--》textureId 输出
-textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, FrameFormat.NV21, FrameFormat.TEXTURE);
-if (textureId &lt; 0){
-    Log.e(TAG, "process Data failed!");
-    return;
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+    textureId = mTxcFilter.processFrame(bytes, mPreviewWidth, mPreviewHeight, mPreviewAngle, TXEFrameFormat.NV21, TXEFrameFormat.TEXTURE);
+    if (textureId &lt; 0){
+        Log.e(TAG, "process Data failed!");
+        return;
+    }
 }
 
 </pre>

@@ -28,3 +28,7 @@
 setFaceShortenLevel->setFaceShortLevel
 setChinSlim->setChinLevel
 setNoseScale->setNoseSlimLevel
+
+###### V1.1.17(2017-09-25)
+* 1、 开放 TXEFrameFormat 数据类型类
+* 2、 美颜、滤镜、p图功能，添加 Android API Level >= 17（Android 4.2和以上系统）限制

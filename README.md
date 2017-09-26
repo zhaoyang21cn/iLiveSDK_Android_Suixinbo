@@ -18,14 +18,15 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.6.3'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.7.0'      
             
 ## SDK最近更新说明
 
-### V1.6.3(2017-09-13)
- - 更新AVSDK 1.9.2.57(修复部分crash)
- - 添加设置AVRootView自动渲染机制
- - 封装IMSDK消息类型(不再暴露IM原生类)
+### V1.7.0(2017-09-25)
+ - 更新AVSDK 1.9.5.9
+ - 优化旋转切换前后置闪屏问题
+ - 添加进房前摄像头预览分辨率及FPS设置
+ - 添加进房后摄像头预览接口
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
