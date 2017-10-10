@@ -32,3 +32,6 @@ setNoseScale->setNoseSlimLevel
 ###### V1.1.17(2017-09-25)
 * 1、 开放 TXEFrameFormat 数据类型类
 * 2、 美颜、滤镜、p图功能，添加 Android API Level >= 17（Android 4.2和以上系统）限制
+
+###### V1.1.18(2017-10-10)
+* 1、 解决sdk与视频编辑UGC SDK符号冲突的问题</br>
