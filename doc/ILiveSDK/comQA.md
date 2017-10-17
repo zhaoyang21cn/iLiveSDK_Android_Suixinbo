@@ -5,8 +5,8 @@
 2、确认正常设置渲染控件(AVRootView或ILiveRootView)
 3、[本地]确认摄像头打开(autoCamera为true或手动调用enableCamera)
     *摄像头打开失败会通过exceptionListener上抛异常*
-```
-#常见异常
+```java
+// 常见异常
 "android.view.WindowManager$BadTokenException: 
 Unable to add window android.view.ViewRootImpl$W@cc80cad -- permission denied for window type 2002]"
 
