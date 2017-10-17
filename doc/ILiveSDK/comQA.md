@@ -7,7 +7,8 @@
     *摄像头打开失败会通过exceptionListener上抛异常*
 ```
 #常见异常
-"android.view.WindowManager$BadTokenException: Unable to add window android.view.ViewRootImpl$W@cc80cad -- permission denied for window type 2002]"
+"android.view.WindowManager$BadTokenException: 
+Unable to add window android.view.ViewRootImpl$W@cc80cad -- permission denied for window type 2002]"
 
 这种为应用被禁用了悬浮窗权限
 手机【设置】 【应用】 找到应用 检查下 【可出现在顶部的应用程序】 是否开启
