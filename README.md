@@ -51,7 +51,8 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.7.0'
 ## 异常事件
 [异常事件](/doc/ILiveSDK/exception.md)
 
-## 错误码
+## 常见问题
+[常见问题](/doc/ILiveSDK/comQA.md)
 [错误码表](/doc/ILiveSDK/error.md)
 
 ## 添加混淆
