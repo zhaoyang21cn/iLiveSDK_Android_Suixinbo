@@ -1,5 +1,9 @@
 ## Release Note
 
+### V1.7.2（2017-10-30）
+ - 更新AVSDK 1.9.5.12 (修复退房回调中stopContext异常)
+ - ILiveSDK中添加setCaptureMode(配置是否需要悬浮窗权限)
+
 ### V1.7.1(2017-10-25)
  - AVRootView开放本地全屏配置(setLocalFullScreen)
  - 优化新发送群组消息失败异常
