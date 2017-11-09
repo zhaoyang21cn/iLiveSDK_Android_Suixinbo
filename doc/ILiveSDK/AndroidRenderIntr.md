@@ -54,6 +54,26 @@ avRootView.setSubMarginY(10);
 avRootView.setSubWidth(240);
 avRootView.setSubHeight(320);
 ```
+
+* 获取视频AVVideoView
+- 在还没有开始渲染视频时，可以通过id来获取(需要在初始化后):
+```
+avRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
+    @Override
+    public void onSubViewCreated() {
+        // AVVideoView初始化回调  
+        for (int i=0; i<ILiveConstants.MAX_AV_VIDEO_NUM; i++){
+            avRootView.getViewByIndex(i).setRotate(true);
+        }
+    }
+});
+```
+- 在开始渲染视频后
+```
+// 获取渲染john的摄像头数据的AVVideoView
+avRootView.findUserViewIndex("john", CommonConstants.Const_VideoType_Camera);
+```
+
 * 动态布局
 AVVideoView支持动态布局
 
