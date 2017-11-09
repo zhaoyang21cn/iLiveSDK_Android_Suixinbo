@@ -13,7 +13,7 @@ AVSDK|tencent/imsdklogs/包名/QAVSDK_YYYYMMDD.log
 ## Android Studio过滤日志
 
 <br/>
-*在ILiveSDK 1.03 以后版本过滤LOG关键字 Key_Procedure 会搜到创建房间加入房间的关键路径*
+*在ILiveSDK 1.6.0 以后版本过滤LOG关键字 [KEY] 会搜到创建房间加入房间的关键路径*
 <br/>
 
 ## 创建一个房间  流程正确LOG如下
