@@ -24,36 +24,36 @@ AVSDK|tencent/imsdklogs/包名/QAVSDK_YYYYMMDD.log
 
 ```C
 1. 初始化步骤
-ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884    
+[17-11-09 17:00:38][KEY][I][ILiveSDK][initSdk->init][appid:1400027849|accountType:11656|version:1.7.2.0.7|abi:armeabi-v7a]  
 
 2. 设置渲染层       
-ILVBRoom: Key_Procedure|ILVB-Room|init root view    
-AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views
+[17-11-09 17:02:00][KEY][I][ILVBRoom][initAvRootView][mRootView:null|view:52829144]
     
 3. iLive登录   
-ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will     
-ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success    
+[17-11-09 17:00:38][KEY][I][ILVBLogin][iLiveLogin][id:ghost]
+[17-11-09 17:00:39][KEY][I][ILVBLogin][iLiveLogin->im login success][env:0]
+[17-11-09 17:00:39][DEV][I][ILVBLogin][iLiveLogin->startContext Success]   
 
 4. 创建房间   
-ILVBRoom: Key_Procedure|ILVB-Room|start create room:6357 enter with im:true|video:true   
+[17-11-09 17:02:22][KEY][I][ILVBRoom][createRoom][roomId:80778|imSupport:true|imGroupType:AVChatRoom|imGroupId:|avSupport:true|role:HD|autoCamera:true] 
 
 5. 直播聊天室创建完毕
-ILVBRoom: Key_Procedure|createRoom->im room ok:6357     
+[17-11-09 17:02:22][KEY][I][ILVBRoom][enterIMGroup->succuess][iEnterMask:0]
 
 6. AV房间创建完毕
-ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0      
+[17-11-09 17:02:22][KEY][I][ILVBRoom][enterAVRoom->succuess][iEnterMask:1]
 
 7. 打开摄像头
-ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera     
+[17-11-09 17:02:22][KEY][I][ILVBRoom][autoOpenCamera->enableCamera][autoCamera:true|curCamera:-1|cameraId:0] 
 
 8. server回调用户上线
-ILVBRoom: Key_Procedure|ILVB-Room|onEndpointsUpdateInfo myself id has camera will     
+[17-11-09 17:02:22][KEY][I][ILVBRoom][onEndPointEvent->hasCamera][eventId:3|users:ghost,]  
 
 9. 渲染
-AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0|0,0,1080,1845       
+[17-11-09 17:02:22][KEY][I][ILVB-AVRootView][renderVideoView][index:0|id:ghost|type:1|left:0|top:0|width:480|height:640|hashcode:52916470]      
 
 10. 摄像头上报成功回调    
-ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true     
+[17-11-09 17:02:22][KEY][D][ILVBRoom][enableCamera->onSuccess][cameraId:0]  
 
 ```
 
@@ -69,30 +69,30 @@ ILVBRoom: Key_Procedure|ILVB-Room|enable camera id:0/true
 
 ```C
 1. 初始化 
-
-ILiveSDK: Key_Procedure｜initSdk->init appid:1400001692, accountType:884   
+[17-11-09 17:00:38][KEY][I][ILiveSDK][initSdk->init][appid:1400027849|accountType:11656|version:1.7.2.0.7|abi:armeabi-v7a]
   
 2. 设置渲染层
-ILVBRoom: Key_Procedure|ILVB-Room|init root view      
-AVVideoGroup: Key_Procedure|ILVB-AVVideoGroup|init sub views   
+[17-11-09 17:02:00][KEY][I][ILVBRoom][initAvRootView][mRootView:null|view:52829144]  
 
 3. iLive登录
-ILVBLogin: Key_Procedure｜ILVB-iLiveLogin strart |id:will      
-ILVBLogin: Key_Procedure｜ILVB-iLiveLogin|login success       
+[17-11-09 17:00:38][KEY][I][ILVBLogin][iLiveLogin][id:ghost]
+[17-11-09 17:00:39][KEY][I][ILVBLogin][iLiveLogin->im login success][env:0]
+[17-11-09 17:00:39][DEV][I][ILVBLogin][iLiveLogin->startContext Success]  
 
 4. 加入房间  
-ILVBRoom: Key_Procedure|joinRoom->id: 6352 isIMsupport: true       
+[17-11-09 17:02:16][KEY][I][ILVBRoom][joinRoom][roomId:80588|imSupport:true|imGroupType:AVChatRoom|imGroupId:|avSupport:true|role:Guest|autoCamera:false]
 
 5. 直播聊天室加入成功    
-ILVBRoom: Key_Procedure|joinLiveRoom joinIMChatRoom callback succ    
+[17-11-09 17:02:16][KEY][I][ILVBRoom][enterIMGroup->succuess][iEnterMask:2]
 
 6. AV房间加入成功       
-ILVBRoom: Key_Procedure|ILVB-Room|enter av room complete result: 0        
+[17-11-09 17:02:16][KEY][I][ILVBRoom][enterAVRoom->succuess][iEnterMask:0]   
 
 7. 获取server 成员上线回调 
-ILVBRoom: Key_Procedure|ILVB-Endpoint | requestRemoteVideo id [willguo]     
+[17-11-09 17:02:16][KEY][I][ILVBRoom][onEndPointEvent->hasCamera][eventId:3|users:jackwang1982,]
+[17-11-09 17:02:16][KEY][D][ILVB-AVSDKContext][requestRemoteVideo->enter][length:1]   
 
 8. 渲染界面
-AVRootView: Key_Procedure|ILVB-AVRootView|renderVideoView->enter index:0| 0,0,1080,1845      
+[17-11-09 17:02:16][KEY][I][ILVB-AVRootView][renderVideoView][index:0|id:jackwang1982|type:1|left:0|top:0|width:480|height:640|hashcode:529e0428]    
 
 ```
