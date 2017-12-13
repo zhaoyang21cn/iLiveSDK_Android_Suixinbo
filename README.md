@@ -18,14 +18,17 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.7.2'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.0'      
 
             
 ## SDK最近更新说明
 
-### V1.7.2（2017-10-30）
- - 更新AVSDK 1.9.5.12 (修复退房回调中stopContext异常)
- - ILiveSDK中添加setCaptureMode(配置是否需要悬浮窗权限)
+### V1.8.0(2017-12-13)
+ - 更新AVSDK 1.9.6.46
+ - 修复切换房间保留最后一帧问题
+ - 添加音视频自定义消息通道
+ - 优化退房回调流程
+ - 优化测试模块
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
