@@ -24,7 +24,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.8.0'
 ## SDK最近更新说明
 
 ### V1.8.1(2017-12-15)
- - 添加屏幕分享支持(RoomManager中enableScreen方法)
+ - 添加屏幕分享支持(Android 5.0以上，RoomManager中enableScreen方法)
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
