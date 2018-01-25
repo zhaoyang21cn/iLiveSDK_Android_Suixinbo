@@ -3,10 +3,10 @@
 ## 使用前说明（重要）：
 1，TXCVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
 p图收费版：
-> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.18'
+> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.19'
 
 非p图普通版：
-> compile 'com.tencent.ilivefilter:liteav_normal:1.1.18'
+> compile 'com.tencent.ilivefilter:liteav_normal:1.1.19'
 
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
@@ -31,8 +31,8 @@ p图收费版：
 
 最新版本说明
 
-> V1.1.18(2017-10-10)</br>
-(1) 解决sdk与视频编辑UGC SDK符号冲突的问题</br>
+> V1.1.19(2018-1-25)</br>
+(1) 解决添加水印后，旋转手机，预览画面变形的问题</br>
 
 </br>
 
@@ -85,9 +85,9 @@ p图收费版：
 <pre>
 build.gradle 的dependency中添加
 // p图版
-compile 'com.tencent.ilivefilter:liteav_pitu:1.1.18'
+compile 'com.tencent.ilivefilter:liteav_pitu:1.1.19'
 // 非 p图版
-compile 'com.tencent.ilivefilter:liteav_normal:1.1.18'
+compile 'com.tencent.ilivefilter:liteav_normal:1.1.19'
 
 defaultConfig{
     ....
