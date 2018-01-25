@@ -18,14 +18,13 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.7.2'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.0'      
 
             
 ## SDK最近更新说明
 
-### V1.7.2（2017-10-30）
- - 更新AVSDK 1.9.5.12 (修复退房回调中stopContext异常)
- - ILiveSDK中添加setCaptureMode(配置是否需要悬浮窗权限)
+### V1.8.1(2017-12-15)
+ - 添加屏幕分享支持(Android 5.0以上，ILiveRoomManager中enableScreen方法)
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
@@ -101,7 +100,7 @@ iLiveSDK内部集成了腾讯云包括IMSDK，QAVSDK。使用iLiveSDK的用户�
 
 对于仍在集成QAVSDK的老用户，也可以在这里获取QAVSDK的最新版本:
 
-[QAVSDK 1.9.5.14](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.5.14_Android_Beta.zip)
+[QAVSDK 1.9.6.49](http://dldir1.qq.com/hudongzhibo/TCShow/AVSDK/AVSDK196/QAVOPENSDK_1.9.6.49_Android_Publish.zip )
 
 ## 联系我们
 
