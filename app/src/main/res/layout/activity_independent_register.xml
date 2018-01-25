@@ -9,9 +9,8 @@
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/tencent_tls_ui_titleBackground">
+        android:layout_height="50dp"
+        android:background="@color/ui_title_background">
 
         <ImageButton
             android:id="@+id/back"
@@ -20,8 +19,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:background="@color/tencent_tls_ui_titleBackground"
-            android:src="@drawable/tencent_tls_ui_arrow_left_blue"/>
+            android:background="@color/ui_title_background"
+            android:src="@drawable/ui_title_arrow_left"/>
 
         <TextView
             style="@style/tencent_tls_ui_titleFontStyle"
@@ -29,29 +28,19 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tencent_tls_ui_shadowgray"/>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="@dimen/tencent_tls_ui_activity_horizontal_margin"
-        android:paddingRight="@dimen/tencent_tls_ui_activity_horizontal_margin"
-        android:layout_weight="9">
+        android:paddingRight="@dimen/tencent_tls_ui_activity_horizontal_margin">
 
         <EditText
             android:id="@+id/username"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/tencent_tls_ui_edittext_height"
             android:paddingLeft="@dimen/tencent_tls_ui_edittext_leftpadding"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
             android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
             android:singleLine="true"
@@ -67,17 +56,6 @@
             android:inputType="textPassword"
             android:singleLine="true"
             android:hint="@string/str_hint_pwd"/>
-
-        <EditText
-            android:id="@+id/repassword"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/tencent_tls_ui_edittext_height"
-            android:paddingLeft="@dimen/tencent_tls_ui_edittext_leftpadding"
-            android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
-            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:hint="确认密码"/>
 
         <Button
             android:id="@+id/btn_register"

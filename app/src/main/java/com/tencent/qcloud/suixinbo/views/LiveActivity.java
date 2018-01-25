@@ -44,12 +44,10 @@ import com.bumptech.glide.RequestManager;
 import com.tencent.TIMMessage;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
-import com.tencent.av.extra.effect.AVVideoEffect;
 import com.tencent.av.opengl.ui.GLView;
 import com.tencent.av.sdk.AVAudioCtrl;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
-import com.tencent.ilivefilter.TILFilter;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.ILiveSDK;
@@ -64,6 +62,8 @@ import com.tencent.ilivesdk.tools.quality.ILiveQualityData;
 import com.tencent.ilivesdk.tools.quality.LiveInfo;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.liteav.basic.enums.TXEFrameFormat;
+import com.tencent.liteav.beauty.TXCVideoPreprocessor;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.livesdk.ILVText;
@@ -162,7 +162,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private Dialog mDetailDialog;
 
-    private TILFilter mUDFilter; //美颜处理器
+    private TXCVideoPreprocessor mTxcFilter;//美颜处理器
 
 
 
@@ -273,17 +273,19 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     private void initILiveBeauty(){
-        if (null == mUDFilter){
+        if (null == mTxcFilter){
             SxbLog.d(TAG, "FILTER->created");
-            mUDFilter = new TILFilter(this);
-            mUDFilter.setFilter(1);
-            mUDFilter.setBeauty(5);     // 默认开启美颜
-            mUDFilter.setWhite(3);
-            ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
+
+            mTxcFilter = new TXCVideoPreprocessor(this, false);
+            mTxcFilter.setBeautyStyle(0);
+            mTxcFilter.setBeautyLevel(5);     // 默认开启美颜
+            mTxcFilter.setWhitenessLevel(3);
+
+            ((AVVideoCtrl)ILiveSDK.getInstance().getVideoEngine().getVideoObj()).setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
                 @Override
                 public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
-                    mUDFilter.processData(var1.data, var1.dataLen, var1.width, var1.height, var1.srcType);
+                    mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
                 }
             });
         }
@@ -355,7 +357,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mBeautyRate = progress;
                 if (MySelfInfo.getInstance().getBeautyType()==1){
                     initILiveBeauty();
-                    mUDFilter.setBeauty(progress*7/100);
+                    mTxcFilter.setBeautyLevel(progress*7/100);
                 }else {//美颜
                     ILiveRoomManager.getInstance().enableBeauty(getBeautyProgress(progress));
                 }
@@ -381,7 +383,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 mWhiteRate = progress;
                 if (MySelfInfo.getInstance().getBeautyType()==1){
                     initILiveBeauty();
-                    mUDFilter.setWhite(progress*9/100);
+                    mTxcFilter.setWhitenessLevel(progress*9/100);
                 }else {//美白
                     ILiveRoomManager.getInstance().enableWhite(getBeautyProgress(progress));
                 }
@@ -501,6 +503,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         ILVLiveManager.getInstance().setAvVideoView(mRootView);
 
 
+        mRootView.setLocalFullScreen(false);
         mRootView.setBackground(R.mipmap.renderback);
         mRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
         mRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
@@ -770,16 +773,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private int curFilter = 0;
     private void initFilterDialog() {
         final String filterRootPath = "assets://qaveffect/filter/";
-        final String[] filters = new String[]{ "清空滤镜",  "漫画(COMIC)",
-                "盛夏(GESE)", "暖阳(BRIGHTFIRE)",
-                "月光(SKYLINE)", "蔷薇(G1)",
-                "幽兰(ORCHID)", "圣代(SHENGDAI)",
-                "薄荷(AMARO)","浪漫(FENBI)"};
-        final String[] values = new String[]{null, filterRootPath+"COMIC",
-                filterRootPath+"GESE", filterRootPath+"BRIGHTFIRE",
-                filterRootPath+"SKYLINE", filterRootPath+"G1",
-                filterRootPath+"ORCHID", filterRootPath+"SHENGDAI",
-                filterRootPath+"AMARO",filterRootPath+"FENBI"};
+        final String[] filters = new String[]{ "清空滤镜",  "浪漫",
+                "清新", "唯美",
+                "粉嫩", "怀旧",
+                "蓝调", "清凉",
+                "日系"};
         filterDialog = new RadioGroupDialog(this, filters);
         filterDialog.setTitle(R.string.str_dt_filter);
         filterDialog.setSelected(curFilter);
@@ -788,7 +786,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onItemClick(int position) {
                 SxbLog.d(TAG, "initFilterDialog->onClick item:"+position);
                 curFilter = position;
-                AVVideoEffect.getInstance(LiveActivity.this).setFilter(values[position]);
+                mTxcFilter.setFilterType(position+1);
             }
         });
     }
@@ -797,7 +795,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private RadioGroupDialog magicDialog;
     private int curMagic = 0;
     private void initMagicDialog() {
-        final String filterRootPath = "assets://qaveffect/pendant/";
+        final String filterRootPath = "assets://pendant/";
         final String[] filters = new String[]{ "清空挂件", "兔子", "白雪公主"};
         final String[] values = new String[]{null, filterRootPath+"video_rabbit", filterRootPath+"video_snow_white"};
         magicDialog = new RadioGroupDialog(this, filters);
@@ -808,17 +806,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onItemClick(int position) {
                 SxbLog.d(TAG, "initMagicDialog->onClick item:"+position);
                 curMagic = position;
-                AVVideoEffect.getInstance(LiveActivity.this).setPendant(values[position]);
+                mTxcFilter.setMotionTmpl(values[position]);
             }
         });
-    }
-
-    private void initPtuEnv() {
-        AVVideoEffect mEffect = AVVideoEffect.getInstance(LiveActivity.this);
-
-        AVVideoCtrl avVideoCtrl = ILiveSDK.getInstance().getAvVideoCtrl();
-        if (null != avVideoCtrl)
-            avVideoCtrl.setEffect(mEffect);
     }
 
     /**
@@ -826,11 +816,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        // 重置滤镜
-        AVVideoEffect.getInstance(this).setFilter(null);
-        // 重置脸萌
-        AVVideoEffect.getInstance(this).setPendant(null);
-
         mBeautyBar.setProgress(72);
         mWhiteBar.setProgress(33);
 
@@ -853,7 +838,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mVideoTimerTask = new VideoTimerTask();
             mVideoTimer.schedule(mVideoTimerTask, 1000, 1000);
 
-            initPtuEnv();
+            initILiveBeauty();
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 mHostNameTv.setText(MySelfInfo.getInstance().getId());
@@ -908,11 +893,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             finish();
         }
 
-        if (null != mUDFilter && MySelfInfo.getInstance().getBeautyType() == 1) {
+        if (null != mTxcFilter && MySelfInfo.getInstance().getBeautyType() == 1) {
             SxbLog.d(TAG, "FILTER->destory");
-            mUDFilter.setFilter(-1);
-            mUDFilter.destroyFilter();
-            mUDFilter = null;
+            mTxcFilter.release();
+            mTxcFilter = null;
         }
 
         //发送

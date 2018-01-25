@@ -71,6 +71,7 @@
     </RelativeLayout>
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:id="@+id/lcv_beauty_type"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         app:name="@string/str_beauty_type"

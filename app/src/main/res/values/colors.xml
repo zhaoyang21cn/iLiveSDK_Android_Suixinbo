@@ -6,13 +6,18 @@
     <color name="tencent_tls_ui_deepgray">#777777</color>
     <color name="tencent_tls_ui_countryCodeColor">#009900</color>
     <color name="tencent_tls_ui_black">#000000</color>
-    <color name="tencent_tls_ui_titleBackground">#FFFFFF</color>
     <color name="tencent_tls_ui_titleFontColor">#000000</color>
     <color name="tencent_tls_ui_defaultButtonColor">#0099FF</color>
     <color name="tencent_tls_ui_pressedButtonColor">#0066CC</color>
     <color name="tencent_tls_ui_background">#EEEEEE</color>
     <color name="tencent_tls_ui_transparent">#9000</color>
 
+
+    <color name="ui_title_background">#DC4B53</color>
+    <color name="ui_title_color">#FFFFFF</color>
+
+    <color name="ui_button_color">#EC4B53</color>
+    <color name="ui_button_focus_color">#AC4B53</color>
 
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>

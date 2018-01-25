@@ -84,7 +84,7 @@ public class RecordAdapter extends ArrayAdapter<RecordInfo> {
             RequestManager req = Glide.with(mActivity);
             req.load(data.getStrCover()).into(holder.ivIcon);
         }else{
-            holder.ivIcon.setImageResource(R.drawable.cover_background);
+            holder.ivIcon.setImageResource(R.drawable.default_background);
         }
 
         holder.tvName.setText(data.getStrName());

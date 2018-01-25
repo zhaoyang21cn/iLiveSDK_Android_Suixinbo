@@ -15,7 +15,7 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/tencent_tls_ui_titleFontSize</item>
-        <item name="android:textColor">@color/tencent_tls_ui_titleFontColor</item>
+        <item name="android:textColor">@color/ui_title_color</item>
     </style>
 
     <style name="tencent_tls_ui_transparent">

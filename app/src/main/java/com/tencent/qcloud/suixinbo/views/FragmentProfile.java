@@ -225,10 +225,15 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     private void showSDKVersion() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("IM SDK: " + TIMManager.getInstance().getVersion() + "\r\n"
+        String strVersion = "IM SDK: " + TIMManager.getInstance().getVersion() + "\r\n"
                 + "AV SDK: " + AVContext.getVersion()+ "\r\n"
                 + "Live SDK: " + ILVLiveManager.getInstance().getVersion() + "\r\n"
-                + "ILiveSDK: " + ILiveSDK.getInstance().getVersion());
+                + "ILiveSDK: " + ILiveSDK.getInstance().getVersion();
+        if (1 == TIMManager.getInstance().getEnv()){
+            strVersion += "\r\nEnv: Debug";
+        }
+
+        builder.setMessage(strVersion);
         builder.show();
     }
 

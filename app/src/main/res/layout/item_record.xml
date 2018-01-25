@@ -9,7 +9,7 @@
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:src="@drawable/cover_background"
+        android:src="@drawable/default_background"
         android:scaleType="fitXY" />
 
     <LinearLayout

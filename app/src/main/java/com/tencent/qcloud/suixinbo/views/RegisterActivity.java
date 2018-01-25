@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * 注册账号类
  */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, LoginView {
-    private EditText mUserName, mPassword, mRepassword;
+    private EditText mUserName, mPassword;
     private TextView mBtnRegister;
     private ImageButton mBtnBack;
     QavsdkApplication mMyApplication;
@@ -34,7 +34,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_independent_register);
         mUserName = (EditText) findViewById(R.id.username);
         mPassword = (EditText) findViewById(R.id.password);
-        mRepassword = (EditText) findViewById(R.id.repassword);
         mBtnRegister = (TextView) findViewById(R.id.btn_register);
         mBtnBack = (ImageButton) findViewById(R.id.back);
         mBtnBack.setOnClickListener(this);
@@ -54,7 +53,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (view.getId() == R.id.btn_register) {
             String userId = mUserName.getText().toString();
             String userPW = mPassword.getText().toString();
-            String userPW2 = mRepassword.getText().toString();
 
 
             if (userId.length() < 4 || userId.length() > 24 || Pattern.compile("^[0-9]*$").matcher(userId).matches()
@@ -65,13 +63,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
 
-            if (userId.length() == 0 || userPW.length() == 0 || userPW2.length() == 0) {
+            if (userId.length() == 0 || userPW.length() == 0) {
                 Toast.makeText(RegisterActivity.this, "用户名和密码不能为空", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!userPW.equals(userPW2)) {
-                Toast.makeText(RegisterActivity.this, "两次密码输入密码不一致", Toast.LENGTH_SHORT).show();
                 return;
             }
 
