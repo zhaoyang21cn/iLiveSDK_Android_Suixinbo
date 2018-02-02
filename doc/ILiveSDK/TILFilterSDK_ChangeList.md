@@ -43,4 +43,4 @@ setNoseScale->setNoseSlimLevel
 * 1、 适配avsdk 的 setAfterPreviewListener 数据回调接口，效率更高，建议废弃以前的 setLocalVideoPreProcessCallback 数据回调接口
 * 2、 更新新版p图，新版p图支持AI抠背，手势识别等新动效
 * 3、 降低sdk cpu 和 gpu消耗
-* 4、 修复sdk内存抖动 和 低端机型Android系统频繁 GC 的问题
+* 4、 修复sdk内存抖动 和 低端机型偶现的 内存GC 问题
