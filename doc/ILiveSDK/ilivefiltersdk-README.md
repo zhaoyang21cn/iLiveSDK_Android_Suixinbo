@@ -39,7 +39,7 @@ p图收费版：
 (1) 适配avsdk 的 setAfterPreviewListener 数据回调接口，效率更高，建议废弃以前的 setLocalVideoPreProcessCallback 数据回调接口</br>
 (2) 更新新版p图，新版p图支持AI抠背，手势识别等新动效</br>
 (3) 降低sdk cpu 和 gpu消耗</br>
-(4) 修复sdk内存抖动 和 低端机型Android系统频繁 GC 的问题</br>
+(4) 修复sdk内存抖动 和 低端机型偶现的 内存GC 问题</br>
 </br>
 
 [查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md
