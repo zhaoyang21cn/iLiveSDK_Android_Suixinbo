@@ -44,7 +44,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.8.2'
 
 
 ## API文档
-[API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
+[API文档(1.8.2)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
 
 ## 直播术语解释
 [房间，房间生命周期](/doc/ILiveSDK/Names.md)
