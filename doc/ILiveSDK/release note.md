@@ -1,4 +1,11 @@
 ## Release Note
+
+### V1.8.2(2018-02-02)
+ - 日志添加setLogPrint(是否打印)和setLogWrite(是否写文件)
+ - 扩展iLiveLogin接口(支持无法下载配置的自定义spear配置)
+ - 修复onRoomDisconnect后摄像头未重置问题
+ - 修复退房后摄像头未关闭问题
+
 ### V1.8.1(2017-12-15)
  - 添加屏幕分享支持(Android 5.0以上，ILiveRoomManager中enableScreen方法)
 

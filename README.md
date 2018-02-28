@@ -18,13 +18,16 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.8.0'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.2'      
 
             
 ## SDK最近更新说明
 
-### V1.8.1(2017-12-15)
- - 添加屏幕分享支持(Android 5.0以上，ILiveRoomManager中enableScreen方法)
+### V1.8.2(2018-02-02)
+ - 日志添加setLogPrint(是否打印)和setLogWrite(是否写文件)
+ - 扩展iLiveLogin接口(支持无法下载配置的自定义spear配置)
+ - 修复onRoomDisconnect后摄像头未重置问题
+ - 修复退房后摄像头未关闭问题
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
@@ -41,7 +44,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.8.0'
 
 
 ## API文档
-[API文档(1.4.0)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
+[API文档(1.8.2)](https://zhaoyang21cn.github.io/iLiveSDK_Help/android_help/)
 
 ## 直播术语解释
 [房间，房间生命周期](/doc/ILiveSDK/Names.md)

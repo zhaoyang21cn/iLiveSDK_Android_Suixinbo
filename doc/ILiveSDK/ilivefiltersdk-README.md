@@ -3,10 +3,10 @@
 ## 使用前说明（重要）：
 1，TXCVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
 p图收费版：
-> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.18'
+> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.20'
 
 非p图普通版：
-> compile 'com.tencent.ilivefilter:liteav_normal:1.1.18'
+> compile 'com.tencent.ilivefilter:liteav_normal:1.1.20'
 
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
@@ -18,12 +18,16 @@ p图收费版：
 
 5，“纹理id输入”或“纹理id输出”的功能，只在有GL环境场景下才有效
 
-6, 美颜、滤镜和p图功能，只支持Android API Level >=  17（Android 4.2和以上系统）
+6， 美颜、滤镜和p图功能，只支持Android API Level >=  17（Android 4.2和以上系统）
 
 7，新版TXCVideoPreprocessor，同时兼容老版的 ilivefilter；
 只需要将类名TXCVideoPreprocessor ，改为 TILFilter；即可；
 [点击跳转老版 ilivefilter 使用文档](https://github.com/zhaoyang21cn/TILFilterSdk/blob/master/README.md
 )
+
+8，“AVSDK版本 < 1.9.5” 并且使用 “liteav_pitu版本”，因avsdk 1.9.5以前版本的 setAfterPreviewListener 接口没有返回画面旋转角度，导致p图无法根据旋转角度识别人脸，所以只能仍然使用 setLocalVideoPreProcessCallback；
+
+9，“AVSDK版本 >= 1.9.5”，建议使用新版的 setAfterPreviewListener 接口，效率更高
 
 ### 费用说明
 
@@ -31,9 +35,11 @@ p图收费版：
 
 最新版本说明
 
-> V1.1.18(2017-10-10)</br>
-(1) 解决sdk与视频编辑UGC SDK符号冲突的问题</br>
-
+> V1.1.20(2018-2-2)</br>
+(1) 适配avsdk 的 setAfterPreviewListener 数据回调接口，效率更高，建议废弃以前的 setLocalVideoPreProcessCallback 数据回调接口</br>
+(2) 更新新版p图，新版p图支持AI抠背，手势识别等新动效</br>
+(3) 降低sdk cpu 和 gpu消耗</br>
+(4) 修复sdk内存抖动 和 低端机型偶现的 内存GC 问题</br>
 </br>
 
 [查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md
@@ -76,7 +82,7 @@ p图收费版：
 | **void setChinLevel(int level)** | 设置长下巴级别|level: 长下巴级别（0~9）|无|
 | **void setNoseSlimLevel(int level)** | 设置小鼻级别|level: 小鼻级别（0~9）|无|
 | **void setMotionTmpl(String tmplPath)** | 设置动态贴纸路径|tmplPath: 动态贴纸路径|无|
-| **boolean setGreenScreenFile(String path)** | 设置绿幕文件路径|path: 绿幕文件路径|无|
+| **boolean setGreenScreenFile(String path, boolean isLoop)** | 设置绿幕文件路径|path: 绿幕文件路径(目前图片支持jpg/png，视频支持mp4格式)      isLoop：是否循环播放设置的视频文件（只针对视频）|无|
 ### 无 OpenglGL 环境（AVSDK/iLiveSDK，或其他无 OpenglGL 环境场景）使用代码范例：
 
 1，如果是p图升级版，请先申请p图licence；并将licence改名为 YTFaceSDK.licence，放入app的asset目录下，即可
@@ -85,9 +91,9 @@ p图收费版：
 <pre>
 build.gradle 的dependency中添加
 // p图版
-compile 'com.tencent.ilivefilter:liteav_pitu:1.1.18'
+compile 'com.tencent.ilivefilter:liteav_pitu:1.1.20'
 // 非 p图版
-compile 'com.tencent.ilivefilter:liteav_normal:1.1.18'
+compile 'com.tencent.ilivefilter:liteav_normal:1.1.20'
 
 defaultConfig{
     ....
@@ -104,12 +110,15 @@ defaultConfig{
 <pre>
 /*
 static public class TXEFrameFormat {
-        static public final int TEXTURE = 0;        // 纹理格式
-        static public final int I420 = 1;           // I420格式
-        static public final int RGBA = 2;           // RGBA格式
-        static public final int NV21 = 3;           // NV21格式
-        static public final int TEXTURE_EXT = 4;    // 外部纹理输入(相机纹理输入时，可用)
-        static public final int NONE = 5;           // 无输入
+    static public final int NV12    = 18;
+    static public final int NV21    = ImageFormat.NV21;     // NV21 = 17
+    static public final int I420    = 100;
+    static public final int RGB565  = ImageFormat.RGB_565;  // RGB565 = 4
+    static public final int RGBA = 6;
+
+    static public final int TEXTURE = 1000;        // 纹理格式
+    static public final int TEXTURE_EXT = 1001;        // 外部纹理输入
+    static public final int NONE = 10010;        // 无输入
 }
 // TXCVideoPreprocessor.EventVideoProcess 事件定义
     static public class EventVideoProcess{
@@ -128,7 +137,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
     mTxcFilter.setBeautyStyle(0);           // 设置美颜风格，0: 光滑 1: 自然 2: 朦胧
     mTxcFilter.setBeautyLevel(5);           // 设置美颜级别,范围 0～10
     mTxcFilter.setWhitenessLevel(3);        // 设置美白级别,范围 0～10
-    mTxcFilter.setRuddyLevel(2);
+    mTxcFilter.setRuddyLevel(2);            // 设置红润级别，范围 0～10
     
     // p 图版本
     mTxcFilter.setFaceSlimLevel(5);         // 设置小脸级别,范围 0～10
@@ -137,10 +146,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
     mTxcFilter.setFaceShortenLevel(5)       // 设置短脸级别,范围 0～10
     mTxcFilter.setChinSlim(5)               // 设置长下巴级别,范围 0～10
     mTxcFilter.setNoseScale(5)              // 设置小鼻级别,范围 0～10
-    mTxcFilter.setMotionTmpl(mMotionTmplPath);  ／／ 设置动效文件路径
+    mTxcFilter.setMotionTmpl(mMotionTmplPath);  // 设置动效文件路径
+    mTxcFilter.setGreenScreenFile(mGreenFile, true);            // 设置绿幕文件路径，如果是视频，循环播放
 }
 </pre>
-5，设置事件回调
+5，设置事件回调（用于监听p图人脸识别 成功/失败 事件）
 <pre>
 /*
 EVENT_VIDEOPROCESS_FACERECOGNISE_SUCESS = 4001;     // 人脸识别成功事件（p图版）
@@ -161,8 +171,10 @@ mTxcFilter.setNotifyListener(new TXINotifyListener(){
 });
 </pre>
 6：设置 AVSDK 相机数据回调；示例为基于iLiveSDK;
-如果是直接集成AVSDK，请直接找到AVSDK 的 setLocalVideoPreProcessCallback就好了（**设置回调，一定要在进入房间成功后，才有效！！**）
+如果是直接集成AVSDK，请直接找到AVSDK 的 setAfterPreviewListener（废弃掉 setLocalVideoPreProcessCallback 接口；但是如果 “AVSDK版本 < 1.9.5” 并且使用 “liteav_pitu版本”，只能继续使用setLocalVideoPreProcessCallback   ） 就好了（**设置回调，一定要在进入房间成功后，才有效！！**）
 <pre>
+// "AVSDK版本 &lt 1.9.5" && "liteav_pitu版本"，只能使用setLocalVideoPreProcessCallback，avsdk版本可以通过 AVContext.getVersion() 获取
+/*
 boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback(){
     @Override
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
@@ -173,16 +185,30 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
         }
     }
 });
+*/
+
+// "AVSDK版本 &gt= 1.9.5"建议使用 setAfterPreviewListener；效率高
+boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.AfterPreviewListener(){
+    @Override
+    public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
+    
+        // 回调的数据，传递给 ilivefilter processFrame 接口处理;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, var1.videoFormat, var1.videoFormat);
+        }
+    }
+});
 </pre>
-7：**退出房间时，必须销毁滤镜资源！！否则下次进入房间，设置滤镜不生效！**
+7：**退出房间时，必须销毁滤镜资源，下次使用时，在重新创建！！否则下次进入房间，设置滤镜不生效！日志也会出现 “please realloc new TXCVideoPreprocessor” 错误**
 <pre>
 ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
     @Override
     public void onSuccess(Object data) {
     // 取消 AVSDK 相机数据回调（参数传null）
-    boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(null);
+    boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(null);
         // 退出房间后，一定要销毁filter 资源；否则下次进入房间，setFilter将不生效或其他异常
         mTxcFilter.release();
+        mTxcFilter = null;
     }
     @Override
     public void onError(String module, int errCode, String errMsg) {
@@ -198,12 +224,15 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
 <pre>
 /*
 static public class TXEFrameFormat {
-        static public final int TEXTURE = 0;        // 纹理格式
-        static public final int I420 = 1;           // I420格式
-        static public final int RGBA = 2;           // RGBA格式
-        static public final int NV21 = 3;           // NV21格式
-        static public final int TEXTURE_EXT = 4;    // 外部纹理输入(相机纹理输入时，可用)
-        static public final int NONE = 5;           // 无输入
+    static public final int NV12    = 18;
+    static public final int NV21    = ImageFormat.NV21;     // NV21 = 17
+    static public final int I420    = 100;
+    static public final int RGB565  = ImageFormat.RGB_565;  // RGB565 = 4
+    static public final int RGBA = 6;
+
+    static public final int TEXTURE = 1000;        // 纹理格式
+    static public final int TEXTURE_EXT = 1001;        // 外部纹理输入
+    static public final int NONE = 10010;        // 无输入
 }
 // TXCVideoPreprocessor.EventVideoProcess 事件定义
     static public class EventVideoProcess{

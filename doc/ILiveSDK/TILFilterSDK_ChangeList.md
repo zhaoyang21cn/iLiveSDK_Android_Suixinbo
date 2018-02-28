@@ -35,3 +35,12 @@ setNoseScale->setNoseSlimLevel
 
 ###### V1.1.18(2017-10-10)
 * 1、 解决sdk与视频编辑UGC SDK符号冲突的问题</br>
+
+###### V1.1.19(2018-1-25)
+* 1、 解决添加水印后，旋转手机，预览画面变形的问题
+
+###### V1.1.20(2018-2-2)
+* 1、 适配avsdk 的 setAfterPreviewListener 数据回调接口，效率更高，建议废弃以前的 setLocalVideoPreProcessCallback 数据回调接口
+* 2、 更新新版p图，新版p图支持AI抠背，手势识别等新动效
+* 3、 降低sdk cpu 和 gpu消耗
+* 4、 修复sdk内存抖动 和 低端机型偶现的 内存GC 问题
