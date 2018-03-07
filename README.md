@@ -18,16 +18,14 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.8.2'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.3'      
 
             
 ## SDK最近更新说明
 
-### V1.8.2(2018-02-02)
- - 日志添加setLogPrint(是否打印)和setLogWrite(是否写文件)
- - 扩展iLiveLogin接口(支持无法下载配置的自定义spear配置)
- - 修复onRoomDisconnect后摄像头未重置问题
- - 修复退房后摄像头未关闭问题
+### V1.8.3(2018-03-07)
+ - 修复自定义spear配置未生效问题
+ - 完善日志系统
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
