@@ -18,15 +18,15 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.8.3'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.4'      
 
             
 ## SDK最近更新说明
 
-### V1.8.3(2018-03-07)
- - 修复自定义spear配置未生效问题
- - 完善日志系统
-
+### V1.8.4(2018-03-29)
+ - 更新AVSDK到1.9.7.54(修复上一版本中的闪屏等问题)
+ - 优化日志系统
+ 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
 
