@@ -22,8 +22,7 @@ p图收费版：
 
 7，新版TXCVideoPreprocessor，同时兼容老版的 ilivefilter；
 只需要将类名TXCVideoPreprocessor ，改为 TILFilter；即可；
-[点击跳转老版 ilivefilter 使用文档](https://github.com/zhaoyang21cn/TILFilterSdk/blob/master/README.md
-)
+[点击跳转老版 ilivefilter 使用文档](https://github.com/zhaoyang21cn/TILFilterSdk/blob/master/TILFilterSDK-README.md)
 
 8，“AVSDK版本 < 1.9.5” 并且使用 “liteav_pitu版本”，因avsdk 1.9.5以前版本的 setAfterPreviewListener 接口没有返回画面旋转角度，导致p图无法根据旋转角度识别人脸，所以只能仍然使用 setLocalVideoPreProcessCallback；
 
