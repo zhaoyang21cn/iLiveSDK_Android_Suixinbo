@@ -6,6 +6,7 @@ import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
 import com.tencent.av.extra.effect.AVVideoEffect;
 import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.ilivesdk.core.ILiveLog;
 import com.tencent.livesdk.ILVLiveConfig;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -51,6 +52,8 @@ public class InitBusinessHelper {
         }
 
         // 初始化ILiveSDK
+        //TIMManager.getInstance().setEnv(1);
+        ILiveLog.setLogPrint(false);
         ILiveSDK.getInstance().initSdk(context, Constants.SDK_APPID, Constants.ACCOUNT_TYPE);
         // 初始化直播模块
         ILVLiveConfig liveConfig = new ILVLiveConfig();

@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/tencent_tls_ui_background"
     tools:context=".IndependentLoginActivity">
 
@@ -10,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@color/tencent_tls_ui_titleBackground">
+        android:background="@color/ui_title_background">
 
         <TextView
             style="@style/tencent_tls_ui_titleFontStyle"
@@ -18,16 +19,11 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tencent_tls_ui_shadowgray"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
         android:paddingLeft="@dimen/tencent_tls_ui_activity_horizontal_margin"
         android:paddingRight="@dimen/tencent_tls_ui_activity_horizontal_margin">
 
@@ -73,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|right"
-                android:textColor="@color/tencent_tls_ui_defaultButtonColor"
+                android:textColor="@color/colorTextBlack"
                 android:text="注册新用户"/>
 
         </FrameLayout>
@@ -81,5 +77,5 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
 

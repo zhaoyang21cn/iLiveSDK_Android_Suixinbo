@@ -4,11 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#1A000000" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,7 +12,7 @@
             android:id="@+id/cover"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:src="@drawable/cover_background"
+            android:src="@drawable/default_background"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -48,54 +43,43 @@
             android:src="@drawable/icon_tab_profile_default"
             />
 
-
-
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="14dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/live_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:textColor="@color/colorGray6"
+                android:text="Live_title"
+                android:maxLines="1"
+                android:textSize="@dimen/h10" />
 
-                <TextView
-                    android:id="@+id/live_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorGray6"
-                    android:text="Live_title"
-                    android:maxLines="1"
-                    android:textSize="@dimen/h10" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/host_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="6"
                     android:textColor="@color/colorTextG3"
-                    android:layout_marginLeft="15dp"
                     android:text="\@host_name"
                     android:maxLines="1"
                     android:textSize="@dimen/h6"/>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/live_members"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:text="1000"
                     android:drawableLeft="@drawable/icon_visitors"
                     android:drawablePadding="5dp"
@@ -106,8 +90,9 @@
 
                 <TextView
                     android:id="@+id/praises"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:layout_marginLeft="10dp"
                     android:text="1000"
                     android:drawableLeft="@drawable/icon_red_hearts"
@@ -116,16 +101,6 @@
                     android:textSize="@dimen/h6"
                     android:textColor="@color/colorGray4"
                     />
-                <TextView
-                    android:id="@+id/live_lbs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:drawableLeft="@drawable/position_red"
-                    android:drawablePadding="5dp"
-                    android:text=""
-                    android:textSize="@dimen/h6"
-                    android:textColor="@color/colorTextG3" />
             </LinearLayout>
 
         </LinearLayout>

@@ -32,7 +32,7 @@ public class RadioGroupDialog extends Dialog implements RadioGroup.OnCheckedChan
         rgMain.setOrientation(LinearLayout.VERTICAL);
         rgMain.setOnCheckedChangeListener(this);
         initMenus(menus);
-        setSelected(mSelected);
+        //setSelected(mSelected);
     }
 
     @Override

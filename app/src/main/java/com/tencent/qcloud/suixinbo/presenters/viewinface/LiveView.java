@@ -1,7 +1,6 @@
 package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 
-import com.tencent.av.TIMAvManager;
 import com.tencent.ilivesdk.data.ILivePushRes;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MemberID;
@@ -53,4 +52,6 @@ public interface LiveView extends MvpView {
     void linkRoomReq(String id, String name);
 
     void linkRoomAccept(String id, String strRoomId);
+
+    void forceQuitRoom(String strMessage);
 }

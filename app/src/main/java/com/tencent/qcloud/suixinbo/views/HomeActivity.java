@@ -138,6 +138,7 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
         SxbLog.i(TAG, "updateProfileInfo");
         if (null != profile) {
             MySelfInfo.getInstance().setAvatar(profile.getFaceUrl());
+            MySelfInfo.getInstance().setSign(profile.getSelfSignature());
             if (!TextUtils.isEmpty(profile.getNickName())) {
                 MySelfInfo.getInstance().setNickName(profile.getNickName());
             } else {
@@ -148,5 +149,11 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
 
     @Override
     public void updateUserInfo(int reqid, List<TIMUserProfile> profiles) {
+    }
+
+    @Override
+    protected void onRequireLogin() {
+        startActivity(new Intent(this, LoginActivity.class));
+        super.onRequireLogin();
     }
 }

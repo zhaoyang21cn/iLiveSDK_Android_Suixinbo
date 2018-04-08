@@ -28,6 +28,7 @@ public class Constants {
     public static final String LIVE_ANIMATOR = "live_animator";
     public static final String LOG_LEVEL = "log_level";
     public static final String BEAUTY_TYPE = "beauty_type";
+    public static final String VIDEO_QULITY = "video_qulity";
 
 //    //
 //    public static final int ACCOUNT_TYPE = 792;
@@ -68,7 +69,9 @@ public class Constants {
     public static final int HOST_LEAVE = 3;
     public static final int HOST_BACK = 4;
 
-    public static final int VOD_MODE = 1;       // 默认是直播码模式(0:直播码 1:频道)
+    public static final int VOD_MODE = 0;       // 默认是直播码模式(0:直播码 1:频道)
+
+    public static final int ERR_TOKEN_EXPIRED = 10009;
 
     public static final String ROOT_DIR = "/sdcard/Suixinbo/";
 
@@ -112,4 +115,14 @@ public class Constants {
     public static final String HOST_ROLE = "LiveMaster";
     public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
     public static final String NORMAL_MEMBER_ROLE = "Guest";
+
+    public static final String HD_ROLE = "HD";
+    public static final String SD_ROLE = "SD";
+    public static final String LD_ROLE = "LD";
+    public static final String HD_GUEST_ROLE = "HDGuest";
+    public static final String SD_GUEST_ROLE = "SDGuest";
+    public static final String LD_GUEST_ROLE = "LDGuest";
+
+    public static final String SD_GUEST = "Guest";
+    public static final String LD_GUEST = "Guest2";
 }

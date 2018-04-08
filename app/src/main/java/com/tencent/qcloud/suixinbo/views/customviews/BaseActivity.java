@@ -1,27 +1,29 @@
 package com.tencent.qcloud.suixinbo.views.customviews;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
+import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.ConnectionChangeReceiver;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.LogConstants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-
 /**
  * Created by admin on 2016/5/20.
  */
 public class BaseActivity extends Activity{
+    private String TAG = "BaseActivity";
     private BroadcastReceiver recv;
     private ConnectionChangeReceiver netWorkStateReceiver;
 
@@ -36,14 +38,11 @@ public class BaseActivity extends Activity{
                     case ILiveConstants.ERR_KICK_OUT:
                         SxbLog.w(TAG, "onForceOffline->entered!");
                         SxbLog.d(TAG, LogConstants.ACTION_HOST_KICK + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "on force off line");
-                        Toast.makeText(BaseActivity.this, "您的帐号已在其它地方登陆", Toast.LENGTH_SHORT).show();
-                        MySelfInfo.getInstance().clearCache(getBaseContext());
-                        getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+                        processOffline(getString(R.string.str_offline_msg));
                         break;
                     case ILiveConstants.ERR_EXPIRE:
                         SxbLog.w(TAG, "onUserSigExpired->entered!");
-                        Toast.makeText(getBaseContext(), "onUserSigExpired|"+message, Toast.LENGTH_SHORT).show();
-                        getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+                        processOffline("onUserSigExpired|"+message);
                         break;
                 }
             }
@@ -54,7 +53,7 @@ public class BaseActivity extends Activity{
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(Constants.BD_EXIT_APP)){
                     SxbLog.d("BaseActivity", LogConstants.ACTION_HOST_KICK + LogConstants.DIV + MySelfInfo.getInstance().getId() + LogConstants.DIV + "on force off line");
-                    finish();
+                    onRequireLogin();
                 }
             }
         };
@@ -82,5 +81,40 @@ public class BaseActivity extends Activity{
         }catch (Exception e){
         }
         super.onDestroy();
+    }
+
+    private void processOffline(String message){
+        if (isDestroyed() || isFinishing()) {
+            return;
+        }
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.str_tips_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .create();
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                requiredLogin();
+            }
+        });
+        alertDialog.show();
+    }
+
+    protected void requiredLogin(){
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
+        MySelfInfo.getInstance().clearCache(getBaseContext());
+        getBaseContext().sendBroadcast(new Intent(Constants.BD_EXIT_APP));
+    }
+
+    protected void onRequireLogin(){
+        finish();
     }
 }

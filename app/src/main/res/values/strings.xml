@@ -78,7 +78,7 @@
     <!-- set -->
     <string name="set_live_animator">渐隐动画</string>
     <string name="set_log_level">日志等级</string>
-    <string name="set_sdk_version">SDK版本</string>
+    <string name="set_sdk_version">版本号</string>
 
     <!-- edit -->
     <string name="edit_error">修改失败</string>
@@ -130,7 +130,8 @@
     <string name="ping_start">开始测速</string>
     <string name="ping_no_server">获取测速列表失败，请稍后重试</string>
     <string name="ping_time">平均时延</string>
-    <string name="ping_miss">丢包率</string>
+    <string name="ping_miss_up">上行丢包率</string>
+    <string name="ping_miss_down">下行丢包率</string>
     <string name="ping_cancel">取消</string>
     <string name="ping_TEL">电信</string>
     <string name="ping_CMCC">移动</string>
@@ -142,7 +143,7 @@
     <string name="ping_NJ">南京</string>
     <string name="ping_HZ">杭州</string>
     <string name="ping_GZ">广州</string>
-    <string name="str_record">录制</string>
+    <string name="str_record">录制回放</string>
     <string name="str_loading_record">正在努力获取录制视频列表。。。</string>
     <string name="str_rec_nobody">未知</string>
     <string name="str_push_title">推流地址</string>
@@ -158,11 +159,17 @@
     <string name="str_qav_beauty">美颜</string>
     <string name="str_qav_white">美白</string>
     <string name="str_btn_link">跨房连麦</string>
-    <string name="str_dt_change_role">切分辨率</string>
+    <string name="str_dt_change_role">分辨率</string>
+    <string name="str_dt_hd">高清</string>
+    <string name="str_dt_sd">标清</string>
+    <string name="str_dt_ld">流畅</string>
     <string name="str_dt_filter">滤镜</string>
     <string name="str_dt_magic">挂件</string>
     <string name="str_dt_voice">变声</string>
-    <string name="str_beauty_type">美颜类型</string>
+    <string name="str_beauty_type">美颜方案</string>
+    <string name="str_video_qulity">观看模式</string>
+    <string name="str_video_sd">清晰</string>
+    <string name="str_video_ld">流畅</string>
     <string name="str_link_limit">已达到跨房连麦上限</string>
     <string name="str_title_logupload">上报日志</string>
     <string name="str_log_upload_hit">0-当天，1-昨天，2-前天，以此类推</string>
@@ -170,4 +177,15 @@
     <string name="str_btn_log_upload">上报</string>
     <string name="str_tips_link_limit">已经达到跨房连麦上限</string>
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
+    <string name="str_exit">退出登录</string>
+
+    <string name="str_tips_title">提示</string>
+    <string name="str_offline_msg">您的帐号已在其它地方登陆</string>
+    <string name="str_room_discuss">主播已离开房间，是否退出?</string>
+
+    <string name="str_search_key">用户名</string>
+    <string name="str_search_size">数量</string>
+    <string name="str_hint_account">用户名为4~24个字符，不能为纯数字</string>
+    <string name="str_hint_pwd">密码长度为8~16个字符</string>
+    <string name="str_tips_force_exit">管理员已将房间解散或将您踢出房间!</string>
 </resources>

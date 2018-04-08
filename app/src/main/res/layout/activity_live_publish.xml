@@ -93,6 +93,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"
             android:background="@color/colorTextWhite">
 
@@ -137,9 +138,19 @@
 
         <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
             android:id="@+id/speed_test"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:name="@string/ping_speed_test"
+            app:isBottom="true"
+            app:canNav="true"
+            android:onClick="onClick"
+            />
+        <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+            android:id="@+id/lcv_role"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:name="@string/str_dt_change_role"
             app:isBottom="true"
             app:canNav="true"
             android:onClick="onClick"

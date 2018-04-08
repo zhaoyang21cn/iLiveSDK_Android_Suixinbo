@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.qcloud.suixinbo.R;
 import com.tencent.qcloud.suixinbo.model.RoomInfoJson;
+import com.tencent.qcloud.suixinbo.utils.GlideCircleTransform;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.utils.UIUtils;
 
@@ -33,7 +34,6 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
         TextView tvHost;
         TextView tvMembers;
         TextView tvAdmires;
-        TextView tvLbs;
         ImageView ivCover;
         ImageView ivAvatar;
     }
@@ -61,7 +61,6 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
             holder.tvHost = (TextView) convertView.findViewById(R.id.host_name);
             holder.tvMembers = (TextView) convertView.findViewById(R.id.live_members);
             holder.tvAdmires = (TextView) convertView.findViewById(R.id.praises);
-            holder.tvLbs = (TextView) convertView.findViewById(R.id.live_lbs);
             holder.ivAvatar = (ImageView) convertView.findViewById(R.id.avatar);
 
             convertView.setTag(holder);
@@ -72,34 +71,24 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
             SxbLog.d(TAG, "load cover: " + data.getInfo().getCover());
             RequestManager req = Glide.with(mActivity);
             req.load(data.getInfo().getCover()).into(holder.ivCover); //获取网络图片
-//            holder.ivCover.setImageResource(R.drawable.cover_background);
         }else{
-            holder.ivCover.setImageResource(R.drawable.cover_background);
+            holder.ivCover.setImageResource(R.drawable.default_background);
         }
 
-        if (null == data.getHostId() || TextUtils.isEmpty("")){
+        if (null == data.getHostId() || TextUtils.isEmpty(data.getFaceUrl())){
             // 显示默认图片
             Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), R.drawable.default_avatar);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             holder.ivAvatar.setImageBitmap(cirBitMap);
         }else{
-//            RequestManager req = Glide.with(mActivity);
-//            req.load(data.getHost().getAvatar()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
+            RequestManager req = Glide.with(mActivity);
+            req.load(data.getFaceUrl()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
         }
 
-        holder.tvTitle.setText(UIUtils.getLimitString(data.getInfo().getTitle(), 10));
-        if (!TextUtils.isEmpty("")){
-//            holder.tvHost.setText("@" + UIUtils.getLimitString(data.getHost().getUsername(), 10));
-        }else{
-            holder.tvHost.setText("@" + UIUtils.getLimitString(data.getHostId(), 10));
-        }
+        holder.tvTitle.setText(UIUtils.getLimitString(data.getInfo().getTitle(), 30));
+        holder.tvHost.setText(UIUtils.getLimitString(data.getHostId(), 20));
         holder.tvMembers.setText(""+data.getInfo().getMemsize());
         holder.tvAdmires.setText(""+data.getInfo().getThumbup());
-//        if (!TextUtils.isEmpty(data.getLbs().getAddress())) {
-//            holder.tvLbs.setText(UIUtils.getLimitString(data.getLbs().getAddress(), 9));
-//        }else{
-//            holder.tvLbs.setText(getContext().getString(R.string.live_unknown));
-//        }
 
         return convertView;
     }

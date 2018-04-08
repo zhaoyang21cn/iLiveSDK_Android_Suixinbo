@@ -5,78 +5,104 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
+        android:background="@color/sxbtheme"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@color/colorRed">
-
+        android:layout_height="100dp">
         <ImageView
             android:id="@+id/profile_avatar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
-
-        <TextView
-            android:id="@+id/profile_name"
-            android:layout_width="wrap_content"
+            android:layout_height="80dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_avatar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="20sp" />
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/profile_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/profile_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_id"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/profile_hearts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_info"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:drawableLeft="@drawable/icon_hearts"
-            android:drawablePadding="5dp"
-            android:textColor="@color/colorTextWhite"
-             />
-
+            <TextView
+                android:id="@+id/profile_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorGray3"
+                android:textSize="18sp" />
+        </LinearLayout>
         <ImageView
             android:id="@+id/edit_profile"
+            android:layout_gravity="top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:src="@drawable/edit" />
-    </RelativeLayout>
+    </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:text="@string/set_live_animator"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <com.tencent.qcloud.suixinbo.views.customviews.CustomSwitch
+            android:id="@+id/cs_animator"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/btn_switch_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
-        android:id="@+id/profile_set"
+        android:id="@+id/lcv_beauty_type"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        app:name="@string/profile_set"
+        app:name="@string/str_beauty_type"
+        app:isBottom="true"
         app:canNav="true"
         />
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_video_qulity"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/str_video_qulity"
+        app:isBottom="true"
+        app:canNav="true"
+        />
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_set_log_level"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/set_log_level"
+        app:isBottom="true"
+        app:canNav="true"
+        />
+    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
+        android:id="@+id/lcv_set_upload_log"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="@string/str_title_logupload"
+        app:isBottom="true"
+        app:canNav="true"
+        />
+
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:id="@+id/profile_speed_test"
         android:layout_width="match_parent"
@@ -88,34 +114,29 @@
     <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        app:name="@string/profile_about"
+        app:name="@string/set_sdk_version"
         android:id="@+id/version"
         app:isBottom="true"
         app:canNav="true"/>
 
-
-    <com.tencent.qcloud.suixinbo.views.customviews.LineControllerView
-        android:id="@+id/logout"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        app:name="退出"
-        app:isBottom="true"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-
-    <!--<TextView-->
-        <!--android:id="@+id/logout"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_gravity="bottom|center_horizontal"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:background="@color/btn_red"-->
-        <!--android:clickable="true"-->
-        <!--android:focusable="true"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@string/btn_login_out"-->
-        <!--android:textSize="20sp" />-->
+    <TextView
+        android:id="@+id/tv_logout"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/sxbtheme"
+        android:gravity="center"
+        android:text="@string/str_exit"
+        android:textColor="@color/colorTextWhite"
+        android:textSize="@dimen/h9"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

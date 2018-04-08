@@ -16,6 +16,7 @@ public class RecListViewHelper {
 
     private RecListView recView;
     private GetRecordList mTask = null;
+    private String strKey = "";
 
     public RecListViewHelper(RecListView view){
         recView = view;
@@ -25,7 +26,7 @@ public class RecListViewHelper {
 
         @Override
         protected ArrayList<RecordInfo> doInBackground(Integer... params) {
-            return UserServerHelper.getInstance().getRecordList(params[0], params[1]);
+            return UserServerHelper.getInstance().getRecordList(params[0], params[1], strKey);
         }
 
         @Override
@@ -37,10 +38,11 @@ public class RecListViewHelper {
     }
 
 
-    public void refresh(){
+    public void refresh(String key, int size){
+        strKey = key;
         if (null == mTask){
             mTask = new GetRecordList();
-            mTask.execute(0, 15);
+            mTask.execute(1, size);
         }
     }
 }

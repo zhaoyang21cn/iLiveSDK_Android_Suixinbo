@@ -3,9 +3,11 @@ package com.tencent.qcloud.suixinbo.presenters;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.tencent.ilivesdk.core.ILiveLog;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MemberID;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -38,7 +40,7 @@ public class UserServerHelper {
     private static final String TAG = UserServerHelper.class.getSimpleName();
     private static UserServerHelper instance = null;
 
-    public static final String SERVER = "https://sxb.qcloud.com/sxb_new/index.php?";
+    public static final String SERVER = "https://sxb.qcloud.com/sxb_dev/index.php?";
 
     public static final String REGISTER             = SERVER+"svc=account&cmd=regist";
     public static final String LOGIN                = SERVER+"svc=account&cmd=login";
@@ -57,6 +59,7 @@ public class UserServerHelper {
     public static final String GET_COS_SIG          = SERVER+"svc=cos&cmd=get_sign";
     public static final String GET_LINK_SIG         = SERVER+"svc=live&cmd=linksig";
 
+    private boolean bDebug = false;
 
     private String token = ""; //后续使用唯一标示
     private String Sig = ""; //登录唯一标示
@@ -109,6 +112,10 @@ public class UserServerHelper {
 
 
     public String post(String url, String json) throws IOException {
+        if (bDebug){
+            SxbLog.d(TAG, "postReq->url:"+url);
+            SxbLog.d(TAG, "postReq->data:"+json);
+        }
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
@@ -116,7 +123,11 @@ public class UserServerHelper {
                 .build();
         Response response = client.newCall(request).execute();
         if (response.isSuccessful()) {
-            return response.body().string();
+            String rsp = response.body().string();
+            if (bDebug){
+                SxbLog.d(TAG, "postRsp->rsp: "+rsp);
+            }
+            return rsp;
         } else {
             return "";
         }
@@ -320,6 +331,7 @@ public class UserServerHelper {
             jasonPacket.put("type", "live");
             jasonPacket.put("index", 0);
             jasonPacket.put("size", 20);
+            jasonPacket.put("isIOS", 1);
             jasonPacket.put("appid", Constants.SDK_APPID);
             String json = jasonPacket.toString();
             String res = post(GET_ROOMLIST, json);
@@ -498,12 +510,14 @@ public class UserServerHelper {
     /**
      * 拉取录制列表
      */
-    public ArrayList<RecordInfo> getRecordList (int page,int size) {
+    public ArrayList<RecordInfo> getRecordList (int page,int size, String key) {
         try {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
 			jasonPacket.put("type", Constants.VOD_MODE);
             jasonPacket.put("index", page);
+            if (!TextUtils.isEmpty(key))
+                jasonPacket.put("s_uid", key);
             jasonPacket.put("size",size);
             String json = jasonPacket.toString();
             Log.v(TAG, "getRecordList->request: "+json);
@@ -607,8 +621,10 @@ public class UserServerHelper {
             JSONObject jasonPacket = new JSONObject();
             jasonPacket.put("token", MySelfInfo.getInstance().getToken());
             jasonPacket.put("id", id);
+            jasonPacket.put("current_roomnum", ILiveRoomManager.getInstance().getRoomId());
             jasonPacket.put("roomnum", Integer.valueOf(roomid));
             String json = jasonPacket.toString();
+            SxbLog.d(TAG, "getGetLinkSig->req:"+json);
             String response = post(GET_LINK_SIG, json);
             SxbLog.d(TAG, "getGetLinkSig->rsp:"+response);
 

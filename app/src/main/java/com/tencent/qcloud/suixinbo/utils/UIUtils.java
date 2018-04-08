@@ -54,6 +54,43 @@ public class UIUtils {
         }
     }
 
+    public static String getFormatSize(float size)
+    {
+        long kb = 1024;
+        long mb = (kb * 1024);
+        long gb  = (mb * 1024);
+        if (size < kb) {
+            return String.format("%d B", (int) size);
+        }
+        else if (size < mb) {
+            return String.format("%.2f KB", size / kb); //保留两位小数
+        }
+        else if (size < gb) {
+            return String.format("%.2f MB", size / mb);
+        }
+        else {
+            return String.format("%.2f GB", size / gb);
+        }
+    }
+
+    public static String getFormatSec(int totalSec)
+    {
+        String formatSec = "";
+        if (totalSec > 3600) {
+            int hour = totalSec / 3600;
+            totalSec = totalSec % 3600;
+            formatSec += String.format(formatSec+"%d时", hour);
+        }
+        if (totalSec > 60) {
+            int min = totalSec / 60;
+            totalSec = totalSec % 60;
+            formatSec = String.format(formatSec+"%d分", min);
+        }
+
+        formatSec = String.format(formatSec+"%d秒", totalSec);
+        return formatSec;
+    }
+
     // 获取Uri
     public static Uri getUriFromFile(Context context, File file){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && null != context){

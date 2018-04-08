@@ -5,6 +5,7 @@ package com.tencent.qcloud.suixinbo.model;
  */
 public class RoomInfoJson {
     private String uid;
+    private String faceUrl;
     private INFO info;
 
     public LBS getLbs() {
@@ -13,6 +14,14 @@ public class RoomInfoJson {
 
     public INFO getInfo() {
         return info;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
     }
 
     private LBS lbs;
@@ -50,7 +59,6 @@ public class RoomInfoJson {
         public String getCover() {
             return cover;
         }
-
 
         public int getThumbup() {
             return thumbup;
