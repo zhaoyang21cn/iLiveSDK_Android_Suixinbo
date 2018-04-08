@@ -44,3 +44,8 @@ setNoseScale->setNoseSlimLevel
 * 2、 更新新版p图，新版p图支持AI抠背，手势识别等新动效
 * 3、 降低sdk cpu 和 gpu消耗
 * 4、 修复sdk内存抖动 和 低端机型偶现的 内存GC 问题
+
+######  V1.1.21(2018-4-3)
+* 1、 优化绿幕功能；添加绿幕参数设置接口 setGreenScreenParam
+* 2、 优化预处理sdk代码
+</br>

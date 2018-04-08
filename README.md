@@ -18,17 +18,15 @@ iLiveSDK在Android Studio上开发。
 直播业务功能       
 compile 'com.tencent.livesdk:livesdk:1.1.4'      
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.8.2'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.8.5'      
 
             
 ## SDK最近更新说明
 
-### V1.8.2(2018-02-02)
- - 日志添加setLogPrint(是否打印)和setLogWrite(是否写文件)
- - 扩展iLiveLogin接口(支持无法下载配置的自定义spear配置)
- - 修复onRoomDisconnect后摄像头未重置问题
- - 修复退房后摄像头未关闭问题
-
+### V1.8.5(2018-04-04)
+ - 更新AVSDK到1.9.8.2
+ - 优化事件上报及日志上报功能
+ 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
 
@@ -103,7 +101,12 @@ iLiveSDK内部集成了腾讯云包括IMSDK，QAVSDK。使用iLiveSDK的用户�
 
 对于仍在集成QAVSDK的老用户，也可以在这里获取QAVSDK的最新版本:
 
+[QAVSDK_1.9.8.2](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.6.46_Android_Publish.zip)
+
+[QAVSDK_1.9.7.54](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.7.54_Android_Publish.zip)
+
 [QAVSDK 1.9.6.49](http://dldir1.qq.com/hudongzhibo/TCShow/AVSDK/AVSDK196/QAVOPENSDK_1.9.6.49_Android_Publish.zip )
+
 
 ## 联系我们
 
