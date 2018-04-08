@@ -277,15 +277,26 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             SxbLog.d(TAG, "FILTER->created");
 
             mTxcFilter = new TXCVideoPreprocessor(this, false);
-            mTxcFilter.setBeautyStyle(0);
-            mTxcFilter.setBeautyLevel(5);     // 默认开启美颜
-            mTxcFilter.setWhitenessLevel(3);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 
-            ((AVVideoCtrl)ILiveSDK.getInstance().getVideoEngine().getVideoObj()).setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+                mTxcFilter.setBeautyStyle(0);           // 设置美颜风格，0: 光滑 1: 自然 2: 朦胧
+                mTxcFilter.setBeautyLevel(5);           // 设置美颜级别,范围 0～10
+                mTxcFilter.setWhitenessLevel(3);        // 设置美白级别,范围 0～10
+                mTxcFilter.setRuddyLevel(2);            // 设置红润级别，范围 0～10
+
+                // p 图版本
+                mTxcFilter.setFaceSlimLevel(5);         // 设置小脸级别,范围 0～10
+                mTxcFilter.setEyeScaleLevel(5);         // 设置大眼级别,范围 0～10
+                mTxcFilter.setFaceVLevel(5);             // 设置 V脸级别,范围 0～10
+            }
+
+            ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.AfterPreviewListener(){
                 @Override
                 public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
-                    mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
+                    // 回调的数据，传递给 ilivefilter processFrame 接口处理;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, var1.videoFormat, var1.videoFormat);
+                    }
                 }
             });
         }
@@ -422,6 +433,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             findViewById(R.id.host_switch_cam).setOnClickListener(this);
             findViewById(R.id.host_beauty_btn).setOnClickListener(this);
             findViewById(R.id.host_menu_more).setOnClickListener(this);
+            BtnMic.setOnClickListener(this);
             mVideoChat.setOnClickListener(this);
             inviteView1 = (TextView) findViewById(R.id.invite_view1);
             inviteView2 = (TextView) findViewById(R.id.invite_view2);
@@ -504,7 +516,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
 
         mRootView.setLocalFullScreen(false);
-        mRootView.setBackground(R.mipmap.renderback);
         mRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
         mRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         mRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
@@ -528,8 +539,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     });
                 }
 
-                mRootView.getViewByIndex(0).setRotate(false);
-                mRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
+
                 mRootView.getViewByIndex(0).setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -751,7 +761,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             }
         }
         roleDialog = new RadioGroupDialog(this, roles);
-
         roleDialog.setTitle(R.string.str_dt_change_role);
         roleDialog.setSelected(curRole);
         roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
@@ -1379,8 +1388,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 }
                 break;
             case R.id.flash_btn:        // 闪光
-                if (!mLiveHelper.toggleFlashLight()){
-                    Toast.makeText(LiveActivity.this, "toggle flash light failed!", Toast.LENGTH_SHORT).show();
+                switch (ILiveRoomManager.getInstance().getCurCameraId()) {
+                    case ILiveConstants.FRONT_CAMERA:
+                        Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
+                        break;
+                    case ILiveConstants.BACK_CAMERA:
+                        mLiveHelper.toggleFlashLight();
+                        break;
+                    default:
+                        Toast.makeText(LiveActivity.this, "camera is not open", Toast.LENGTH_SHORT).show();
+                        break;
                 }
                 break;
             case R.id.btn_back:
