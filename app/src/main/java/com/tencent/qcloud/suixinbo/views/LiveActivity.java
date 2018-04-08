@@ -277,15 +277,26 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             SxbLog.d(TAG, "FILTER->created");
 
             mTxcFilter = new TXCVideoPreprocessor(this, false);
-            mTxcFilter.setBeautyStyle(0);
-            mTxcFilter.setBeautyLevel(5);     // 默认开启美颜
-            mTxcFilter.setWhitenessLevel(3);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 
-            ((AVVideoCtrl)ILiveSDK.getInstance().getVideoEngine().getVideoObj()).setLocalVideoPreProcessCallback(new AVVideoCtrl.LocalVideoPreProcessCallback() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+                mTxcFilter.setBeautyStyle(0);           // 设置美颜风格，0: 光滑 1: 自然 2: 朦胧
+                mTxcFilter.setBeautyLevel(5);           // 设置美颜级别,范围 0～10
+                mTxcFilter.setWhitenessLevel(3);        // 设置美白级别,范围 0～10
+                mTxcFilter.setRuddyLevel(2);            // 设置红润级别，范围 0～10
+
+                // p 图版本
+                mTxcFilter.setFaceSlimLevel(5);         // 设置小脸级别,范围 0～10
+                mTxcFilter.setEyeScaleLevel(5);         // 设置大眼级别,范围 0～10
+                mTxcFilter.setFaceVLevel(5);             // 设置 V脸级别,范围 0～10
+            }
+
+            ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.AfterPreviewListener(){
                 @Override
                 public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
-                    mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, TXEFrameFormat.I420, TXEFrameFormat.I420);
+                    // 回调的数据，传递给 ilivefilter processFrame 接口处理;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        mTxcFilter.processFrame(var1.data, var1.width, var1.height, var1.rotate, var1.videoFormat, var1.videoFormat);
+                    }
                 }
             });
         }
