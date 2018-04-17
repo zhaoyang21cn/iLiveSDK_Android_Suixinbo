@@ -51,7 +51,7 @@ public class SpeedTestDialog {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case MSG_START:
-                    pd = new ProgressDialog(context.getApplicationContext());
+                    pd = new ProgressDialog(context);
                     pd.setTitle(context.getString(R.string.ping_ing));
                     pd.setCancelable(false);
                     pd.setMessage(context.getString(R.string.ping_start));

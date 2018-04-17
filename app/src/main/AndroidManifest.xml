@@ -54,6 +54,7 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".views.HomeActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             />
         <activity
@@ -71,9 +72,6 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".views.EditActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".views.SetActivity"
             android:screenOrientation="portrait"
             />
 
