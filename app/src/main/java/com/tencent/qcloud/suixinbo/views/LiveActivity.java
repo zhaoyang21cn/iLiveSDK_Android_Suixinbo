@@ -102,9 +102,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-
 
 /**
  * Live直播类
@@ -183,8 +180,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
         mLiveHelper.startEnterRoom();
-        //初始化社会化分享组件
-        ShareSDK.initSDK(this);
     }
 
 
@@ -624,8 +619,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         CurLiveInfo.setAdmires(0);
         CurLiveInfo.setCurrentRequestCount(0);
         mLiveHelper.onDestory();
-
-        ShareSDK.stopSDK(this);
     }
 
 
@@ -1802,38 +1795,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     }
                 })
                 .setNegativeButton(getString(R.string.btn_cancel), null);
-        if (bHLSPush) {
-            builder.setNeutralButton(getString(R.string.str_push_share), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    showShareDlg(url);
-                }
-            });
-        }
         builder.show();
     }
-
-    private void showShareDlg(String url) {
-        //分享到社交平台
-        OnekeyShare oks = new OnekeyShare();
-        //关闭sso授权
-        oks.disableSSOWhenAuthorize();
-
-        SxbLog.i("TAG", "pushStreamSucc->title:" + CurLiveInfo.getTitle());
-        SxbLog.i("TAG", "pushStreamSucc->url:" + url);
-        oks.setTitle(CurLiveInfo.getTitle());
-        String coverUrl = CurLiveInfo.getCoverurl();
-        if (coverUrl == null || coverUrl.length() == 0) {//用户未选择封面时，使用默认封面
-            coverUrl = "https://zhaoyang21cn.github.io/ilivesdk_help/readme_img/cover_default.png";
-        }
-        oks.setImageUrl(coverUrl);
-        oks.setText("走过路过，不要错过~快来观看直播吧！");
-        oks.setUrl(url);
-
-        // 启动分享GUI
-        oks.show(this);
-    }
-
 
     /**
      * 推流成功
