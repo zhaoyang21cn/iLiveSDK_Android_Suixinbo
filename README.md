@@ -101,7 +101,7 @@ iLiveSDK内部集成了腾讯云包括IMSDK，QAVSDK。使用iLiveSDK的用户�
 
 对于仍在集成QAVSDK的老用户，也可以在这里获取QAVSDK的最新版本:
 
-[QAVSDK_1.9.8.2](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.6.46_Android_Publish.zip)
+[QAVSDK_1.9.8.2](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.8.2_Android_Publish.zip)
 
 [QAVSDK_1.9.7.54](http://dldir1.qq.com/hudongzhibo/ILiveSDK/Android/QAVOPENSDK_1.9.7.54_Android_Publish.zip)
 

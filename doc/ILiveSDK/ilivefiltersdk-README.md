@@ -172,7 +172,7 @@ boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCa
 */
 
 // "AVSDK版本 &gt= 1.9.5"建议使用 setAfterPreviewListener；效率高
-boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.AfterPreviewListener(){
+ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.AfterPreviewListener(){
     @Override
     public void onFrameReceive(AVVideoCtrl.VideoFrame var1) {
     
@@ -189,7 +189,7 @@ ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
     @Override
     public void onSuccess(Object data) {
     // 取消 AVSDK 相机数据回调（参数传null）
-    boolean bRet = ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(null);
+        ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(null);
         // 退出房间后，一定要销毁filter 资源；否则下次进入房间，setFilter将不生效或其他异常
         mTxcFilter.release();
         mTxcFilter = null;
