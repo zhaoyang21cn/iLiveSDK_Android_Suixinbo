@@ -171,7 +171,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 .autoFocus(true)
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
-                .controlRole(Constants.NORMAL_MEMBER_ROLE)
+                .controlRole(Constants.FSD)
                 .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
                 .autoMic(false);
@@ -594,40 +594,22 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "upMemberVideo->with not in room");
         }
-        ILVLiveManager.getInstance().upToVideoMember(Constants.VIDEO_MEMBER_ROLE, true,true, new ILiveCallBack<ILVChangeRoleRes>() {
-            @Override
-            public void onSuccess(ILVChangeRoleRes data) {
-                SxbLog.d(TAG, "upToVideoMember->success");
-                MySelfInfo.getInstance().setIdStatus(Constants.VIDEO_MEMBER);
-                bMicOn = true;
-                bCameraOn = true;
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "upToVideoMember->failed:" + module + "|" + errCode + "|" + errMsg);
-            }
-        });
+        ILiveRoomManager.getInstance().enableCamera(ILiveConstants.FRONT_CAMERA, true);
+        ILiveRoomManager.getInstance().enableMic(true);
+        MySelfInfo.getInstance().setIdStatus(Constants.VIDEO_MEMBER);
+        bMicOn = true;
+        bCameraOn = true;
     }
 
     public void downMemberVideo() {
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             SxbLog.e(TAG, "downMemberVideo->with not in room");
         }
-        ILVLiveManager.getInstance().downToNorMember(Constants.NORMAL_MEMBER_ROLE, new ILiveCallBack<ILVChangeRoleRes>() {
-            @Override
-            public void onSuccess(ILVChangeRoleRes data) {
-                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-                bMicOn = false;
-                bCameraOn = false;
-                SxbLog.e(TAG, "downMemberVideo->onSuccess");
-            }
-
-            @Override
-            public void onError(String module, int errCode, String errMsg) {
-                SxbLog.e(TAG, "downMemberVideo->failed:" + module + "|" + errCode + "|" + errMsg);
-            }
-        });
+        ILiveRoomManager.getInstance().enableMic(false);
+        ILiveRoomManager.getInstance().enableCamera(ILiveRoomManager.getInstance().getActiveCameraId(), false);
+        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+        bMicOn = false;
+        bCameraOn = false;
     }
 
     private void checkEnterReturn(int iRet){
@@ -663,8 +645,6 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
                 .controlRole(CurLiveInfo.getCurRole())
-                .autoFocus(true)
-                .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
         int ret = ILVLiveManager.getInstance().createRoom(MySelfInfo.getInstance().getMyRoomNum(), hostOption, new ILiveCallBack() {
             @Override
@@ -695,8 +675,7 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 .autoCamera(false)
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
-                .controlRole(MySelfInfo.getInstance().getGuestRole())
-                .authBits(AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO)
+                .controlRole(Constants.FSD)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO)
                 .autoMic(false);
         int ret = ILVLiveManager.getInstance().joinRoom(CurLiveInfo.getRoomNum(), memberOption, new ILiveCallBack() {

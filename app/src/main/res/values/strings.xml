@@ -160,9 +160,12 @@
     <string name="str_qav_white">美白</string>
     <string name="str_btn_link">跨房连麦</string>
     <string name="str_dt_change_role">分辨率</string>
-    <string name="str_dt_hd">高清</string>
-    <string name="str_dt_sd">标清</string>
-    <string name="str_dt_ld">流畅</string>
+    <string name="str_dt_hd2">1280*720</string>
+    <string name="str_dt_hd">960*540</string>
+    <string name="str_dt_sd2">640*480</string>
+    <string name="str_dt_sd">640*368</string>
+    <string name="str_dt_ld2">480*360</string>
+    <string name="str_dt_ld">320*240</string>
     <string name="str_dt_filter">滤镜</string>
     <string name="str_dt_magic">挂件</string>
     <string name="str_dt_voice">变声</string>

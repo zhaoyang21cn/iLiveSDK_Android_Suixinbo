@@ -153,18 +153,21 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
     // 角色对话框
     private RadioGroupDialog roleDialog;
+    private int curRole = 0;
     private void initRoleDialog() {
-        final String[] roles = new String[]{ "高清(960*540,25fps)","标清(640*368,20fps)", "流畅(640*368,15fps)"};
-        final String[] values = new String[]{Constants.HD_ROLE, Constants.SD_ROLE, Constants.LD_ROLE};
+        final String[] roles = new String[]{ "(1280*720,20fps)","(960x540,20fps)", "(640x480,20fps)",
+                "(640x368,20fps)", "(480x360,20fps)", "(320x240,15fps)"};
+        final String[] values = new String[]{Constants.FHD2, Constants.FHD, Constants.FSD2, Constants.FSD, Constants.FLD2, Constants.FLD};
+        curRole = 3;
+        for (int i=0; i<values.length; i++){
+            if (CurLiveInfo.getCurRole().equals(values[i])){
+                curRole = i;
+                break;
+            }
+        }
         roleDialog = new RadioGroupDialog(this, roles);
         roleDialog.setTitle(R.string.str_dt_change_role);
-        if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)){
-            roleDialog.setSelected(1);
-        }else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)){
-            roleDialog.setSelected(2);
-        }else {
-            roleDialog.setSelected(0);
-        }
+        roleDialog.setSelected(curRole);
         roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -176,12 +179,18 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     }
 
     private String getRoleShow(String role){
-        if (role.equals(Constants.HD_ROLE)){
+        if (role.equals(Constants.FHD2)){
+            return getString(R.string.str_dt_hd2);
+        }else if (role.equals(Constants.FHD)){
             return getString(R.string.str_dt_hd);
-        }else if (role.equals(Constants.SD_ROLE)){
-            return getString(R.string.str_dt_sd);
-        }else{
+        }else if (role.equals(Constants.FSD2)){
+            return getString(R.string.str_dt_sd2);
+        }else if (role.equals(Constants.FLD)){
             return getString(R.string.str_dt_ld);
+        }else if (role.equals(Constants.FLD2)){
+            return getString(R.string.str_dt_ld2);
+        }else{
+            return getString(R.string.str_dt_sd);
         }
     }
 

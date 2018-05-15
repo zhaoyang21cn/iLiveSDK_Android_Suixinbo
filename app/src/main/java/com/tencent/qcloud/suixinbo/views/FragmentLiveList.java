@@ -92,7 +92,8 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                     CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
                     CurLiveInfo.setAdmires(item.getInfo().getThumbup());
 //                    CurLiveInfo.setAddress(item.getLbs().getAddress());
-                    checkJoinLive();
+					Intent intent = new Intent(getActivity(), LiveActivity.class);
+            		startActivity(intent);
                 }
             }
         });
@@ -169,31 +170,6 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                 }
             }
             roomShowAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void checkJoinLive() {
-        if (TextUtils.isEmpty(MySelfInfo.getInstance().getGuestRole())) {
-            final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
-            final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
-
-            RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
-
-            roleDialog.setTitle(R.string.str_video_qulity);
-            roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    SxbLog.d(TAG, "showVideoQulity->onClick item:" + position);
-                    MySelfInfo.getInstance().setGuestRole(values[position]);
-                    MySelfInfo.getInstance().writeToCache(getContext());
-                    Intent intent = new Intent(getActivity(), LiveActivity.class);
-                    startActivity(intent);
-                }
-            });
-            roleDialog.show();
-        }else{
-            Intent intent = new Intent(getActivity(), LiveActivity.class);
-            startActivity(intent);
         }
     }
 }

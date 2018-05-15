@@ -112,17 +112,11 @@ public class Constants {
     public static final long NORMAL_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO;
 
 
-    public static final String HOST_ROLE = "LiveMaster";
-    public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
-    public static final String NORMAL_MEMBER_ROLE = "Guest";
+    public static final String FLD = "FLD";     // 320*240
+    public static final String FLD2 = "FLD2";   // 480*360
+    public static final String FSD = "FSD";     // 640*368
+    public static final String FSD2 = "FSD2";   // 640*480
+    public static final String FHD = "FHD";     // 960*540
+    public static final String FHD2 = "FHD2";   // 1280*720
 
-    public static final String HD_ROLE = "HD";
-    public static final String SD_ROLE = "SD";
-    public static final String LD_ROLE = "LD";
-    public static final String HD_GUEST_ROLE = "HDGuest";
-    public static final String SD_GUEST_ROLE = "SDGuest";
-    public static final String LD_GUEST_ROLE = "LDGuest";
-
-    public static final String SD_GUEST = "Guest";
-    public static final String LD_GUEST = "Guest2";
 }

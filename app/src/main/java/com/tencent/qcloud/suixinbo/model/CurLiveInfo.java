@@ -14,7 +14,7 @@ public class CurLiveInfo {
     private static double long1;
     private static String address = "";
     private static String coverurl = "";
-    private static String curRole = Constants.HD_ROLE;  // 默认为高清
+    private static String curRole = Constants.FSD;
 
     private static RecordInfo mRecordInfo;
 

@@ -743,14 +743,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private RadioGroupDialog roleDialog;
     private int curRole = 0;
     private void initRoleDialog() {
-        final String[] roles = new String[]{ "高清(960*540,25fps)","标清(640*368,20fps)", "流畅(640*368,15fps)"};
-        final String[] values = new String[]{Constants.HD_ROLE, Constants.SD_ROLE, Constants.LD_ROLE};
-        final String[] guestValues = new String[]{Constants.HD_GUEST_ROLE, Constants.SD_GUEST_ROLE, Constants.LD_GUEST_ROLE};
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST){
-            if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)){
-                curRole = 1;
-            }else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)){
-                curRole = 2;
+        final String[] roles = new String[]{ "(1280*720,20fps)","(960x540,20fps)", "(640x480,20fps)",
+                "(640x368,20fps)", "(480x360,20fps)", "(320x240,15fps)"};
+        final String[] values = new String[]{Constants.FHD2, Constants.FHD, Constants.FSD2, Constants.FSD, Constants.FLD2, Constants.FLD};
+        curRole = 3;
+        for (int i=0; i<values.length; i++){
+            if (CurLiveInfo.getCurRole().equals(values[i])){
+                curRole = i;
+                break;
             }
         }
         roleDialog = new RadioGroupDialog(this, roles);
@@ -761,11 +761,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             public void onItemClick(int position) {
                 SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
                 curRole = position;
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-                    mLiveHelper.changeRole(values[curRole]);
-                }else{
-                    mLiveHelper.changeRole(guestValues[curRole]);
-                }
+                mLiveHelper.changeRole(values[curRole]);
             }
         });
     }

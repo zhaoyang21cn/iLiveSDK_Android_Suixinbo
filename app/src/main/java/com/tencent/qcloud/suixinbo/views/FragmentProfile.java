@@ -62,7 +62,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private ImageView mAvatar, mEditProfile;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvQulity, lcvReport;
+    private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvReport;
     private CustomSwitch csAnimator;
 
 
@@ -95,18 +95,13 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         lcvLog = (LineControllerView) view.findViewById(R.id.lcv_set_log_level);
         lcvReport = (LineControllerView)view.findViewById(R.id.lcv_set_upload_log);
         lcvBeauty = (LineControllerView) view.findViewById(R.id.lcv_beauty_type);
-        lcvQulity = (LineControllerView) view.findViewById(R.id.lcv_video_qulity);
         csAnimator.setOnClickListener(this);
         lcvLog.setOnClickListener(this);
-        lcvQulity.setOnClickListener(this);
         lcvBeauty.setOnClickListener(this);
         lcvReport.setOnClickListener(this);
 
         lcvLog.setContent(MySelfInfo.getInstance().getLogLevel().toString());
         lcvBeauty.setContent(beautyTypes[MySelfInfo.getInstance().getBeautyType() & 0x1]);
-
-        lcvQulity.setContent(Constants.SD_GUEST.equals(
-                MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
 
         csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), false);
 
@@ -208,9 +203,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 break;
             case R.id.version:
                 showSDKVersion();
-                break;
-            case R.id.lcv_video_qulity:
-                showVideoQulity();
                 break;
             case R.id.tv_logout:
                 if (null != mLoginHeloper)
@@ -321,31 +313,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             }
         });
         beautyTypeDialog.show();
-    }
-
-    private void showVideoQulity() {
-        final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
-        final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
-
-        RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
-
-        roleDialog.setTitle(R.string.str_video_qulity);
-        if (Constants.SD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())) {
-            roleDialog.setSelected(0);
-        } else if (Constants.LD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())){
-            roleDialog.setSelected(1);
-        }
-        roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                SxbLog.d(TAG, "showVideoQulity->onClick item:" + position);
-                MySelfInfo.getInstance().setGuestRole(values[position]);
-                MySelfInfo.getInstance().writeToCache(getContext());
-                lcvQulity.setContent(Constants.SD_GUEST.equals(
-                        MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
-            }
-        });
-        roleDialog.show();
     }
 
     private void updateUserInfo(String id, String name, String url){
