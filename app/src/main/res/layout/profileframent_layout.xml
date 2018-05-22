@@ -99,6 +99,7 @@
         android:id="@+id/profile_speed_test"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:visibility="gone"
         app:name="@string/ping_speed_test"
         app:canNav="true"
         />
