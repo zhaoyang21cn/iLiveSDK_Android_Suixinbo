@@ -1,12 +1,5 @@
 ## Release Note
 
-### V1.8.7(2018-06-19)
- - 不再包含bugly,用户可自行集成，参考[bugly官网](https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20180427191736)
- - 更新AVSDK到1.9.8.20
- - 移除soload.jar依赖
- - AVVideoView添加addLabelText/removeLable接口支持文本
- - 修复已知问题
-
 ### V1.8.6(2018-05-28)
  - 升级IMSDK到2.7
  - 优化进房预览功能
