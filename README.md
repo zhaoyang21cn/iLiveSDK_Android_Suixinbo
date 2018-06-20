@@ -21,13 +21,14 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.8.7'
             
 ## SDK最近更新说明
 
-### V1.8.6(2018-05-28)
- - 升级IMSDK到2.7
- - 优化进房预览功能
- - 优化切后台逻辑
- - 优化录制功能
- - 优化分开渲染
- - 在ILiveRoomManager中添加悬浮窗检测接口isSurfaceViewCreated
+### V1.8.7(2018-06-19)
+- 优化内置bugly集成方式(可以通过```exclude module:'buglyforimsdk'```移除bugly)
+- 更新AVSDK到1.9.8.20
+- 移除soload.jar依赖
+- AVVideoView添加addLabelText/removeLable接口支持文本
+- 修复已知问题
+
+[更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
 
 ## DEMO
