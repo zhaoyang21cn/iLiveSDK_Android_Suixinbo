@@ -21,7 +21,7 @@ compile 'com.tencent.ilivesdk:ilivesdk:1.8.7'
             
 ## SDK最近更新说明
 
-### V1.8.7(2018-06-19)
+### V1.8.7(2018-06-20)
 - 优化内置bugly集成方式(可以通过```exclude module:'buglyforimsdk'```移除bugly)
 - 更新AVSDK到1.9.8.20
 - 移除soload.jar依赖
