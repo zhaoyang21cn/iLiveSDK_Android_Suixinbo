@@ -14,17 +14,15 @@ iLiveSDK在Android Studio上开发。
 
   
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.8.7'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.9.0'      
 
             
 ## SDK最近更新说明
 
-### V1.8.7(2018-06-20)
-- 优化内置bugly集成方式(可以通过```exclude module:'buglyforimsdk'```移除bugly)
-- 更新AVSDK到1.9.8.20
-- 移除soload.jar依赖
-- AVVideoView添加addLabelText/removeLable接口支持文本
-- 修复已知问题
+### V1.9.0(2018-07-09)
+ - 默认使用云上环境通道（**老用户需配置为IMSDK通道，否则无法互通**）
+ - ILiveSDK添加通道配置接口setChannelMode
+ - **云上环境authBuffer即privateMapKey为必填字段**)
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
