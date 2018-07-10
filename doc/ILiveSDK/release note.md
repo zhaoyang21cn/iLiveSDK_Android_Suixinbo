@@ -3,7 +3,7 @@
 ### V1.9.0(2018-07-09)
  - 默认使用云上环境通道（**老用户需配置为IMSDK通道，否则无法互通**）
  - ILiveSDK添加通道配置接口setChannelMode
- - 废弃ILiveRoomOption中的autoBits字段(权限由[privateMapKey](https://cloud.tencent.com/document/product/647/17230#privatemapkey)指定, **云上环境authBuffer即privateMapKey为必填字段**)
+ - **云上环境authBuffer即privateMapKey为必填字段**)
 
 ### V1.8.7(2018-06-20)
 - 优化内置bugly集成方式(可以通过```exclude module:'buglyforimsdk'```移除bugly)
