@@ -14,15 +14,14 @@ iLiveSDK在Android Studio上开发。
 
   
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.9.0'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.9.1'      
 
             
 ## SDK最近更新说明
 
-### V1.9.0(2018-07-09)
- - 默认使用云上环境通道（**老用户需配置为IMSDK通道，否则无法互通**）
- - ILiveSDK添加通道配置接口setChannelMode
- - **云上环境authBuffer即privateMapKey为必填字段**)
+### V1.9.1(2018-07-18)
+ - 修改进房privateMapKey配置方法为privateMapKey(原为authBuffer)
+ - 修复云上环境旁路直播方向问题
 
 [更多版本更新信息](doc/ILiveSDK/release%20note.md)
 
