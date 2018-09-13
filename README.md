@@ -102,3 +102,7 @@ iLiveSDK内部集成了腾讯云包括IMSDK，QAVSDK。使用iLiveSDK的用户�
 技术支持QQ群：594923937 207177891
 
 技术需求反馈：[https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/issues](https://github.com/zhaoyang21cn/iLiveSDK_Android_Suixinbo/issues)
+
+关注公众号"腾讯云视频"，给公众号发关键字"技术支持"，会有专人联系。
+
+![](https://main.qcloudimg.com/raw/769293c3dbc0df8fbfb7d6a7cc904692.jpg)
