@@ -7,7 +7,7 @@ iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能�
 ## iLiveSDK导入
 
 iLiveSDK在Android Studio上开发。
-导入只需要在gradle里增加两行（后面是版本号）
+导入只需要在gradle里增加一行（后面是版本号）
 
 
 核心功能     
