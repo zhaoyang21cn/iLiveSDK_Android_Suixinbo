@@ -1,8 +1,6 @@
 # iLiveSDK
 iLiveSDK 提供了账号登录，音视频互动，文本互动等基础功能，顺利的话一天之内即可集成音视频能力。
 
-![](https://zhaoyang21cn.github.io/iLiveSDK_Help/readme_img/ilivesdk_construction.png)
-
 
 ## iLiveSDK导入
 
@@ -11,9 +9,13 @@ iLiveSDK在Android Studio上开发。
 
 
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:latest.release'  //其中latest.release指代最新iLiveSDK版本号  
+compile 'com.tencent.ilivesdk:ilivesdk:1.9.4.6'  //其中latest.release指代最新iLiveSDK版本号  
 
-            
+
+## 重要说明
+
+本Demo中使用的livesdk已不再维护，请新接入用户直接参考 [简单直播](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo.git)
+
 ## [SDK最近更新说明](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo/blob/master/doc/ILiveSDK/release%20note.md)
 
 
