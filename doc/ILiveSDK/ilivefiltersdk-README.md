@@ -3,10 +3,10 @@
 ## 使用前说明（重要）：
 1，TXCVideoPreprocessor 分为“p图收费版” 和 “非p图普通版”
 p图收费版：
-> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.22'
+> compile 'com.tencent.ilivefilter:liteav_pitu:1.1.24'
 
 非p图普通版：
-> compile 'com.tencent.ilivefilter:liteav_normal:1.1.22'
+> compile 'com.tencent.ilivefilter:liteav_normal:1.1.24'
 
 2，需要申请p图的licence后，大眼、瘦脸、动效才能生效；
    p图licence 需要联系商务获取
@@ -33,11 +33,8 @@ p图收费版：
 美颜、美白、红润等基础功能是免费的。基于人脸识别的功能由于采用了优图实验室的专利技术，授权费用约 50W/年（目前国内同类图像处理产品授权均在百万左右）。如有需要可以提工单或联系我们（jerryqian QQ:364993028 ），商务同学会提供P图SDK，并替您向优图实验室申请试用 License。
 
 最新版本说明
-> V1.1.22(2018-9-26)</br>
-(1) 预处理支持多实例同时处理</br>
-(2) 优化美颜清晰度</br>
-(3) 更新最新p图版本1.7，优化p图版本性能</br>
-(4) 修改Context引起的内存泄漏</br>
+> V1.1.24(2019-3-25)</br>
+(1) 修复p图版本，因为licence过期，导致开启大眼/瘦脸等p图功能，黑屏的问题
 </br>
 
 [查看更多版本更新记录](https://github.com/zhaoyang21cn/iLiveSDK_Android_LiveDemo/blob/master/doc/ILiveSDK/TILFilterSDK_ChangeList.md)
@@ -90,9 +87,10 @@ p图收费版：
 <pre>
 build.gradle 的dependency中添加
 // p图版
-compile 'com.tencent.ilivefilter:liteav_pitu:1.1.22'
+compile 'com.tencent.ilivefilter:liteav_pitu:
+'
 // 非 p图版
-compile 'com.tencent.ilivefilter:liteav_normal:1.1.22'
+compile 'com.tencent.ilivefilter:liteav_normal:1.1.24'
 
 defaultConfig{
     ....
