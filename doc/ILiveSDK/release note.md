@@ -1,5 +1,50 @@
 ## Release Note
 
+### V1.9.6.9(2019-09-25)
+ - 更新EDU AVSDK到1.9.9.1116
+ - 修复默认进房只有下行权限
+ - 修复已知问题
+
+### V1.9.6.3(2018-01-08)
+ - 支持[自定义Spear配置功能](def_role.md)
+ - 进房option添加disableDeviceSwitch可禁用sdk管理音频通道
+ - 修复登录失败导致任务无响应问题
+ - 更新AVSDK到1.9.9.1086
+
+### V1.9.6(2018-11-30)
+ - 更新AVSDK到1.9.9.1067
+ - 在网络较差的情况下优化先保证音频
+ - 修复已知问题
+
+### V1.9.5(2018-10-22)
+ - 云上环境支持手动推流录制
+ - 进房角色不存在时直接报错
+ - 解除对IMSDK版本的强依赖(**由于IMSDK支持多加架构，需配置为armeabi/armeabi-v7a架构**)<br />
+    (若想使用IMSDK 3.x可直接添加IMSDK版本号配置，如: compile 'com.tencent.imsdk:imsdk:3.3.2.13870.14059')
+  
+### V1.9.4(2018-08-30)
+ - 修改默认群组类型为Public
+ - 初始化接口废弃accountType参数(不再需要)
+ - 修复房间断开连接(onRoomDisconnect)时摄像头状态异常
+
+### V1.9.3(2018-08-23)
+ - 更新AVSDK到1.9.9.1013
+ - 添加测速类ILiveSpeedTest(可通过startSpeedTest进行测速)
+
+### V1.9.2(2018-08-02)
+ - 房间(摄像头)接口去时序化
+ - ILiveSDK添加addEventListener的方法添加[统一事件回调](EventListener.md)
+ - 添加成员进出房间(群组)事件通知以及群组解散事件通知
+
+### V1.9.1(2018-07-18)
+ - 修改进房privateMapKey配置方法为privateMapKey(原为authBuffer)
+ - 修复云上环境旁路直播方向问题
+
+### V1.9.0(2018-07-09)
+ - 默认使用云上环境通道（**老用户需配置为IMSDK通道，否则无法互通**）
+ - ILiveSDK添加通道配置接口setChannelMode
+ - **云上环境authBuffer即privateMapKey为必填字段**)
+
 ### V1.8.7(2018-06-20)
 - 优化内置bugly集成方式(可以通过```exclude module:'buglyforimsdk'```移除bugly)
 - 更新AVSDK到1.9.8.20
