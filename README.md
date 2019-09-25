@@ -8,10 +8,14 @@ iLiveSDK在Android Studio上开发。
 
 
 核心功能     
-compile 'com.tencent.ilivesdk:ilivesdk:1.9.6'      
+compile 'com.tencent.ilivesdk:ilivesdk:1.9.6.9'      
 
             
 ## SDK最近更新说明
+### V1.9.6.9(2019-09-25)
+ - 更新EDU AVSDK到1.9.9.1116
+ - 修复默认进房只有下行权限
+ - 修复已知问题
 
 ### V1.9.6(2018-11-30)
  - 更新AVSDK到1.9.9.1067
