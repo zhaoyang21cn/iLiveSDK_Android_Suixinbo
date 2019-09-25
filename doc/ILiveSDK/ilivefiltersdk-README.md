@@ -185,7 +185,7 @@ ILiveSDK.getInstance().getAvVideoCtrl().setAfterPreviewListener(new AVVideoCtrl.
 </pre>
 7：**退出房间时，必须销毁滤镜资源，下次使用时，在重新创建！！否则下次进入房间，设置滤镜不生效！日志也会出现 “please realloc new TXCVideoPreprocessor” 错误**
 <pre>
-ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
+ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
     @Override
     public void onSuccess(Object data) {
     // 取消 AVSDK 相机数据回调（参数传null）
