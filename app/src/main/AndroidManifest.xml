@@ -61,7 +61,7 @@
             android:name=".views.PublishLiveActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize" />
-        <!-- 避免部分机器调用摄像头时自动横竖屏切换造成Activity重建 -->
+
         <activity
             android:name=".views.LiveActivity"
             android:launchMode="singleTask"
