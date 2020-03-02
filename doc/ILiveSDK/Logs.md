@@ -96,3 +96,30 @@ AVSDK|tencent/imsdklogs/包名/QAVSDK_YYYYMMDD.log
 [17-11-09 17:02:16][KEY][I][ILVB-AVRootView][renderVideoView][index:0|id:jackwang1982|type:1|left:0|top:0|width:480|height:640|hashcode:529e0428]    
 
 ```
+
+## 退出一个房间 流程正确的 LOG 如下
+
+![](../../raw/quitRoomProcess.jpg)
+
+- 具体包括了 6 个步骤，解释如下：
+
+```C
+1. 开始退出房间
+ILVBRoom: Key_Procedure|quitRoom->entered with status:true/false
+
+2. 关闭摄像头（如果摄像头处于开启状态）
+ILVBRoom: Key_Procedure|ILVB-Room|strart enableCamera:0, false
+ILVBRoom: ILVB-Room|enableCamera id:0/false, result: 0
+
+3. 开始退出 AV 房间
+ILVBRoom: bEnterRoom true quitRoom->exit Room entered!
+
+4. 清理渲染视图（如果视图存在）
+ILVB-AVRootView: ILVB-View|clearUserView
+
+5. 退出 AV 房间成功回调
+ILVBRoom: Key_Procedure|ILVB-Room|exit avroom  Complete with cb...
+
+6. 清理房间资源
+ILVBRoom: clearRoomRes->enter
+```
